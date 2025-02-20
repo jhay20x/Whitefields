@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=block" rel="stylesheet">
-    <link rel="stylesheet" href="./resources/css/home.css">
+    
 
 </head>
 
@@ -31,7 +31,7 @@
                     </div>   
 
                     <div class="col-md-6 p-0">
-                        <img src="./resources/images/smile-67459a4b6c4c3.webp" alt="Smile" class="img-fluid">
+                        
                     </div>             
                 </div>
             </div>
@@ -48,16 +48,16 @@
                 </div>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="./resources/images/carousel-1-67459a3f25558.webp" class="d-block img-fluid" alt="...">
+                        
                     </div> 
                     <div class="carousel-item"> 
-                        <img src="./resources/images/carousel-2-67459a4400202.webp" class="d-block img-fluid" alt="...">
+                       
                     </div> 
                     <div class="carousel-item"> 
-                        <img src="./resources/images/carousel-3-67459a4449f24.webp" class="d-block img-fluid" alt="...">
+                        
                     </div> 
                     <div class="carousel-item"> 
-                        <img src="./resources/images/carousel-4-67459a45910cb.webp" class="d-block img-fluid" alt="...">
+                       
                     </div> 
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
