@@ -509,7 +509,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <button id="" class="btn btn-outline-secondary position-relative" data-bs-toggle="modal" data-bs-target="#dentalHistoryModal">
                                         <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
                                         <svg class="bi pe-none" width="16" height="16"><use xlink:href="#pencil-square"/></svg>
-                                    </button>                                
+                                    </button>                               
                                 </div>
                             </div>
                             
