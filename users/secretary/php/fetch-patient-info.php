@@ -1,0 +1,41 @@
+<?php
+session_start();
+
+include '../../../database/config.php';
+
+$error;
+$data = [];
+$id;
+
+if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
+    $id = $_POST['id'];
+
+    $stmt = $conn->prepare("SELECT CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname) AS Name,
+    pi.age, pi.contactno, pi.bdate, pi.gender, 
+    pi.religion, pi.nationality, pi.occupation, pi.address, ac.email_address, ac.username
+    FROM `patient_info` pi
+    LEFT OUTER JOIN accounts ac
+    ON ac.id = pi.accounts_id
+    WHERE pi.id = ?");
+    $stmt->bind_param('i',$id);
+    $stmt->execute();
+    $result = $stmt->get_result();    
+
+    if ($result->num_rows == 1) {
+        $row = $result->fetch_assoc();
+        
+        $data['Name'] = $row['Name'];
+        $data['age'] = $row['age'];
+        $data['bdate'] = $row['bdate'];
+        $data['gender'] = $row['gender'];
+        $data['religion'] = $row['religion'];
+        $data['nationality'] = $row['nationality'];
+        $data['contactno'] = $row['contactno'];
+        $data['address'] = $row['address'];
+        $data['occupation'] = $row['occupation'];
+        $data['email_address'] = $row['email_address'];
+        $data['username'] = $row['username'];
+    }
+}
+
+echo json_encode($data);

@@ -1,0 +1,66 @@
+body{
+    font-family: "Montserrat";
+}
+
+.topheader {
+    background-color: rgba(166,143,98,255);
+}
+
+@media only screen and (min-width: 2501px) {
+    .carousel-item>img {
+        height: 50vh;
+        width: 100vw;
+    }
+
+    .navigationbar>div>a {
+        font-size: 25px;
+    }
+}
+
+@media only screen and (min-width: 1201px) and (max-width: 2500px) {
+    .carousel-item>img {
+        height: 70vh;
+        width: 100vw;
+    }
+
+    .navigationbar>div>a {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+    .carousel-item>img {
+        height: 55vh;
+        width: 100vw;
+    }
+
+    .navigationbar>div>a {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 900px) {        
+    .carousel-item>img {
+        height: 45vh;
+        width: 100vw;
+    }
+
+    .navigationbar>div>a {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .schedule h1, .schedule h3, .schedule p {
+        font-size: 10px;
+    }
+    
+    .carousel-item>img {
+        height: 30vh;
+        width: 100vw;
+    }
+
+    .navigationbar>div>a {
+        font-size: 13px;
+    }
+}
