@@ -15,12 +15,12 @@
 </head>
 
 <body>
-    <?php include "./components/topbar.php" ?>
+    
 
     <div class="container p-0 shadow">
         <div class="p-3 pb-0">
 
-            <?php include "./components/navbar.php" ?>
+            
 
             <div class="d-flex justify-content-center">
                 <div class="d-flex align-items-center row headerrow">
