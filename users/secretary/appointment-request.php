@@ -808,9 +808,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $("#aptApplyBtn, #reason, #reasonOther, #setStatus").prop("disabled", true);
                 fetchRequestDetails(id);
                 refreshList();
-                console.log(data.responseText);
+                // console.log(data.responseText);
             }).fail(function(data) {
-                console.log(data.responseText);
+                // console.log(data.responseText);
             });
         }
 

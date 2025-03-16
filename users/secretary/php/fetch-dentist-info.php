@@ -18,7 +18,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $id = $_POST['id'];
 
     $stmt = $conn->prepare("SELECT CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname) AS Name,
-    di.accounts_id, di.specialist, di.bdate, di.contactno, di.gender, di.address, di.about_me, di.religion, di.nationality, ac.email_address, ac.username
+    di.accounts_id, di.specialist, di.bdate, di.contactno, di.gender, di.address, di.about_me, di.religion, di.nationality, ac.email_address, ac.username, ac.status, ac.id as AccountID
     FROM dentist_info di
     LEFT OUTER JOIN accounts ac
     ON ac.id = di.accounts_id
@@ -30,6 +30,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
         
+        $data['AccountID'] = $row['AccountID'];
         $data['Name'] = $row['Name'];
         $data['specialist'] = $row['specialist'];
         $data['age'] = calculateAge($row['bdate']);
@@ -42,6 +43,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $data['nationality'] = $row['nationality'];
         $data['email_address'] = $row['email_address'];
         $data['username'] = $row['username'];
+        $data['status'] = $row['status'];
     }
 }
 

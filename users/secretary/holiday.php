@@ -336,7 +336,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     dayTxt: $("#day").text()
                 };
 
-                console.log(formData);
+                // console.log(formData);
 
                 $.ajax({
                     type: "POST",
@@ -351,11 +351,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         location.reload();
                     }
                     // console.log(formData);
-                    console.log("Done");
+                    // console.log("Done");
                     //console.log(data);
                 }).fail(function(data) {
                     // console.log(formData);
-                    console.log("Failed");
+                    // console.log("Failed");
                     //console.log(data);
                 });
             });

@@ -100,6 +100,30 @@ if (is_int($id)) {
       <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
     </symbol>
 </svg>
+
+<!-- Modal -->
+<div class="modal fade" id="logoutConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="logoutConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h6 class="modal-title" id="logoutConfirmLabel">
+                    <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person"/></svg>
+                </h6>
+                <h6 class="ms-2">Logout Confirmation</h6>
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="text-center">
+                        <h6>Are you sure to logout?</h6>
+                        <a href="../../auth/logout.php" id="logoutYesBtn" class="btn btn-sm btn-success m-2 me-0">Yes</a>
+                        <button type="button" value="" id="logoutNoBtn" class="btn btn-sm btn-danger m-2 me-0" data-bs-dismiss="modal" aria-label="Close">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     
 <div id="sidebar">
   <div class="d-flex flex-column flex-shrink-0 p-3" style="width: 350px; height: 100vh; background-color: rgba(166,143,98,255);">
@@ -407,7 +431,7 @@ if (is_int($id)) {
           <!-- <hr> -->
 
           <li class="mb-1 ms-3">
-            <a href="../../auth/logout.php" class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white">
+            <a class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white" data-bs-toggle="modal" data-bs-target="#logoutConfirmModal">
                 <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#box-arrow-right"/></svg>
                 Log Out
             </a>

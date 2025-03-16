@@ -29,13 +29,8 @@ if (isset($_SESSION['email_address'])) {
     }
 
     $mail = new PHPMailer(true);
-    
-    // $stmt = $conn->prepare("UPDATE `accounts` SET `reset_otp`= ? WHERE `email_address` = ?");
-    // $stmt->bind_param("ss", $otp, $userEmail);
-    // $stmt->execute();
 
     try {
-        // Server settings
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
@@ -44,27 +39,19 @@ if (isset($_SESSION['email_address'])) {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
     
-        // Email Recipients
         $mail->setFrom('jhay20x@gmail.com', 'Whitefields Dental Clinic');
         $mail->addAddress($userEmail, $username);
     
-        //Email Content
         $mail->isHTML(true);
         $mail->Subject = $subject;
         $mail->Body =  $message;
         $mail->AltBody = $message;
         
-        // Send email
         $mail->send();        
     
-        // header("Location: ../verify-email.php");
-
-        // $_SESSION['email_address'] = $userEmail;
         $_SESSION["passwordResetOTP"] = $otp;
-        
-        // echo 'Message has been sent';
     } catch (Exception $e) {
-        $error = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        $error = "Message could not be sent. {$mail->ErrorInfo}";
     }
 }
 
@@ -74,7 +61,7 @@ if (!empty($error)) {
     $data['otpSent'] = false;
 } else {
     $data['success'] = true;
-    $data['message'] = 'Message has been sent.';
+    $data['message'] = 'OTP Code has been sent.';
     $data['otpSent'] = true;
 }
 

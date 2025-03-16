@@ -35,7 +35,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 			COUNT(CASE WHEN ar.appoint_status_id = 4
                 THEN 1
                	END) AppointAll,
-			(SELECT COUNT(di.id) FROM dentist_info di) TotalDentist,            
+			(SELECT COUNT(di.id) FROM dentist_info di
+            LEFT OUTER JOIN accounts ac
+            ON di.accounts_id = ac.id
+            WHERE ac.status != 0) TotalDentist,            
 			(SELECT COUNT(pi.id) FROM patient_info pi) TotalPatient
             FROM appointment_requests ar;");
 
@@ -348,7 +351,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <?php
                                             $stmt = $conn->prepare("SELECT di.lname, sc.Sun, sc.Mon, sc.Tue, sc.Wed, sc.Thu, sc.Fri, sc.Sat
                                                 FROM dentist_info di
-                                                LEFT OUTER JOIN schedules sc ON sc.dentist_id = di.id");
+                                                LEFT OUTER JOIN schedules sc ON sc.dentist_id = di.id
+                                                LEFT OUTER JOIN accounts ac ON di.accounts_id = ac.id
+                                                WHERE ac.status != 0;");
                                             $stmt->execute();
                                             $result = $stmt->get_result();
 
@@ -371,17 +376,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         ?>
                                     </tbody>
                                 </table>
-                                <!-- <h5>Upcoming Holidays:</h5>
-                                <h6>• January 1, 2025 - New Year's Day</h6>
-                                <h6>• April 9, 2025 - Day of Valor</h6>
-                                <h6>• April 17, 2025 - Maundy Thursday</h6>
-                                <h6>• April 18, 2025 - Good Friday</h6>
-                                <h6>• May 1, 2025 - Labor Day</h6>
-                                <h6>• June 12, 2025 - Independence Day</h6>
-                                <h6>• August 25, 2025 - National Heroes Day</h6>
-                                <h6>• November 30, 2025 - Bonifacio Day</h6>
-                                <h6>• December 25, 2025 - Christmas Day</h6>
-                                <h6>• December 30, 2025 - Rizal Day</h6>                                     -->
                             </div>
                         </div>                    
                     </div>

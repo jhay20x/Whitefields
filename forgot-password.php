@@ -79,7 +79,7 @@ session_start();
 				</div>
 				
 				<div class="mb-3" id="passwordValidation">
-					<p id="passLength" class="passwordValidate invalidPassword">• Minimum of 6 characters.</p>
+					<p id="passLength" class="passwordValidate invalidPassword">• Minimum of 6 characters. Max 20.</p>
 					<p id="passSymbol" class="passwordValidate validPassword">• Must not include any symbols except _.</p>
 					<p id="passLower" class="passwordValidate invalidPassword">• Must use atleast one lower case letter.</p>
 					<p id="passUpper" class="passwordValidate invalidPassword">• Must use atleast one upper case letter.</p>

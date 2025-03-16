@@ -110,7 +110,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     $stmt = $conn->prepare("SELECT di.id AS ID, CONCAT(di.fname , ' ' , di.mname , ' ' , di.lname) AS Name,
                                         sc.Sun, sc.Mon, sc.Tue, sc.Wed, sc.Thu, sc.Fri, sc.Sat
                                         FROM dentist_info di
-                                        LEFT OUTER JOIN schedules sc ON sc.dentist_id = di.id");
+                                        LEFT OUTER JOIN schedules sc ON sc.dentist_id = di.id
+                                        LEFT OUTER JOIN accounts ac ON di.accounts_id = ac.id
+                                        WHERE ac.status != 0");
                                     $stmt->execute();
                                     $result = $stmt->get_result();
 

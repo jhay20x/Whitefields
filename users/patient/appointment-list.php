@@ -207,10 +207,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <h6 id="ampmText" class="mx-3">--</h6>
                                 </div>
                                 
-                                <!-- <div class="input-group my-3">
+                                <div class="input-group my-3">
                                     <label class="input-group-text" for="dentist">Dentist</label>
                                     <input maxlength="100" required disabled type="text" name="dentist" placeholder="Dentist"  id="dentist" class="form-control">
-                                </div> -->
+                                </div>
                                 
                                 <div class="form-floating my-3">
                                     <input maxlength="100" required type="text" name="concern" placeholder="Oral Concern"  id="concern" class="form-control">
@@ -362,7 +362,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             $status = "text-success";
                                         } else if ($row['Status'] == "Denied" || $row['Status'] == "Cancelled") {
                                             $status = "text-danger";
-                                        } else if ($row['Status'] == "Examined") {
+                                        } else if ($row['Status'] == "Evaluated") {
                                             $status = "text-secondary";
                                         } else {
                                             $status = "text-warning";
@@ -626,7 +626,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             }
                             break;
                         
-                        case "Examined":
+                        case "Evaluated":
                             $(".aptdtlsverdictdiv").show();
                             $(".aptdtlsreasondiv").hide();
                             $("#aptCancelBtn").hide();
@@ -658,7 +658,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             $("#aptdtlsverdicttime").text(data.Cancel_Time);
                             $("#aptdtlsverdictby").text("Me");
                             break;
-                        case "Examined":
+                        case "Evaluated":
                             $("#aptdtlsverdictdate").text(data.Examined_Date);
                             $("#aptdtlsverdicttime").text(data.Examined_Time);
                             $("#aptdtlsverdictby").text("Me");

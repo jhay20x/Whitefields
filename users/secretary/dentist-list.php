@@ -24,6 +24,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     <title>Dentists - Whitefields Dental Clinic</title>
     <link rel="stylesheet" href="../../resources/css/bootstrap.css">
     <link rel="stylesheet" href="../../resources/css/sidebar.css">
+    <link rel="stylesheet" href="../../resources/css/loader.css">
     <link rel="stylesheet" href="../../resources/css/jquery-ui.css">
     <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../../resources/css/dataTables.bootstrap5.css">
@@ -60,6 +61,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             padding: 5rem;
             width: 100%;
         }
+        
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
 
         @media only screen and (max-width: 600px) {
 
@@ -87,8 +101,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 <body class="bg-body-secondary">
     <?php include "../../components/sidebar.php" ?>
 
+    <div id="overlay" style="display:none;">
+        <div id="loader"></div>		
+    </div>
+
     <!-- Modal -->
-    <div class="modal fade" id="dentistViewModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="dentistViewLabel" aria-hidden="true">
+    <div class="modal fade" id="dentistViewModal" data-bs-backdrop="static" data-bs-keyboard="false"  tabindex="-1" aria-labelledby="dentistViewLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
@@ -96,12 +114,21 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person-vcard"/></svg>                        
                     </h6>
                     <h6 class="ms-2">Dentist Information</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" id="dentistViewClose" aria-label="Close"></button>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="dentistViewClose" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">                        
                         <div class="row">
-                            <div class="col-12 col-sm">
+                            <div class="row">
+                                <h5 class="col-auto my-auto">Account Status: <span id="dentistStatusText"></span></h5>
+                                <div class="col-3" id="dentistStatusDiv" style="display: none;">                                    
+                                    <select disabled required class="form-select" id="dentistStatus" name="dentistStatus">
+                                        <option class="text-success h6" value="1">Active</option>
+                                        <option class="text-danger h6" value="0">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mt-2 col-12 col-sm">
                                 <h6>Name: <span id="dentistName" class="fw-normal"></span></h6>
                                 <h6>Specialist: <span id="dentistSpecialist" class="fw-normal"></h6>
                                 <h6>Birth Date: <span id="dentistBdate" class="fw-normal"></span></h6>
@@ -120,12 +147,42 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" id="changeStatusBtn" class="btn btn-sm btn-primary">Change Status</button>
+                    <button type="button" id="changeStatusBackBtn" class="btn btn-sm btn-primary" data-bs-dismiss="modal" aria-label="Close">Back</button>
+                    <button type="button" style="display: none;" id="changeStatusSaveBtn" class="btn btn-sm btn-success">Save</button>
+                    <button type="button" style="display: none;" id="changeStatusCancelBtn" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#changeStatusCancelConfirmModal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="changeStatusCancelConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changeStatusCancelConfirmLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center">
+                    <h6 class="modal-title" id="changeStatusCancelConfirmLabel">
+                        <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person"/></svg>
+                    </h6>
+                    <h6 class="ms-2">Change Status Form</h6>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="text-center">
+                            <h6>Are you sure to cancel editing this form?</h6>
+                            <button type="button" id="changeStatusConfirmYesBtn" class="btn btn-sm btn-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#dentistViewModal">Yes</button>
+                            <button type="button" id="changeStatusConfirmNoBtn" class="btn btn-sm btn-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#dentistViewModal">No</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="addDentistModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="addDentistLabel" aria-hidden="true">
+    <div class="modal fade" id="addDentistModal" data-bs-backdrop="static" data-bs-keyboard="false"  tabindex="-1" aria-labelledby="addDentistLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
@@ -133,11 +190,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person-vcard"/></svg>
                     </h6>
                     <h6 class="ms-2">Profile Information</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" id="addDentistClose" aria-label="Close"></button>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="addDentistClose" aria-label="Close"></button> -->
                 </div>
-                <form autocomplete="off" action="php/insert-update-info.php" method="POST" class="col" id="myForm">
+                <form autocomplete="off" action="php/add-dentist.php" method="POST" class="col" id="myForm">
                     <div class="modal-body">
                         <div class="container-fluid">
+                            <div id="addDentistMessage" class="col-12" role="alert"></div>
+
                             <div class="col-lg-12">
                                 <h5>Login Details</h5>
                                 <hr>
@@ -146,7 +205,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <div class="row">
                                 <div class="col-lg">
                                     <div class="form-floating mb-3">
-                                        <input autocomplete="off" required name="username" placeholder="Last Name"  id="username" class="form-control">
+                                        <input maxlength="35" autocomplete="off" required name="username" placeholder="Username"  id="username" class="form-control">
                                         <label for="username">Username</label>
                                     </div>
                                 </div>
@@ -154,11 +213,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="col-lg">
                                     <div class="input-group mb-3">
                                         <div class="form-floating">
-                                            <input autocomplete="off" type="email" name="email" placeholder="Middle Name" id="email" class="form-control">
+                                            <input maxlength="35" required autocomplete="off" type="email" name="email" placeholder="Email" id="email" class="form-control">
                                             <label for="email">Email</label>
                                         </div>
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0" id="noemail" name="noemail" type="checkbox">
+                                            <input class="form-check-input mt-0" id="noemail" name="noemail" type="checkbox" data-bs-toggle="modal"data-bs-target="#noEmailConfirmModal">
                                             <label class="ms-1" for="noemail">N/A</label>
                                         </div>
                                     </div>
@@ -170,7 +229,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <div class="input-group mb-3">
                                         <div class="input-group">
                                             <div class="form-floating">
-                                                <input autocomplete="new-password" type="password" minlength="6" maxlength="20" id="userPasswordDentist" class="form-control" name="userPasswordDentist" placeholder="Confirm Password">
+                                                <input required autocomplete="new-password" type="password" minlength="6" maxlength="20" id="userPasswordDentist" class="form-control" name="userPasswordDentist" placeholder="Confirm Password">
                                                 <label for="userPasswordDentist">Password</label>
                                             </div>
                                             <button class="btn btn-outline-secondary disableInputs input-group-text" type="button" id="togglePassword">
@@ -182,7 +241,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <p id="userPassUpper" class="invalidPassword">• Must use atleast one upper case letter.</p>
                                             <p id="userPassNumber" class="invalidPassword">• Must use atleast one number.</p>
                                             <p id="userPassSymbol" class="validPassword">• Must not include any symbols except _.</p>
-                                            <p id="userPassLength" class="invalidPassword">• Minimum of 6 characters.</p>
+                                            <p id="userPassLength" class="invalidPassword">• Minimum of 6 characters. Max 20.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -191,7 +250,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <div class="input-group mb-3">
                                         <div id="confirmPass" class="input-group is-invalid">
                                             <div class="form-floating">
-                                                <input disabled autocomplete="new-password" type="password" minlength="6" maxlength="20" id="confirmUserPasswordDentist" class="form-control" name="confirmUserPasswordDentist" placeholder="Confirm Password">
+                                                <input disabled required autocomplete="new-password" type="password" minlength="6" maxlength="20" id="confirmUserPasswordDentist" class="form-control" name="confirmUserPasswordDentist" placeholder="Confirm Password">
                                                 <label for="confirmUserPasswordDentist">Confirm Password</label>
                                             </div>
                                             <button disabled class="btn btn-outline-secondary disableInputs" type="button" id="toggleConfirmPassword">
@@ -214,7 +273,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="col-lg">
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input type="text" name="fname" placeholder="First Name"  id="fname" class="form-control">
+                                            <input maxlength="35" type="text" required name="fname" placeholder="First Name"  id="fname" class="form-control">
                                             <label for="fname">First Name</label>
                                         </div>
                                     </div>
@@ -222,7 +281,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <div class="col-lg">
                                         <div class="input-group mb-3">
                                             <div class="form-floating">
-                                                <input type="text" name="mname" placeholder="Middle Name" id="mname"  class="form-control">
+                                                <input maxlength="35" type="text" required name="mname" placeholder="Middle Name" id="mname"  class="form-control">
                                                 <label for="mname">M. Name</label>
                                             </div>
                                             <div class="input-group-text">
@@ -231,11 +290,18 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             </div>
                                         </div>
                                     </div>
+    
+                                    <div class="col-lg">
+                                        <div class="form-floating mb-3">
+                                            <input maxlength="35" type="text" required name="lname" placeholder="Last Name"  id="lname" class="form-control">
+                                            <label for="lname">Last Name</label>
+                                        </div>
+                                    </div>
                                         
                                     <div class="col-lg">
                                         <div class="input-group mb-3">
                                             <div class="form-floating">
-                                                <input type="text" name="suffix" placeholder="Middle Name" id="suffix" class="form-control">
+                                                <input maxlength="10" type="text" required name="suffix" placeholder="Middle Name" id="suffix" class="form-control">
                                                 <label for="suffix">Suffix</label>
                                             </div>
                                             <div class="input-group-text">
@@ -247,21 +313,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input type="text" name="lname" placeholder="Last Name"  id="lname" class="form-control">
-                                            <label for="lname">Last Name</label>
-                                        </div>
-                                    </div>
-    
-                                    <div class="col-lg">
-                                        <div class="form-floating mb-3">
-                                            <input type="text" name="specialist" placeholder="Age"  id="specialist" class="form-control">
+                                            <input maxlength="25" type="text" required name="specialist" placeholder="Age"  id="specialist" class="form-control">
                                             <label for="specialist">Specialist</label>
                                         </div>
                                     </div>
     
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input type="date" name="bdate" placeholder="Code"  id="bdate" class="form-control">
+                                            <input type="date" required name="bdate" placeholder="Birth Date"  id="bdate" class="form-control">
                                             <label for="bdate">Birth Date</label>
                                         </div>
                                     </div>
@@ -270,14 +329,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="col-lg">    
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input type="text" name="address" placeholder="Address"  id="address" class="form-control">
+                                            <input maxlength="100" type="text" required name="address" placeholder="Address"  id="address" class="form-control">
                                             <label for="address">Address</label>
                                         </div>                                             
                                     </div>
 
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <select class="form-select" name="gender" id="gender">
+                                            <select required class="form-select" name="gender" id="gender">
                                                 <option disabled selected value="">Select...</option>
                                                 <option value="Female">Female</option>
                                                 <option value="Male">Male</option>
@@ -291,26 +350,26 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input type="text" name="religion" placeholder="Religion"  id="religion" class="form-control">
+                                            <input maxlength="25" type="text" required name="religion" placeholder="Religion"  id="religion" class="form-control">
                                             <label for="religion">Religion</label>
                                         </div>
                                     </div>
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input type="text" name="nationality" placeholder="Nationality"  id="nationality" class="form-control">
+                                            <input maxlength="25" type="text" required name="nationality" placeholder="Nationality"  id="nationality" class="form-control">
                                             <label for="nationality">Nationality</label>
                                         </div>
                                     </div>
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input type="text" name="contnumber" placeholder="Contact Number"  id="contnumber" class="form-control">
+                                            <input maxlength="11" type="text" required name="contnumber" placeholder="Contact Number" value="09" id="contnumber" class="form-control">
                                             <label for="contnumber">Contact No.</label>
                                         </div>
                                     </div>
     
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input type="text" maxlength="100" name="aboutme" placeholder="Occupation" id="aboutme" class="form-control">
+                                            <input type="text" required maxlength="100" name="aboutme" placeholder="Occupation" id="aboutme" class="form-control">
                                             <label for="aboutme">About Me</label>
                                         </div>                                            
                                     </div>
@@ -319,8 +378,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </div>
                     </div>               
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm btn-success" name="profileSubmitBtn">Submit</button>
-                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal"data-bs-target="#cancelAddDentistConfirmModal">Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-success" id="addDentistSubmitBtn" name="addDentistSubmitBtn">Submit</button>
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"data-bs-target="#cancelAddDentistConfirmModal">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -342,8 +401,32 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <div class="container-fluid">
                         <div class="text-center">
                             <h6>Are you sure to cancel editing this form?</h6>
-                            <button type="button" value="" id="aptCancelYesBtn" class="btn btn-sm btn-danger m-2 me-0" data-bs-dismiss="modal" aria-label="Close">Yes</button>
-                            <button type="button" value="" id="aptCancelNoBtn" class="btn btn-sm btn-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addDentistModal">No</button>
+                            <button type="button" id="aptCancelYesBtn" class="btn btn-sm btn-danger m-2 me-0" data-bs-dismiss="modal" aria-label="Close">Yes</button>
+                            <button type="button" id="aptCancelNoBtn" class="btn btn-sm btn-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addDentistModal">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="noEmailConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="noEmailConfirmLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center">
+                    <h6 class="modal-title" id="noEmailConfirmLabel">
+                        <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person"/></svg>
+                    </h6>
+                    <h6 class="ms-2">No Email Confirmation</h6>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="text-center">
+                            <h6>Checking this box will allow the system to create a dentist account without an email. However, password recovery via email will not be possible until the dentist registers an email themselves. Do you want to proceed?</h6>
+                            <button type="button" id="addDentistYesBtn" class="btn btn-sm btn-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addDentistModal">Yes</button>
+                            <button type="button" id="addDentistNoBtn" class="btn btn-sm btn-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#addDentistModal">No</button>
                         </div>
                     </div>
                 </div>
@@ -364,12 +447,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <?php include "../../components/notification.php" ?>
             </div>
 
-            <div class="col-md-9 my-3 rounded shadow bg-white row">
+            <div class="col-md-9 my-3 rounded shadow bg-white row">                
                 <div class="my-3">
                     <div class="col">
                         <h3>Dentist Lists</h3>                        
                         <span>View all related information about the clinic's dentists.</span>
                     </div>
+                    
+                    <div id="errorMessage" class="col-12" role="alert"></div>
 
                     <table id="myTable" class="table-group-divider table table-hover table-striped">
                         <thead>
@@ -378,6 +463,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <th class="col">Full Name</th>
                                 <th class="col">Contact Number</th>
                                 <th class="col">Specialist</th>
+                                <th class="col">Status</th>
                                 <th class="col">Action</th>
                             </tr>
                         </thead>
@@ -385,8 +471,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <tbody>
                             <?php
                             $stmt = $conn->prepare("SELECT CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname) AS Name, 
-                                di.id AS ID, di.contactno AS Contact, di.specialist AS Specialist
-                                FROM dentist_info di;");
+                                di.id AS ID, di.contactno AS Contact, di.specialist AS Specialist, ac.status as Status
+                                FROM dentist_info di
+                                LEFT OUTER JOIN accounts ac
+                                ON di.accounts_id = ac.id;");
                             $stmt->execute();
                             $result = $stmt->get_result();
 
@@ -394,10 +482,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo '
                                     <tr>
-                                        <td id="dentistID">' . $row['ID'] . '</td>
-                                        <td id="dentistName">' . $row['Name'] . '</td>
-                                        <td id="dentistContact">' .  $row['Contact'] . '</td>
-                                        <td id="dentistAge">' . $row['Specialist'] . '</td>
+                                        <td>' . $row['ID'] . '</td>
+                                        <td>' . $row['Name'] . '</td>
+                                        <td>' .  $row['Contact'] . '</td>
+                                        <td>' . $row['Specialist'] . '</td>
+                                        <td class="fw-bold ' . ($row['Status'] === 1 ? "text-success" : "text-danger") . '">' . ($row['Status'] === 1 ? "Active" : "Inactive") . '</td>
                                         <td class="appointID">
                                         <button type="button" value="' . $row['ID'] . '" class="btn btn-sm btn-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#dentistViewModal">View
                                         </button>
@@ -489,7 +578,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     targets: []
                 },
                 {
-                    targets: [0,1,2,3,4],
+                    targets: [0,1,2,3,4,5],
                     className: 'dt-body-center dt-head-center'
                 }
             ],
@@ -502,7 +591,135 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             ]
         });
 
-        // $('#dentistViewModal').modal('show');        
+        // $('#dentistViewModal').modal('show'); 
+
+		$("#myForm").submit(function(e){
+            showLoader();
+            $("#errorMessage").empty();
+			e.preventDefault();
+
+			var url = $("#myForm").attr('action');
+
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: $("#myForm").serialize(),
+                dataType: "json"
+			}).done(function (data) {
+                if (!data.success) {
+                    hideLoader();
+                    $("#addDentistMessage").append('<div class="mt-3 alert alert-danger">' + data.error +  '</div>');
+                } else {
+                    localStorage.setItem("errorMessage", data.message);
+                    location.reload();
+                }
+				// console.log(data);
+			}).fail(function(data) {
+				// console.log(data);
+			});
+		});
+
+		$("#changeStatusSaveBtn").click(function(e){
+            showLoader();
+            $("#errorMessage").empty();
+			e.preventDefault();
+
+            var formData = {
+                status: $("#dentistStatus").val(),
+                id: $(this).attr("value")
+            };
+
+			$.ajax({
+				type: "POST",
+				url: "php/update-dentist-status.php",
+				data: formData,
+                dataType: "json"
+			}).done(function (data) {
+                if (!data.success) {
+                    hideLoader();
+                    $("#addDentistMessage").append('<div class="mt-3 alert alert-danger">' + data.error +  '</div>');
+                } else {
+                    localStorage.setItem("errorMessage", data.message);
+                    location.reload();
+                }
+				console.log(data);
+			}).fail(function(data) {
+				console.log(data);
+			});
+		});
+
+        $("#dentistStatus").on("change", function() {
+            if ($("#dentistStatus").val() == 1) {
+                $("#dentistStatus").removeClass("text-danger");
+                $("#dentistStatus").addClass("text-success");
+            }else {
+                $("#dentistStatus").removeClass("text-success");                
+                $("#dentistStatus").addClass("text-danger");
+            }
+        });
+
+        $("#changeStatusBtn").on("click", function() {
+            $(this).hide();
+            $("#changeStatusBackBtn").hide();
+            $("#dentistStatusText").hide();
+            $("#changeStatusSaveBtn").show()
+            $("#changeStatusCancelBtn").show()
+            $("#dentistStatusDiv").show();
+            $("#dentistStatusDiv select").prop("disabled", false);
+        });
+
+        $("#changeStatusConfirmYesBtn").on("click", function() {
+            $("#changeStatusBtn").show();
+            $("#changeStatusBackBtn").show();
+            $("#dentistStatusText").show();
+            $("#changeStatusSaveBtn").hide()
+            $("#changeStatusCancelBtn").hide()
+            $("#dentistStatusDiv").hide();
+            $("#dentistStatusDiv select").prop("disabled", true);
+        });
+
+        $("#addDentistNoBtn").on("click", function() {
+            $("#noemail").attr("data-bs-toggle", "modal");
+            $("#noemail").attr("data-bs-target", "#noEmailConfirmModal");
+            $("#noemail").prop("checked", false);
+            $("#email").prop("readonly", false);
+            $("#email").val("");
+        });
+
+        $("#addDentistYesBtn").on("click", function() {
+            $("#noemail").removeAttr("data-bs-toggle");
+            $("#noemail").removeAttr("data-bs-target");
+        });
+
+        $("#noemail").on("click", function() {
+            let id =  "#" + $(this).attr('id').substring(2);
+
+            if ($(this).is(":checked")) {
+                $(this).prop("checked", true);
+                $(id).prop("readonly", true);
+                $(id).val("None");
+            } else {
+                $(this).prop("checked", false);
+                $(id).prop("readonly", false);
+                $(id).val("");
+                $(this).attr("data-bs-toggle", "modal");
+                $(this).attr("data-bs-target", "#noEmailConfirmModal");
+            }
+        });
+
+        $("#contnumber").on("focusin keypress focusout", function() {
+            if (!this.value.startsWith("09")) {
+                this.value = "09";
+            }
+        });
+        
+        if (localStorage.getItem("errorMessage")){
+            let message = localStorage.getItem("errorMessage");
+
+            $("#errorMessage").append('<div class="mt-3 alert alert-success">' + message +  '</div>');
+
+            localStorage.removeItem("errorMessage")
+        };
 
         $('body').on('click', '.viewAptDetail', function(){
             let id = $(this).attr('value');
@@ -520,6 +737,20 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 data: formData,
                 dataType: 'json'
             }).done(function (data) {
+                let status = data.status === 1 ? "Active" : "Inactive";
+                let statusStyle;
+                
+                if (data.status === 1) {
+                    $("#dentistStatusText, #dentistStatus").addClass("text-success");
+                    $("#dentistStatusText, #dentistStatus").removeClass("text-danger");
+                } else {
+                    $("#dentistStatusText, #dentistStatus").addClass("text-danger");
+                    $("#dentistStatusText, #dentistStatus").removeClass("text-success");                    
+                }
+
+                $("#changeStatusSaveBtn").val(data.AccountID);
+                $("#dentistStatus").val(data.status);
+                $("#dentistStatusText").text(status);
                 $("#dentistName").text(data.Name);
                 $("#dentistUsername").text(data.username);
                 $("#dentistBdate").text(data.bdate);
@@ -571,18 +802,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
         $('#userPasswordDentist, #confirmUserPasswordDentist').focusout("click", function() {
             $("#" + this.id + "Feedback").hide();
-        });
-
-        $("#noemail").click(function() {
-            let id =  "#" + $(this).attr('id').substring(2);
-
-            if ($(this).is(":checked")) {
-                $(id).prop("readonly", true);
-                $(id).val("None");
-            } else {                
-                $(id).prop("readonly", false);
-                $(id).val("");
-            }
         });
 	});
 

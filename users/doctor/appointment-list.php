@@ -594,7 +594,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         $status = "text-success";
                                     } else if ($row['Status'] == "Denied" || $row['Status'] == "Cancelled") {
                                         $status = "text-danger";
-                                    } else if ($row['Status'] == "Examined") {
+                                    } else if ($row['Status'] == "Evaluated") {
                                         $status = "text-secondary";
                                     } else {
                                         $status = "text-warning";
@@ -681,7 +681,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $("#aptdtlsstatus")
                     .removeClass("text-success text-warning text-danger")
                     .addClass("text-secondary")
-                    .text("Examined");
+                    .text("Evaluated");
                 refreshTreatment(patient_id);
 				// console.log(data);
 			}).fail(function(data) {
@@ -897,7 +897,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 } else if (data.Status == "Denied" || data.Status == "Cancelled") {
                     $("#aptdtlsstatus").removeClass("text-success text-warning text-secondary");
                     $("#aptdtlsstatus").addClass("text-danger");
-                } else if (data.Status == "Examined") {
+                } else if (data.Status == "Evaluated") {
                     $("#aptdtlsstatus").removeClass("text-success text-warning text-danger");
                     $("#aptdtlsstatus").addClass(" text-secondary");
                 } else {                        
@@ -1007,9 +1007,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     $('#had_hospitalized').text(hadHospitalized['#had_hospitalized']);
                 }
                 
-                console.log(data);
+                // console.log(data);
             }).fail(function(data) {
-                console.log(data);
+                // console.log(data);
             });
         }
 

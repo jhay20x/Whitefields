@@ -95,7 +95,7 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 					</div>
 								
 					<div class="mb-3" id="passwordValidation">
-						<p id="passLength" class="passwordValidate invalidPassword">• Minimum of 6 characters.</p>
+						<p id="passLength" class="passwordValidate invalidPassword">• Minimum of 6 characters. Max 20.</p>
 						<p id="passSymbol" class="passwordValidate validPassword">• Must not include any symbols except _.</p>
 						<p id="passLower" class="passwordValidate invalidPassword">• Must use atleast one lower case letter.</p>
 						<p id="passUpper" class="passwordValidate invalidPassword">• Must use atleast one upper case letter.</p>
@@ -221,6 +221,8 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 			if (!data.success) {
 				$("#forgotEmail").focus();
 				$("#errorMessage").append('<div class="alert alert-danger" role="alert">' + data.error +  '</div>');
+			} else {
+				$("#errorMessage").append('<div class="alert alert-success" role="alert">' + data.message +  '</div>');
 			}
 		}).fail(function(data) {
 			//console.log(data);
@@ -241,6 +243,10 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 		if ($_SESSION['account_type'] == 3) {
 			header("Location: ./users/doctor/dashboard.php");						
 		}
+	} else {
+		session_unset();
+		session_destroy();
+		header("Location: login.php");
 	}
 	
 	// if ($_SESSION['user_type'] === 2) {

@@ -72,37 +72,45 @@ if (isset($_SESSION['email_address'])) {
 <script src="./resources/js/loginPasswordToggler.js"></script>
 <script type="text/javascript" src="./resources/js/functions.js"></script>
 <script>
-	let otpFromUser, otpCode;
-	// let user_id = <?php // echo isset($_SESSION['user_id']) ? "'" . $_SESSION['user_id'] . "'" : "''"; ?>;
-	let username = <?php echo isset($_SESSION['username']) ? "'" . $_SESSION['username'] . "'" : "''"; ?>;
-	let userEmail = <?php echo isset($_SESSION['email_address']) ? "'" . $_SESSION['email_address'] . "'" : "''"; ?>;
-
 	$(document).ready(function () {
-		if (sessionStorage.getItem("timer") !== null) {
-			startTimer();
-		} else {			
-			$("#resendCodeBtn").prop("disabled", false);
+		let otpFromUser, otpCode;
+		const timer = "";
+		// let user_id = <?php // echo isset($_SESSION['user_id']) ? "'" . $_SESSION['user_id'] . "'" : "''"; ?>;
+		let username = <?php echo isset($_SESSION['username']) ? "'" . $_SESSION['username'] . "'" : "''"; ?>;
+		let userEmail = <?php echo isset($_SESSION['email_address']) ? "'" . $_SESSION['email_address'] . "'" : "''"; ?>;
+		
+		checkTimer();
+
+		function checkTimer() {
+			if (sessionStorage.getItem("timer") !== null) {
+				startTimer();
+			} else {			
+				$("#resendCodeBtn").prop("disabled", false);
+			}
 		}
 
 		$("#backToLogin").on("click", function () {
 			sessionStorage.removeItem("timer");
+			clearInterval(timer);
 			$.post("auth/session-end.php", function(data) {
 				window.location.href = "login.php"
 			});
 		});
 
 		$("#resendCodeBtn").on("click", function() {
+			showLoader();
+			$("#errorMessage").empty();
 			$("#resendCodeBtn").prop("disabled", true);
 			sessionStorage.setItem("timer", 60);
-			disableInputs();
-			setTimeout(showLoader, 1000);
+			disableInputs();	
 			setTimeout(sendOTP, 2000);
 		});
-
+		
 		$("#myForm").submit(function(e){
 			$("#errorMessage").empty();
 			e.preventDefault();
 			showLoader();
+			disableInputs();
 			fetchOTP();
 			$("#otpCode").blur();
 			setTimeout(checkOTP, 2000);
@@ -112,7 +120,7 @@ if (isset($_SESSION['email_address'])) {
 	function startTimer() {
 		let count = sessionStorage.getItem("timer");
 		
-		const timer = setInterval(function() {
+		timer = setInterval(function() {
 			count--;
 			sessionStorage.setItem("timer", count);
 			$("#resendCodeBtn").text("Resend New Code in " + count + " seconds.");
@@ -132,11 +140,14 @@ if (isset($_SESSION['email_address'])) {
 		if (otpFromUser == "") {
 			hideLoader();
 			$("#errorMessage").append('<div class="alert alert-danger">OTP is required. Please try again.</div>');
+			enableInputs();
 			$("#otpCode").focus();
 		}
 		else if (otpFromUser == otpCode) {
 			hideLoader();
 			disableInputs();
+			sessionStorage.removeItem("timer");
+			clearInterval(timer);
 			$("#errorMessage").append('<div class="alert alert-success">Email is successfully verified.</div>');
 			setTimeout(showLoader, 1000);
 			setTimeout(updateEmailStatus, 2000);
@@ -188,18 +199,21 @@ if (isset($_SESSION['email_address'])) {
 			//console.log(data);
 			hideLoader();
 			if (!data.success) {
+				enableInputs();
+				$("#resendCodeBtn").prop("disabled", false);
 				$("#forgotEmail").focus();
 				$("#errorMessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
 			} else {				
 				sessionStorage.setItem("timer", 60);
+				$("#resendCodeBtn").prop("disabled", true);
 				startTimer();
 				fetchOTP();
 				hideLoader();
 				enableInputs();
 			}
-			//console.log(data);
+			// console.log(data);
 		}).fail(function(data) {
-			//console.log(data);
+			// console.log(data);
 		});
 	}
 	

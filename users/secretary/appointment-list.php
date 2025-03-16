@@ -795,7 +795,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             }
                             break;
                         
-                        case "Examined":
+                        case "Evaluated":
                             $(".aptdtlsVerdictDiv").show();
                             $(".aptdtlsReasonDiv").hide();
                             $(".aptdtlsstatus").removeClass("text-danger text-warning text-success").addClass("text-secondary");
@@ -828,7 +828,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             $("#aptdtlsReason").text(data.Reason);
                             $("#aptdtlsReasonOther").text(data.ReasonOther);
                             break;
-                        case "Examined":
+                        case "Evaluated":
                             $("#aptdtlsVerdictDate").text(data.Examined_Date);
                             $("#aptdtlsVerdictTime").text(data.Examined_Time);
                             $("#aptdtlsVerdictBy").text(data.Dentist);

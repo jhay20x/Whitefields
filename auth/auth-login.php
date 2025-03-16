@@ -70,6 +70,7 @@ if (isset($_POST['loginUserEmail']) && isset($_POST['password'])) {
 							} else {
 								$emailVerification = false;
 								$_SESSION['email_address'] = $user_email;
+								$_SESSION['user_username'] = $user_username;
 							};
 						} else {
 							$error = "Login restricted due to multiple failed attempts. Please try again after $minutesLeft minute/s or reset your password with <a href='./forgot-password.php'>Forgot Password</a>";

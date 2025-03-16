@@ -541,7 +541,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $("#errorMessage").append('<div class="alert alert-success">' + message +  '</div>');
 
             localStorage.removeItem("errorMessage")
-        }    
+        }
 
         $("#nomname, #nosuffix, #nooccupation").click(function() {
             let id =  "#" + $(this).attr('id').substring(2);
