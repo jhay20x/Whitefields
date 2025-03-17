@@ -190,7 +190,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <option value="5">5</option>
                                             <option value="6">6</option>
                                         </select>
-                                        <label for="timeHour">Set Time: Hour</label>
+                                        <label for="timeHour">Hour</label>
                                     </div>
                                     
                                     <h3 class="mx-3">:</h3>
@@ -201,7 +201,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <option value="00">00</option>
                                             <option value="30">30</option>
                                         </select>
-                                        <label for="timeMinute">Set Time: Minute</label>
+                                        <label for="timeMinute">Minute</label>
                                     </div>
 
                                     <h6 id="ampmText" class="mx-3">--</h6>
