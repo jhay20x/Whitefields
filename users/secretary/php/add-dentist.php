@@ -45,7 +45,7 @@ function insertInfo($conn, $insertId, $lname, $fname, $mname, $suffix, $contnumb
 
 function insertAccount($conn, $email, $username, $hash) {
     $stmt = $conn->prepare("INSERT INTO `accounts`(`account_type_id`, `email_address`, `username`, `password`, `email_verified`) VALUES (3,?,?,?,1)");
-    $stmt->bind_param("sssi", $email, $username, $hash);
+    $stmt->bind_param("sss", $email, $username, $hash);
     $stmt->execute();
     $insertId = $conn->insert_id;
 
@@ -116,7 +116,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     
     $insertId = insertAccount($conn, $email, $username, $hash);
     insertInfo($conn, $insertId, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $specialist, $gender, $religion, $nationality, $aboutme, $address);
-    $message = "A new dentist has been successfully added.";
+    $message = "A new dentist has been successfully added. Want to manage their <a href='schedule.php'>schedule</a>?";
 }
 
 if (!empty($error)) {

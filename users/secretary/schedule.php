@@ -99,13 +99,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <div class="row">
                                 <?php
                                     $count = 0;
-                                    $checked1;
-                                    $checked2;
-                                    $checked3;
-                                    $checked4;
-                                    $checked5;
-                                    $checked6;
-                                    $checked7;
+                                    $checked = $checked2 = $checked3 = $checked4 = $checked5 = $checked6 = $checked7 = "";
 
                                     $stmt = $conn->prepare("SELECT di.id AS ID, CONCAT(di.fname , ' ' , di.mname , ' ' , di.lname) AS Name,
                                         sc.Sun, sc.Mon, sc.Tue, sc.Wed, sc.Thu, sc.Fri, sc.Sat
@@ -117,82 +111,31 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     $result = $stmt->get_result();
 
                                     if ($result->num_rows > 0) {
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            $count += 1;
+                                        while ($row = mysqli_fetch_assoc($result)) {                                            
+                                            echo '<div class="row d-flex align-items-center mb-3">
+                                                    <div class="col-12 col-lg-2 ms-1">
+                                                        <span>' . $row['Name'] . '</span>
+                                                    </div>
+                                                    <div class="col-12 col-lg-6 row">';
 
-                                            $row['Sun'] ? $checked1 = "checked" : $checked1 = "";
-                                            $row['Mon'] ? $checked2 = "checked" : $checked2 = "";
-                                            $row['Tue'] ? $checked3 = "checked" : $checked3 = "";
-                                            $row['Wed'] ? $checked4 = "checked" : $checked4 = "";
-                                            $row['Thu'] ? $checked5 = "checked" : $checked5 = "";
-                                            $row['Fri'] ? $checked6 = "checked" : $checked6 = "";
-                                            $row['Sat'] ? $checked7 = "checked" : $checked7 = "";
+                                            $days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-                                            echo '
-                                        <div class="row mb-3">
-                                            <div class="col-5 col-lg-2 d-flex align-items-center ms-1">
-                                                <span>'. $row['Name'] .'</span>
-                                            </div>
+                                            foreach ($days as $day) {
+                                                $checked = !empty($row[$day]) ? "checked" : "";
+                                                    echo '<div class="col-auto">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" disabled name="radio' . $day . '" id="radio' . $day . $count . '" ' . $checked . '>
+                                                                <label class="form-check-label" for="radio' . $day . $count . '">
+                                                                    ' . $day . '
+                                                                </label>
+                                                            </div>
+                                                        </div>';
+                                            }
                                             
-                                            <div class="col-6 row">
-                                                <div class="col d-flex justify-content-start">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="radioSun" disabled id="radioSun' . $count . '" ' . $checked1 . '>
-                                                        <label class="form-check-label" for="radioSun' . $count . '">
-                                                            Sun
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col d-flex justify-content-start">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="radioMon" disabled id="radioMon' . $count . '" ' . $checked2 . '>
-                                                        <label class="form-check-label" for="radioMon' . $count . '">
-                                                            Mon
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col d-flex justify-content-start">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="radioTue" disabled id="radioTue' . $count . '" ' . $checked3 . '>
-                                                        <label class="form-check-label" for="radioTue' . $count . '">
-                                                            Tue
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col d-flex justify-content-start">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="radioWed" disabled id="radioWed' . $count . '" ' . $checked4 . '>
-                                                        <label class="form-check-label" for="radioWed' . $count . '">
-                                                            Wed
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col d-flex justify-content-start">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="radioThur" disabled id="radioThur' . $count . '" ' . $checked5 . '>
-                                                        <label class="form-check-label" for="radioThur' . $count . '">
-                                                            Thu
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col d-flex justify-content-start">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="radioFri" disabled id="radioFri' . $count . '" ' . $checked6 . '>
-                                                        <label class="form-check-label" for="radioFri' . $count . '">
-                                                            Fri
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col d-flex justify-content-start">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="radioSat" disabled id="radioSat' . $count . '" ' . $checked7 . '>
-                                                        <label class="form-check-label" for="radioSat' . $count . '">
-                                                            Sat
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>';
+                                            echo '  </div>
+                                                </div>';
+                                                
+                                            $count++;
                                         }
                                     }
                                 ?>
