@@ -44,8 +44,8 @@ function insertInfo($conn, $insertId, $lname, $fname, $mname, $suffix, $contnumb
 }
 
 function insertAccount($conn, $email, $username, $hash) {
-    $stmt = $conn->prepare("INSERT INTO `accounts`(`account_type_id`, `email_address`, `username`, `password`, `email_verified`) VALUES (3,?,?,?,0)");
-    $stmt->bind_param("sss", $email, $username, $hash);
+    $stmt = $conn->prepare("INSERT INTO `accounts`(`account_type_id`, `email_address`, `username`, `password`, `email_verified`) VALUES (3,?,?,?,1)");
+    $stmt->bind_param("sssi", $email, $username, $hash);
     $stmt->execute();
     $insertId = $conn->insert_id;
 

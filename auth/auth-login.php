@@ -39,7 +39,10 @@ if (isset($_POST['loginUserEmail']) && isset($_POST['password'])) {
 		}else if (empty($password)){
 			$error = 'Password is required.';
 			// header("Location: ../login.php?userLogin=1&error=Password is required.&loginUserEmail=$uname");
-		}else {
+		} else if ($uname == "None") {
+			$error = 'Incorect username or passwords.';
+		}
+		else {
 			$stmt = $conn->prepare("SELECT * FROM `accounts` WHERE `username` = ? OR `email_address` = ?");
 			$stmt->bind_param("ss", $uname, $uname);
 			$stmt->execute();
@@ -53,73 +56,77 @@ if (isset($_POST['loginUserEmail']) && isset($_POST['password'])) {
 				$user_id = $user['id'];
 				$user_password = $user['password'];
 				$user_type = $user['account_type_id'];
+				$status = $user['status'];
 				// if (($uname === $user_username || $uname === $user_email) && $user_type == 2) {
 
 				if ((strtolower($uname) === strtolower($user_username) || strtolower($uname) === strtolower($user_email))) {
-					if (password_verify($password, $user_password)) {
-						checkHasFailedAttempt($uname);
-
-						if (!checkTimeRemaining()) {
-							updateFailedLogin(NULL, NULL, $uname);
+					if ($status) {
+						if (password_verify($password, $user_password)) {
+							checkHasFailedAttempt($uname);
 	
-							if ($emailVerification = $user['email_verified']) {
-								$emailVerification = true;
-								$_SESSION['user_id'] = $user_id;
-								$_SESSION['user_username'] = $user_username;
-								$_SESSION['account_type'] = $user_type;
-							} else {
-								$emailVerification = false;
-								$_SESSION['email_address'] = $user_email;
-								$_SESSION['user_username'] = $user_username;
-							};
-						} else {
-							$error = "Login restricted due to multiple failed attempts. Please try again after $minutesLeft minute/s or reset your password with <a href='./forgot-password.php'>Forgot Password</a>";
-						}
-
-						// $_SESSION['user_type'] = 2;
-						// header("Location: ../users/secretary/dashboard.php");	
-					}else {
-						// header("Location: ../login.php?userLogin=1&error=Incorect username or password.&loginUserEmail=$uname");
-
-						// echo var_dump(checkHasFailedAttempt($uname));
-						// echo var_dump(checkTimeRemaining());
-
-						if (checkHasFailedAttempt($uname)) {
 							if (!checkTimeRemaining()) {
 								updateFailedLogin(NULL, NULL, $uname);
-								$error = "Incorect password. Please try again.";
+		
+								if ($emailVerification = $user['email_verified']) {
+									$emailVerification = true;
+									$_SESSION['user_id'] = $user_id;
+									$_SESSION['user_username'] = $user_username;
+									$_SESSION['account_type'] = $user_type;
+								} else {
+									$emailVerification = false;
+									$_SESSION['email_address'] = $user_email;
+									$_SESSION['user_username'] = $user_username;
+								};
 							} else {
 								$error = "Login restricted due to multiple failed attempts. Please try again after $minutesLeft minute/s or reset your password with <a href='./forgot-password.php'>Forgot Password</a>";
 							}
-							
-						} else {		
-							global $attempts;
-							
-							if ($attempts == 0) {
-								$failed_login_timestamp = date('Y-m-d H:i:s');
-							} else {
-								$failed_login_timestamp = $lastFailedAttemptTime;
-							}
-
-							$attempts += 1;
-							$_SESSION['maxAttempt'] -= 1;
-
-							updateFailedLogin($attempts,$failed_login_timestamp,$uname);
-
-							if ($attempts == 4) {
+	
+							// $_SESSION['user_type'] = 2;
+							// header("Location: ../users/secretary/dashboard.php");	
+						}else {
+							// header("Location: ../login.php?userLogin=1&error=Incorect username or password.&loginUserEmail=$uname");
+	
+							// echo var_dump(checkHasFailedAttempt($uname));
+							// echo var_dump(checkTimeRemaining());
+	
+							if (checkHasFailedAttempt($uname)) {
 								if (!checkTimeRemaining()) {
 									updateFailedLogin(NULL, NULL, $uname);
 									$error = "Incorect password. Please try again.";
 								} else {
 									$error = "Login restricted due to multiple failed attempts. Please try again after $minutesLeft minute/s or reset your password with <a href='./forgot-password.php'>Forgot Password</a>";
 								}
-							} else {
-								$error = "Incorect password. " . $_SESSION['maxAttempt'] . " attempt/s remaining.";
+								
+							} else {		
+								global $attempts;
+								
+								if ($attempts == 0) {
+									$failed_login_timestamp = date('Y-m-d H:i:s');
+								} else {
+									$failed_login_timestamp = $lastFailedAttemptTime;
+								}
+	
+								$attempts += 1;
+								$_SESSION['maxAttempt'] -= 1;
+	
+								updateFailedLogin($attempts,$failed_login_timestamp,$uname);
+	
+								if ($attempts == 4) {
+									if (!checkTimeRemaining()) {
+										updateFailedLogin(NULL, NULL, $uname);
+										$error = "Incorect password. Please try again.";
+									} else {
+										$error = "Login restricted due to multiple failed attempts. Please try again after $minutesLeft minute/s or reset your password with <a href='./forgot-password.php'>Forgot Password</a>";
+									}
+								} else {
+									$error = "Incorect password. " . $_SESSION['maxAttempt'] . " attempt/s remaining.";
+								}
+								
 							}
-							
 						}
+					} else {
+						$error = "Your account is marked as inactive. Please contact the secretary to re-activate your account.";
 					}
-
 				} else {
 					$error = "Incorect username or password.";
 					// header("Location: ../login.php?userLogin=1&error=Incorect username or password.&loginUserEmail=$uname");

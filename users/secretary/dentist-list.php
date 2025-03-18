@@ -660,22 +660,24 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
         $("#changeStatusBtn").on("click", function() {
             $(this).hide();
-            $("#changeStatusBackBtn").hide();
-            $("#dentistStatusText").hide();
-            $("#changeStatusSaveBtn").show()
-            $("#changeStatusCancelBtn").show()
-            $("#dentistStatusDiv").show();
+            $("#changeStatusBackBtn, #dentistStatusText").hide();
+            $("#changeStatusSaveBtn, #changeStatusCancelBtn, #dentistStatusDiv").show()
             $("#dentistStatusDiv select").prop("disabled", false);
         });
 
+        $("#aptCancelYesBtn").on("click", function() {
+            $("#myForm")[0].reset();
+            $("#userPasswordDentist, #confirmUserPasswordDentist").removeClass("is-invalid");
+        });
+
         $("#changeStatusConfirmYesBtn").on("click", function() {
-            $("#changeStatusBtn").show();
-            $("#changeStatusBackBtn").show();
-            $("#dentistStatusText").show();
-            $("#changeStatusSaveBtn").hide()
-            $("#changeStatusCancelBtn").hide()
-            $("#dentistStatusDiv").hide();
+            let id = $(this).val();
+
+            $("#changeStatusBtn, #changeStatusBackBtn, #dentistStatusText").show();
+            $("#changeStatusSaveBtn, #changeStatusCancelBtn, #dentistStatusDiv").hide();
             $("#dentistStatusDiv select").prop("disabled", true);
+            $("#dentistStatus").val(id);
+            styleStatus(id);
         });
 
         $("#addDentistNoBtn").on("click", function() {
@@ -687,7 +689,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         });
 
         $("#addDentistYesBtn").on("click", function() {
-            $("#noemail").removeAttr("data-bs-toggle");
+            $("#noemail").removeAttr("data-bs-toggle data-bs-target");
             $("#noemail").removeAttr("data-bs-target");
         });
 
@@ -726,6 +728,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             fetchDentistDetails(id);
         });
 
+        function styleStatus(status) {
+            if (status == 1) {
+                $("#dentistStatusText, #dentistStatus").addClass("text-success");
+                $("#dentistStatusText, #dentistStatus").removeClass("text-danger");
+            } else {
+                $("#dentistStatusText, #dentistStatus").addClass("text-danger");
+                $("#dentistStatusText, #dentistStatus").removeClass("text-success");                    
+            }
+        }
+
         function fetchDentistDetails(id) {            
             var formData = {
                 id: id
@@ -737,32 +749,30 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 data: formData,
                 dataType: 'json'
             }).done(function (data) {
-                let status = data.status === 1 ? "Active" : "Inactive";
+                let status = data.status == 1 ? "Active" : "Inactive";
                 let statusStyle;
                 
-                if (data.status === 1) {
-                    $("#dentistStatusText, #dentistStatus").addClass("text-success");
-                    $("#dentistStatusText, #dentistStatus").removeClass("text-danger");
-                } else {
-                    $("#dentistStatusText, #dentistStatus").addClass("text-danger");
-                    $("#dentistStatusText, #dentistStatus").removeClass("text-success");                    
-                }
+                styleStatus(data.status);
 
                 $("#changeStatusSaveBtn").val(data.AccountID);
                 $("#dentistStatus").val(data.status);
-                $("#dentistStatusText").text(status);
-                $("#dentistName").text(data.Name);
-                $("#dentistUsername").text(data.username);
-                $("#dentistBdate").text(data.bdate);
-                $("#dentistAge").text(data.age);
-                $("#dentistContact").text(data.contactno);
-                $("#dentistGender").text(data.gender);
-                $("#dentistAddress").text(data.address);
-                $("#dentistAboutMe").text(data.about_me);
-                $("#dentistReligion").text(data.religion);
-                $("#dentistNationality").text(data.nationality);
-                $("#dentistEmail").text(data.email_address);                
-                $("#dentistSpecialist").text(data.specialist);
+                $("#changeStatusConfirmYesBtn").val(data.status);
+
+                let detailsId = [
+                    "#dentistStatusText", "#dentistName", "#dentistUsername",
+                    "#dentistBdate", "#dentistAge", "#dentistContact", "#dentistGender", "#dentistAddress",
+                    "#dentistAboutMe", "#dentistReligion", "#dentistNationality", "#dentistEmail", "#dentistSpecialist"
+                ];
+
+                let details = [
+                    status, data.Name, data.username, 
+                    data.bdate, data.age, data.contactno, data.gender, data.address, 
+                    data.about_me, data.religion, data.nationality, data.email_address, data.specialist
+                ];
+
+                for (let index = 0; index < details.length; index++) {
+                    $(detailsId[index]).text(details[index]);
+                }
 
                 //console.log(data.responseText);
             }).fail(function(data) {
@@ -783,7 +793,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         });
 
         $("#togglePassword, #toggleConfirmPassword").on("click", function() {
-            let passwordInput = this.id === "togglePassword" ? "#userPasswordDentist" : "#confirmUserPasswordDentist";
+            let passwordInput = this.id == "togglePassword" ? "#userPasswordDentist" : "#confirmUserPasswordDentist";
             
             if ($(passwordInput).attr("type") == "password") {
                 $(passwordInput).attr("type", "text");
