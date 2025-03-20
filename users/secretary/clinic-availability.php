@@ -228,7 +228,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="ms-3">
                                     <div id="errorMessage" class="" role="alert"></div>
                                     <div class="row mb-3 align-items-center">
-                                        <div class="col-10 col-md-8 col-lg-9 col-xl-6">
+                                        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
                                             <h5 class="">Sunday</h5>
                                             <p class="mb-0"><?php echo $sun ?></p>
                                         </div>
@@ -237,7 +237,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
-                                        <div class="col-10 col-md-8 col-lg-9 col-xl-6">
+                                        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
                                             <h5 class="">Monday</h5>
                                             <p class="mb-0"><?php echo $mon ?></p>
                                         </div>
@@ -246,7 +246,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
-                                        <div class="col-10 col-md-8 col-lg-9 col-xl-6">
+                                        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
                                             <h5 class="">Tuesday</h5>
                                             <p class="mb-0"><?php echo $tue ?></p>
                                         </div>
@@ -255,7 +255,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
-                                        <div class="col-10 col-md-8 col-lg-9 col-xl-6">
+                                        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
                                             <h5 class="">Wednesday</h5>
                                             <p class="mb-0"><?php echo $wed ?></p>
                                         </div>
@@ -264,7 +264,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
-                                        <div class="col-10 col-md-8 col-lg-9 col-xl-6">
+                                        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
                                             <h5 class="">Thursday</h5>
                                             <p class="mb-0"><?php echo $thu ?></p>
                                         </div>
@@ -273,7 +273,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
-                                        <div class="col-10 col-md-8 col-lg-9 col-xl-6">
+                                        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
                                             <h5 class="">Friday</h5>
                                             <p class="mb-0"><?php echo $fri ?></p>
                                         </div>
@@ -282,7 +282,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
                                     <div class="row align-items-center">
-                                        <div class="col-10 col-md-8 col-lg-9 col-xl-6">
+                                        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
                                             <h5 class="">Saturday</h5>
                                             <p class="mb-0"><?php echo $sat ?></p>
                                         </div>
@@ -294,7 +294,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             </div>
                         </div>
 
-                        <div class="col-12 col-lg">
+                        <!-- <div class="col-12 col-lg">
                             <div class="col">
                                 <h3>Holidays</h3>
                                 <span>Set the regular holidays that will reflect when requesting an appointment.</span>
@@ -321,7 +321,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
