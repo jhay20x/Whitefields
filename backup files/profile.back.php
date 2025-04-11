@@ -31,7 +31,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $stmt->bind_param('i',$id);
             $stmt->execute();
             $result = $stmt->get_result();
-            
+            $stmt->close();            
     
             if ($result->num_rows == 1) {
                 $row = $result->fetch_assoc();
@@ -222,7 +222,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="p-5 rounded shadow">
                     <p class="display-1 fw-bold">Welcome <?php echo $_SESSION['user_username']; ?></p>
                     <a href="../../auth/logout.php">
-                        <button class="btn btn-primary col-12">Logout</button>
+                        <button class="btn btn-outline-primary col-12">Logout</button>
                     </a>
                 </div>
             </div>
@@ -446,7 +446,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     </div>
                                 </div> -->
 
-                                <input type="submit" class="btn btn-primary btn-md mt-1" value="Submit" name="submitbtn">
+                                <input type="submit" class="btn btn-outline-primary btn-md mt-1" value="Submit" name="submitbtn">
                             </form>
                         </div>
                     </div>                    

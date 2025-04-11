@@ -12,6 +12,7 @@ function fetchProcedures($conn, $pid) {
     $stmt = $conn->prepare("SELECT * FROM procedures;");
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
 
     $data = [];
 
@@ -35,6 +36,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $stmt->bind_param('ii', $pid, $dentist_id);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
 
     $procedures = [];
 

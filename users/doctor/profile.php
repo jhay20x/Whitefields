@@ -32,7 +32,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $stmt->bind_param('i',$id);
             $stmt->execute();
             $result = $stmt->get_result();
-            
+            $stmt->close();            
     
             if ($result->num_rows == 1) {
                 $row = $result->fetch_assoc();
@@ -349,7 +349,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-center">
-                        <input type="submit" class="btn btn-sm btn-primary btn-md mt-1" value="Submit" name="submitbtn">
+                        <input type="submit" class="btn btn-sm btn-outline-primary btn-md mt-1" value="Submit" name="submitbtn">
                     </div>
                 </form>
             </div>

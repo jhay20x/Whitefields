@@ -54,7 +54,7 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 	
 	<div class="d-flex justify-content-center align-items-center row container">
 		<div class="d-flex align-content-center justify-content-center row">
-			<form class="d-flex col-4 justify-content-center align-items-center" method="post" action="" id="myForm">
+			<form class="d-flex col justify-content-center align-items-center" method="post" action="" id="myForm">
 				<div class="p-5 flex-column rounded shadow d-flex align-items-center row">
 					<div class="d-flex flex-column align-items-center">
 						<a href="home.php">
@@ -106,7 +106,7 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 						
 					<div style="display: block;" class="userLogin">
 						<div class="d-flex flex-column align-items-center">
-							<button type="submit" id="loginBtn" name="userLogin" class="btn p-2 mb-3 col-12 btn-primary disableInputs">LOGIN</button>
+							<button type="submit" id="loginBtn" name="userLogin" class="btn p-2 mb-3 col-12 btn-outline-primary disableInputs">LOGIN</button>
 							<h6>
 								No account yet?
 								<button type="button" id="signUpLink" class="btn btn-sm btn-outline-primary disableInputs">Sign up</button>
@@ -121,7 +121,7 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 					
 					<div style="display: none;" class="userSignUp">
 						<div class="d-flex flex-column align-items-center">
-							<button type="submit" id="signUpBtn" class="btn p-2 mb-3 col-12 btn-primary disableInputs">SIGN UP</button>
+							<button type="submit" id="signUpBtn" class="btn p-2 mb-3 col-12 btn-outline-primary disableInputs">SIGN UP</button>
 							<h6>
 							Already signed up?
 							<button type="button" id="loginLink" class="btn btn-sm btn-outline-primary disableInputs">Login</button>
@@ -132,9 +132,9 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 				</div>
 			</form>
 
-			<div class="col-auto d-none d-lg-block">
-				<img src="./resources/images/dentist.svg" class="img-fluid h-100" height="auto" width="550px" alt="Dentist">
-			</div>	
+			<div class="row col justify-content-center align-items-center d-none d-lg-flex">
+				<img src="./resources/images/dentist.svg" width="55px" alt="Dentist">
+			</div>
 		</div>
 	</div>
 </body>

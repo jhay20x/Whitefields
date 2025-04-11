@@ -24,6 +24,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         <title>Appointment List - Whitefields Dental Clinic</title>
         <link rel="stylesheet" href="../../resources/css/bootstrap.css">
         <link rel="stylesheet" href="../../resources/css/sidebar.css">
+        <link rel="stylesheet" href="../../resources/css/loader.css">
         <link rel="stylesheet" href="../../resources/css/jquery-ui.css">
         <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
         <link rel="stylesheet" href="../../resources/css/dataTables.bootstrap5.css">
@@ -85,6 +86,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     <body class="bg-body-secondary">
         <?php include "../../components/sidebar.php" ?>
 
+        <div id="overlay" style="display:none;">
+            <div id="loader"></div>		
+        </div>
+
         <!-- Modal -->
         <div class="modal fade" id="patientUpdateStatusModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="patientUpdateStatusLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -107,13 +112,43 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             </div>
 
                             <hr>
-
-                            <div class="col-12 col-lg">
-                                <h6>Set Status</span></h6>
-                            </div>
                             
                             <div class="row">
                                 <div class="col-lg-6">
+                                    <div class="col-12 col-lg">
+                                        <h6>Change Dentist</span></h6>
+                                    </div>
+                                    <div class="form-floating mb-3 mb-lg-3">
+                                        <select class="form-select" name="patientChangeDentist" id="patientChangeDentist">
+                                            <option disabled selected value="">Select Dentist...</option>
+                                            <?php
+                                                $stmt = $conn->prepare("SELECT di.id AS ID, 
+                                                CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
+                                                CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS Dentist
+                                                FROM dentist_info di
+                                                LEFT OUTER JOIN Accounts ac ON ac.id = di.accounts_id
+                                                WHERE ac.status != 0;");
+                                                $stmt->execute();
+                                                $result = $stmt->get_result();
+                                                $stmt->close();
+
+                                                if ($result->num_rows > 0) {
+                                                    while ($row = mysqli_fetch_assoc($result)) {
+                                                        echo '
+                                                            <option value="' . $row['ID'] . '">' . $row['Dentist'] . '</option>
+                                                        ';
+                                                    }
+                                                }
+                                            ?>
+                                        </select>
+                                        <label for="patientChangeDentist">Dentist</label>
+                                    </div>
+                                </div> 
+
+                                <div id="aptdtlsUpdateStatus" class="col-lg-6">
+                                    <div class="col-12 col-lg">
+                                        <h6>Set Status</span></h6>
+                                    </div>
                                     <div class="form-floating mb-3 mb-lg-3">
                                         <select class="form-select" name="patientUpdateStatus" id="patientUpdateStatus">
                                             <option disabled selected value="">Select...</option>
@@ -122,8 +157,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </select>
                                         <label for="patientUpdateStatus">Status</label>
                                     </div>
-                                </div>    
-                                <div class="col-lg-6">
+
                                     <div id="reasonDiv" class="col-lg mb-3">
                                         <div class="form-floating">
                                             <select class="form-select" name="reason" id="reason">
@@ -132,7 +166,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                                     $stmt = $conn->prepare("SELECT * FROM `rejected_reasons`;");
                                                     $stmt->execute();
                                                     $result = $stmt->get_result();
-
+                                                    $stmt->close();
+    
                                                     if ($result->num_rows > 0) {
                                                         while ($row = mysqli_fetch_assoc($result)) {
                                                             echo '
@@ -141,17 +176,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                                         }
                                                     }
                                                 ?>
-                                                <!-- <option value="1">Reason 1</option>
-                                                <option value="2">Reason 2</option>
-                                                <option value="3">Reason 3</option>
-                                                <option value="4">Reason 4</option>
-                                                <option value="5">Reason 5</option>
-                                                <option value="6">Other...</option> -->
                                             </select>
                                             <label for="reason">Reason</label>
                                         </div>
                                     </div>
-
+    
                                     <div id="reasonOtherDiv" class="col-lg">
                                         <div class="form-floating">
                                             <input autocomplete="off" type="text" name="reasonOther" placeholder="Reason"  id="reasonOther" class="form-control">
@@ -163,8 +192,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" value="" id="aptTreatPatientBackBtn" class="btn btn-sm btn-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#appointListModal">Save</button>
-                        <button type="button" value="" id="aptTreatPatientContinueBtn" class="btn btn-sm btn-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#cancelSetStatusModal">Cancel</button>
+                        <button type="button" value="" id="updateStatusSaveBtn" class="btn btn-sm btn-outline-success m-2 me-0">Save</button>
+                        <button type="button" value="" id="updateStatusCancelBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#cancelSetStatusModal">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -211,7 +240,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                             <hr class="aptdtlsVerdictDiv">
 
-                            <div class="d-flex align-items-start row">
+                            <div class="align-items-start row">
                                 <div class="col-12 col-lg aptdtlsVerdictDiv">
                                     <h6><span class="aptdtlsVerdict"></span> Date: <span id="aptdtlsVerdictDate" class="fw-normal"></span></h6>
                                     <h6><span class="aptdtlsVerdict"></span> Time: <span id="aptdtlsVerdictTime" class="fw-normal"></span></h6>
@@ -225,8 +254,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             </div>                  
                         </div>
                     </div>
-                    <div id="aptdtlsUpdateStatus" class="modal-footer">
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#patientUpdateStatusModal">Update Status</button>
+                    <div class="modal-footer">
+                        <button id="updateStatusBtn" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientUpdateStatusModal">Update Appointment</button>
                     </div>
                 </div>
             </div>
@@ -240,15 +269,15 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <h6 class="modal-title" id="cancelSetStatusLabel">
                             <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#calendar3"/></svg>
                         </h6>
-                        <h6 class="ms-2">Appointment Cancellation Form</h6>
+                        <h6 class="ms-2">Update Appointment Form</h6>
                         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelSetStatusClose" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
                             <div class="text-center">
                                 <h6>Are you sure to cancel editing this form?</h6>
-                                <button type="button" value="" id="aptCancelYesBtn" class="btn btn-sm btn-danger m-2 me-0" data-bs-toggle="modal"data-bs-target="#appointListModal">Yes</button>
-                                <button type="button" value="" id="aptCancelNoBtn" class="btn btn-sm btn-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#patientUpdateStatusModal">No</button>
+                                <button type="button" value="" id="aptCancelYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal"data-bs-target="#appointListModal">Yes</button>
+                                <button type="button" value="" id="aptCancelNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#patientUpdateStatusModal">No</button>
                             </div>
                         </div>
                     </div>
@@ -438,7 +467,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
                                 </div>
-                                <div id="tratmentItem" class="accordion-item">
+                                <div id="treatmentItem" class="accordion-item">
                                     <h2 class="accordion-header">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#treatmentInfo" aria-expanded="false" aria-controls="treatmentInfo">
                                             <span class="h6">Treatment History</span>
@@ -469,7 +498,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-primary"  data-bs-toggle="modal" data-bs-target="#appointListModal">Back</button>
+                        <button class="btn btn-sm btn-outline-primary"  data-bs-toggle="modal" data-bs-target="#appointListModal">Back</button>
                     </div>
                 </div>
             </div>
@@ -503,7 +532,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
+                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
                     </div>
                 </div>
             </div>
@@ -525,7 +554,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
+                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
                     </div>
                 </div>
             </div>
@@ -551,30 +580,37 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <span>View and manage all of the appointments received by the clinic.</span>
                         </div>
 
-                        <table id="myTable" class="table-group-divider table table-hover table-striped">
+                        <table id="appointmentListTable" class="table-group-divider table table-hover table-striped">
                             <thead>
                                 <tr>
+                                    <th class="col">ID</th>
                                     <th class="col">Request Date</th>
                                     <!-- <th class="col">Request Time</th> -->
                                     <th class="col-3">Patient Name</th>
                                     <th class="col">Appointment Date</th>
+                                    <th class="col-3">Dentist Name</th>
                                     <th class="col">Status</th>
                                     <!-- <th class="col">Appointment Time</th> -->
                                     <th class="col">Action</th>
                                 </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody id="appointmentListTableBody">
                                 <?php
                                 $stmt = $conn->prepare("SELECT ar.request_datetime AS RequestDateTime, st.status_name AS Status, ar.start_datetime AS ApprovedDateTime,
-                                    CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname) AS Name, ar.id AS ID, ar.patient_id AS PID
+                                    CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
+                                    CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name, ar.id AS ID, ar.patient_id AS PID,
+                                    CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
+                                    CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS Dentist
                                     FROM appointment_requests ar
                                     LEFT OUTER JOIN patient_info pi ON pi.id = ar.patient_id
+                                    LEFT OUTER JOIN dentist_info di ON di.id = ar.dentist_info_id
                                     LEFT OUTER JOIN appointment_status st ON st.id = ar.appoint_status_id
                                     WHERE ar.appoint_status_id != 4
-                                    ORDER BY RequestDateTime DESC;");
+                                    ORDER BY ar.id  DESC;");
                                 $stmt->execute();
                                 $result = $stmt->get_result();
+                                $stmt->close();
 
                                 $status;
 
@@ -592,12 +628,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         }
                                         echo '
                                         <tr>
+                                            <td id="appointID">' . $row['ID'] . '</td>
                                             <td id="appointRequestDate">' . $requesttime . '</td>
                                             <td id="appointName">' . $row['Name'] . '</td>
                                             <td id="appointApprovedDate">' . $approvedtime . '</td>
+                                            <td id="appointDentistName">' . $row['Dentist'] . '</td>
                                             <td id="appointStatus" class="' . $status . ' fw-bold">' . $row['Status'] . '</td>
                                             <td class="appointID">
-                                            <button type="button" data-p-id="' . $row['PID'] . '" value="' . $row['ID'] . '" class="btn btn-sm btn-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#appointListModal">View
+                                            <button type="button" data-p-id="' . $row['PID'] . '" value="' . $row['ID'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#appointListModal">View
                                             </button>
                                             </td>
                                         </tr>
@@ -639,61 +677,65 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     <script src="../../resources/js/dataTables.select.js"></script>
     <script src="../../resources/js/select.dataTables.js"></script>
     <script src="../../resources/js/buttons.dataTables.js"></script>
+    <script src="../../resources/js/functions.js" defer></script>
 
     <script>
         $(document).ready(function() {
             let patient_id;
 
+            loadTable();
             loadModal();
-            $('#myTable thead th').eq(3).attr('width', '0%');
+            $('#appointmentListTable thead th').eq(3).attr('width', '0%');
 
-            let table = new DataTable('#myTable', {
-                language: {
-                    searchBuilder: {
-                        title: {
-                            0: 'Filters',
-                            _: 'Filters (%d)'
-                        },
-                    }
-                },
-                select: false,
-                lengthMenu: [
-                    [15, 25, 50, -1],
-                    [15, 25, 50, 'All'],
-                ],
-                layout: {
-                    top1: {
+            function loadTable() {
+                let table = new DataTable('#appointmentListTable', {
+                    language: {
                         searchBuilder: {
-
+                            title: {
+                                0: 'Filters',
+                                _: 'Filters (%d)'
+                            },
+                        }
+                    },
+                    select: false,
+                    lengthMenu: [
+                        [15, 25, 50, -1],
+                        [15, 25, 50, 'All'],
+                    ],
+                    layout: {
+                        top1: {
+                            searchBuilder: {
+    
+                            },
                         },
-                    },
-                    topStart: {
-
-                    },
-                    bottomStart: {
-                        pageLength: true
-                    }
-                },
-                columnDefs: [
-                    {
-                        searchPanes: {
-                            show: false
+                        topStart: {
+    
                         },
-                        targets: []
+                        bottomStart: {
+                            pageLength: true
+                        }
                     },
-                    {
-                        targets: [0,1,2,3,4],
-                        className: 'dt-body-center dt-head-center'
-                    }
-                ],
-                autoWidth: false,
-                paging: true,
-                scrollCollapse: true,
-                scrollY: '50vh',
-                order: [
-                    [0, "desc"]
-                ]
-            });
+                    columnDefs: [
+                        {
+                            searchPanes: {
+                                show: false
+                            },
+                            targets: []
+                        },
+                        {
+                            targets: [0,1,2,3,4,5,6],
+                            className: 'dt-body-center dt-head-center'
+                        }
+                    ],
+                    autoWidth: false,
+                    paging: true,
+                    scrollCollapse: true,
+                    scrollY: '50vh',
+                    order: [
+                        [0, "desc"]
+                    ]
+                });
+            }
 
             function loadtreatmentTable (){
                 let treatmentTable = new DataTable('#treatmentTable', {
@@ -728,19 +770,69 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 });
             }
 
-            $('#tratmentItem').on('click', function () {
+            $('#treatmentItem').on('click', function () {
                 $('#treatmentTable').DataTable().columns.adjust();
             });
 
             $('body').on('click', '.viewAptDetail', function(){
                 let id = $(this).attr('value');
                 patient_id = $(this).attr("data-p-id");
+                $("#updateStatusSaveBtn").attr("value", id).attr("data-p-id", patient_id);
                 resetAccordion();
                 fetchPatientDetails(patient_id, id);
                 refreshDentalList(patient_id);
                 refreshMedicalList(patient_id);
                 refreshTreatment(patient_id);
                 loadDetails(id);
+            });
+
+            $('#updateStatusSaveBtn').on('click', function () {
+                showLoader();
+                let id = $(this).attr('value');
+                let patiend_id = $(this).attr('data-p-id');
+                let dentist_id = $("#patientChangeDentist").val();
+                let setStatus = $("#patientUpdateStatus").val();
+                let reason = $("#reason").val();
+                let reasonOther = $("#reasonOther").val();
+
+                var formData = {
+                    id: id,
+                    dentist_id: dentist_id,
+                    setStatus: setStatus,
+                    reason: reason,
+                    reasonOther: reasonOther
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "php/update-request-details.php",
+                    data: formData,
+                    dataType: 'json'
+                }).done(function (data) {
+                    refreshList();
+                    fetchPatientDetails(patient_id, id);
+                    refreshDentalList(patient_id);
+                    refreshMedicalList(patient_id);
+                    refreshTreatment(patient_id);
+                    loadDetails(id);
+                    $('#patientUpdateStatusModal').modal('hide');
+                    $('#appointListModal').modal('show');
+                    $("#patientUpdateStatus option, #reasonDiv option").prop('selected', function() {
+                        return this.defaultSelected;
+                    });
+                    $("#reasonOther").val("");
+                    hideLoader();
+                    // console.log(data);
+                }).fail(function(data) {
+                    // console.log(data);
+                });
+            });
+
+            $("#aptCancelYesBtn").on("click", function() {
+                $("#patientUpdateStatus option, #reasonDiv option").prop('selected', function() {
+                    return this.defaultSelected;
+                });
+                $("#reasonOther").val("");                
             });
 
             function loadModal() {
@@ -760,6 +852,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     refreshMedicalList(pid);
                     refreshTreatment(pid);
                     loadDetails(id);
+                    $('#appointListModal').modal('show');
                 }
             };
 
@@ -825,6 +918,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             $("#aptdtlsVerdictBy").text("The Client");
                             break;                            
                         case "Denied":
+                            $("#aptdtlsVerdictDate").text(data.Approved_Date);
+                            $("#aptdtlsVerdictTime").text(data.Approved_Time);
                             $("#aptdtlsReason").text(data.Reason);
                             $("#aptdtlsReasonOther").text(data.ReasonOther);
                             break;
@@ -833,15 +928,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             $("#aptdtlsVerdictTime").text(data.Examined_Time);
                             $("#aptdtlsVerdictBy").text(data.Dentist);
                             break;
-                        default:                            
+                        default:
+                            $("#aptdtlsVerdictDate").text(data.Approved_Date);
+                            $("#aptdtlsVerdictTime").text(data.Approved_Time);
                             $("#aptdtlsReason").text("");
                             $("#aptdtlsReasonOther").text("");     
                             break;
                     }
                     
-                    if (data.length != 0) {
-                        $('#appointListModal').modal('show');
-                    }
+                    // if (data.length != 0) {
+                    //     $('#appointListModal').modal('show');
+                    // }
+
+                    $("#updateStatusBtn").attr("data-dentist-id", data.Dentist_ID)
 
                     // console.log(data);
                 }).fail(function(data) {
@@ -849,7 +948,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 });
             }
 
-            $('body').on('click', '#aptdtlsUpdateStatus', function(){
+            $('body').on('click', '#updateStatusBtn', function(){
+                let dentistID = $(this).attr('data-dentist-id');
+                $("#patientChangeDentist").val(dentistID);
                 $('#patientUpdateStatus').val(1);
                 $("#reasonDiv").hide();
                 $("#reasonOtherDiv").hide();
@@ -879,7 +980,21 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 } else {
                     $("#reasonOtherDiv").hide();
                 }
-            });            
+            });     
+
+            function refreshList() {
+                $.ajax({
+                    url: 'php/refresh-appointment-list.php',
+                    dataType: 'json'
+                }).done(function (data) {
+                    $("#appointmentListTable").DataTable().destroy().clear();
+                    $('#appointmentListTableBody').html(data);
+                    loadTable();
+                    //console.log(data);
+                }).fail(function(data) {
+                    //console.log(data);
+                });
+            }       
 
             function resetAccordion() {
                 $('.accordion-collapse.show').each(function () {

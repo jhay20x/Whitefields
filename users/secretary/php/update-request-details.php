@@ -12,22 +12,14 @@ date_default_timezone_set('Asia/Manila');
 $error;
 $message;
 $data = [];
-$emailVerified;
-$id;
-$user_id;
-$pid;
 
 sleep(1);
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
-    $id = $_POST['id'];
-    $pid = $_POST['pid'];
+    $id = $_POST['id'] ?? "";
 
-    $user_id = $_SESSION['user_id'];
-    $setStatus = $_POST['setStatus'];
-    $setStatusText = $_POST['setStatusText'];
-    $datetime = $_POST['datetime'];
-    $reasonText = $_POST['reasonText'];
+    $setStatus = $_POST['setStatus'] ?? "";
+    $dentist_id = $_POST['dentist_id'] ?? "";
 
     if ($setStatus == 2) {
         if (is_null($_POST['reason'])) {
@@ -44,38 +36,43 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     } else {
         $reason = NULL;
         $reasonOther = NULL;
+    }    
+    
+    if ($setStatus == 1) {
+        $query = "UPDATE `appointment_requests` SET `dentist_info_id` = ? WHERE `id` = ?;";
+        $params = [$dentist_id, $id];
+        $type = "ii";
+    } else {
+        $query = "UPDATE `appointment_requests` SET `appoint_status_id`= ?, `reason_id` = ?, `reason_other` = ?, `dentist_info_id` = ? WHERE `id` = ?;";
+        $params = [$setStatus, $reason, $reasonOther, $dentist_id, $id];
+        $type = "iisii";
     }
 
-    $approveddatetime = date('Y/m/d H:i:s A', time());
-
-    $stmt = $conn->prepare("UPDATE `appointment_requests` SET `appoint_status_id`= ?, `approved_datetime`= ?, `approved_by`= ?, `reason_id` = ?, `reason_other` = ? WHERE `id` = ?;");
-    $stmt->bind_param("isiisi", $setStatus, $approveddatetime, $user_id, $reason, $reasonOther, $id);
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param($type, ...$params);
 
     if ($stmt->execute()) {
-        $user = fetchEmail();
+        // $user = fetchEmail($conn, $pid);
 
         if ($setStatus == 1) {
-            $message = 'Appointment request has been successfully approved.';
-            $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been approved. Failing to attend on your appointed date and time will result to the cancellation of your appointment. Have a nice day.";
+            $message = "Appointment request has been successfully approved.";
+            // $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been approved. Failing to attend on your appointed date and time will result to the cancellation of your appointment. Have a nice day.";
         } else if ($setStatus == 2) {
-            $message = 'Appointment request has been successfully rejected.';
+            $message = "Appointment request has been successfully rejected.";
 
-            if ($reason != 6){
-                $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been rejected due to the following reason: $reasonText.";                
-            } else {
-                $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been rejected due to the following reason: $reasonText - $reasonOther.";                
-            }
+            // if ($reason != 6){
+            //     $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been rejected due to the following reason: $reasonText.";                
+            // } else {
+            //     $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been rejected due to the following reason: $reasonText - $reasonOther.";                
+            // }
         }
         
         // sendEmail($user["emailAddress"], $content);
     }
 }
 
-function fetchEmail()
+function fetchEmail($conn, $pid)
 {
-    global $conn;
-    global $pid;
-
     $stmt = $conn->prepare("SELECT DISTINCT ac.email_address, ac.username 
         FROM patient_info pi
         LEFT OUTER JOIN appointment_requests ar ON ar.patient_id = pi.id

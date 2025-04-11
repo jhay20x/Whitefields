@@ -13,13 +13,15 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $id = fetchDentistID();
 
     if (is_int($id)) {
-        $stmt = $conn->prepare("SELECT ar.id AS ID, CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname) AS Name,
+        $stmt = $conn->prepare("SELECT ar.id AS ID, CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
+            CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name,
             ar.start_datetime_str AS Date, ar.patient_id as PID FROM appointment_requests ar
             LEFT OUTER JOIN patient_info pi ON pi.id = ar.patient_id
             WHERE ar.appoint_status_id = 1 AND ar.dentist_info_id = ?;");
         $stmt->bind_param('i', $id);
         $stmt->execute();
         $result = $stmt->get_result();
+        $stmt->close();
     
         if ($result->num_rows > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
@@ -50,6 +52,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 //     $stmt->bind_param("i", $user_id);
 //     $stmt->execute();
 //     $result = $stmt->get_result();
+//     $stmt->close();
 
 //     if ($result->num_rows > 0) {        
 //         $user = $result->fetch_assoc();

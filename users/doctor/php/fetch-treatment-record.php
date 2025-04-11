@@ -17,6 +17,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $stmt->bind_param('i',$aptId);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
     
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();

@@ -167,6 +167,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                                 $stmt = $conn->prepare("SELECT * FROM `rejected_reasons`;");
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
+                                                $stmt->close();
         
                                                 if ($result->num_rows > 0) {
                                                     while ($row = mysqli_fetch_assoc($result)) {
@@ -198,7 +199,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" value="" id="aptApplyBtn" disabled class="btn btn-sm btn-primary">Apply</button>
+                    <button type="button" value="" id="aptApplyBtn" disabled class="btn btn-sm btn-outline-primary">Apply</button>
                 </div>
             </div>
         </div>
@@ -417,7 +418,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#appointRequestModal">Back</button>
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#appointRequestModal">Back</button>
                 </div>
             </div>
         </div>
@@ -451,7 +452,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
                 </div>
             </div>
         </div>
@@ -473,7 +474,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
                 </div>
             </div>
         </div>
@@ -499,29 +500,31 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <span>View and manage all incoming appointment requests.</span>
                     </div>
 
-                    <table id="myTable" class="table-group-divider table table-hover table-striped">
+                    <table id="appointmentTable" class="table-group-divider table table-hover table-striped">
                         <thead>
                             <tr>
+                                <th class="col">ID</th>
                                 <th class="col">Request Date</th>
-                                <!-- <th class="col">Request Time</th> -->
                                 <th class="col">Patient Name</th>
                                 <th class="col">Appointment Date</th>
                                 <th class="col">Status</th>
-                                <!-- <th class="col">Appointment Time</th> -->
                                 <th class="col">Action</th>
                             </tr>
                         </thead>
 
-                        <tbody id="tableBody">
+                        <tbody id="appointmentTableTableBody">
                             <?php
                             $stmt = $conn->prepare("SELECT ar.request_datetime AS RequestDateTime, st.status_name AS Status, ar.start_datetime AS ApprovedDateTime,
-                                CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname) AS Name, ar.id AS ID, ar.patient_id AS PID
+                                CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
+                                CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name, ar.id AS ID, ar.patient_id AS PID
                                 FROM appointment_requests ar
                                 LEFT OUTER JOIN patient_info pi ON pi.id = ar.patient_id
                                 LEFT OUTER JOIN appointment_status st ON st.id = ar.appoint_status_id
-                                WHERE ar.appoint_status_id = 4;");
+                                WHERE ar.appoint_status_id = 4
+                                ORDER BY ar.id DESC;");
                             $stmt->execute();
                             $result = $stmt->get_result();
+                            $stmt->close();
                             
                             if ($result->num_rows > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
@@ -529,12 +532,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     $approvedtime = date('Y-m-d', strtotime($row['ApprovedDateTime']));
                                     echo '
                                         <tr>
+                                            <td id="appointID">' . $row['ID'] . '</td>
                                             <td id="appointRequestDate">' . $requesttime . '</td>
                                             <td id="appointName">' . $row['Name'] . '</td>
                                             <td id="appointApprovedDate">' . $approvedtime . '</td>
                                             <td id="appointStatus" class="text-warning fw-bold">' . $row['Status'] . '</td>
                                             <td class="appointID">
-                                            <button type="button" data-p-id="' . $row['PID'] . '" value="' . $row['ID'] . '" class="btn btn-sm btn-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#appointRequestModal">View
+                                            <button type="button" data-p-id="' . $row['PID'] . '" value="' . $row['ID'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#appointRequestModal">View
                                             </button>
                                             </td>
                                         </tr>
@@ -582,12 +586,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 <script>
     $(document).ready(function () {
         let patient_id;
+
         loadTable();
 
-        $('#myTable thead th').eq(3).attr('width', '0%');
-
         function loadTable (){
-            let table = new DataTable('#myTable', {
+            let table = new DataTable("#appointmentTable", {
                 language: {
                     searchBuilder: {            
                         title: {
@@ -609,25 +612,27 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     },
                     bottomStart: {
                         
-                    },
+                    }
                 },
                 columnDefs: [
                     {
                         searchPanes: {
                             show: false
                         },
-                        targets: [],
+                        targets: []
                     },
                     {
-                        targets: [0,1,2,3,4],
-                        className: 'dt-body-center dt-head-center',
-                    },
+                        targets: [0,1,2,3,4,5],
+                        className: 'dt-body-center dt-head-center'
+                    }
                 ],
                 autoWidth: false,
                 paging: true,
                 scrollCollapse: true,
                 scrollY: '50vh',
-                order: [[0, "desc"]],
+                order: [
+                    [0, "desc"]
+                ]
             });
         }
 
@@ -673,13 +678,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $("#aptdtlsstatus").removeClass("text-success text-danger");
             $("#aptdtlsstatus").addClass("text-warning");
             $("#aptApplyBtn").attr("value", id);
-            $("#setStatus option").prop('selected', function() {
+            $("#setStatus option, #reasonDiv option").prop('selected', function() {
                 return this.defaultSelected;
             });
             $("#reasonDiv").hide();
-            $("#reasonDiv option").prop('selected', function() {
-                return this.defaultSelected;
-            });
             $("#reasonOtherDiv").hide();
             $("#reasonOther").val("");
             $("#reason, #reasonOther, #setStatus").prop("disabled", false);
@@ -759,24 +761,36 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             let setStatus = $("#setStatus").val();
             let setStatusText = $( "#setStatus option:selected" ).text();
             let datetime = $("#aptdtlsstartdate").text() + " at " + $("#aptdtlsstarttime").text();
+            let reason = $("#reason").val();
+            let reasonText = $( "#reason option:selected" ).text();
+            let reasonOther = $("#reasonOther").val();
 
             if (setStatus == 1) {
                 updateRequestStatus(id, pid, setStatus, setStatusText, datetime, null, null);
             } else if (setStatus == 2) {
-                let reason = $("#reason").val();
-                
-                if (reason == 6) {
-                    let reasonOther = $("#reasonOther").val();
 
-                    updateRequestStatus(id, pid, setStatus, setStatusText, datetime, reason, reasonOther);
+                if (reason == "" || reason == null) {
+                    $("#errorMessage").empty();
+                    $("#errorMessage").append('<div class="alert alert-danger mt-3">Please select a reason first.</div>');
+                    return;
+                }
+
+                if (reason == 6 && reasonOther == "") {
+                    $("#errorMessage").empty();
+                    $("#errorMessage").append('<div class="alert alert-danger mt-3">Please provide a valid reason for rejecting the appointment.</div>');
+                    return;
+                }
+
+                if (reason != 6) {
+                    updateRequestStatus(id, pid, setStatus, setStatusText, datetime, reason, reasonText, null);
                 } else {
-                    updateRequestStatus(id, pid, setStatus, setStatusText, datetime, reason, null);
+                    updateRequestStatus(id, pid, setStatus, setStatusText, datetime, reason, reasonText, reasonOther);
                 }
             }
 
         });
 
-        function updateRequestStatus(id, pid, setStatus, setStatusText, datetime, reason, reasonOther) {
+        function updateRequestStatus(id, pid, setStatus, setStatusText, datetime, reason, reasonText, reasonOther) {
 			showLoader();
             var formData = {
                 id: id,
@@ -785,6 +799,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 setStatusText: setStatusText,
                 datetime: datetime,
                 reason: reason,
+                reasonText: reasonText,
                 reasonOther: reasonOther
             };
             
@@ -819,8 +834,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 url: 'php/refresh-list.php',
                 dataType: 'json'
             }).done(function (data) {
-                $('#myTable').DataTable().destroy().clear();
-                $('#tableBody').html(data);
+                $("#appointmentTable").DataTable().destroy().clear();
+                $('#appointmentTableTableBody').html(data);
                 loadTable();
                 //console.log(data);
             }).fail(function(data) {

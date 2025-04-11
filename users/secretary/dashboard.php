@@ -44,6 +44,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
         $stmt->execute();
         $result = $stmt->get_result();
+        $stmt->close();
 
         if ($result->num_rows == 1) {
             $row = $result->fetch_assoc();
@@ -161,7 +162,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             }
             
             .card-text {
-                font-size: 1.25rem;
+                font-size: 1.15rem;
             }
 
             .card-title {
@@ -287,51 +288,66 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <?php echo $hasId ? '' : '<div class="alert alert-danger">Please complete your profile first.</div>' ?>
                         </div>
         
-                        <div class="row d-flex justify-content-start">
-                            <div class="col" id="calendar">
-
-                            </div>
+                        <div class="row justify-content-start">
+                            <div class="col" id="calendar"></div>
+                            
                             
                             <div class="col-12 col-xl-auto mt-3 mt-xl-0">
                                 <h5>Clinic Hours:</h5>
-                                <?php 
-                                    $sun = $mon = $tue = $wed = $thu = $fri = $sat = "";
-                                    $sun_id = $mon_id = $tue_id = $wed_id = $thu_id = $fri_id = $sat_id = "";
-                                    
-                                    $stmt = $conn->prepare("SELECT * FROM store_availability");
-                                    // $stmt->bind_param('i',$id);
-                                    $stmt->execute();
-                                    $result = $stmt->get_result();
-                                    
 
-                                    if ($result->num_rows > 0) {
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            switch ($row['day']) {
-                                                case 'Sunday':
-                                                    echo ($row['availability'] !== NULL) ? "<h6>" . $row['day'] . " - Open, " . date('h:i A', strtotime($row['time_from'])) . ' - ' . date('h:i A', strtotime($row['time_to'])) . "</h6>" : "<h6>" . $row['day'] . " - Closed</h6>";
-                                                    break;
-                                                case 'Monday':
-                                                    echo ($row['availability'] !== NULL) ? "<h6>" . $row['day'] . " - Open, " . date('h:i A', strtotime($row['time_from'])) . ' - ' . date('h:i A', strtotime($row['time_to'])) . "</h6>" : "<h6>" . $row['day'] . " - Closed</h6>";
-                                                    break;
-                                                case 'Tuesday':
-                                                    echo ($row['availability'] !== NULL) ? "<h6>" . $row['day'] . " - Open, " . date('h:i A', strtotime($row['time_from'])) . ' - ' . date('h:i A', strtotime($row['time_to'])) . "</h6>" : "<h6>" . $row['day'] . " - Closed</h6>";
-                                                    break;
-                                                case 'Wednesday':
-                                                    echo ($row['availability'] !== NULL) ? "<h6>" . $row['day'] . " - Open, " . date('h:i A', strtotime($row['time_from'])) . ' - ' . date('h:i A', strtotime($row['time_to'])) . "</h6>" : "<h6>" . $row['day'] . " - Closed</h6>";
-                                                    break;
-                                                case 'Thursday':
-                                                    echo ($row['availability'] !== NULL) ? "<h6>" . $row['day'] . " - Open, " . date('h:i A', strtotime($row['time_from'])) . ' - ' . date('h:i A', strtotime($row['time_to'])) . "</h6>" : "<h6>" . $row['day'] . " - Closed</h6>";
-                                                    break;
-                                                case 'Friday':
-                                                    echo ($row['availability'] !== NULL) ? "<h6>" . $row['day'] . " - Open, " . date('h:i A', strtotime($row['time_from'])) . ' - ' . date('h:i A', strtotime($row['time_to'])) . "</h6>" : "<h6>" . $row['day'] . " - Closed</h6>";
-                                                    break;
-                                                case 'Saturday':
-                                                    echo ($row['availability'] !== NULL) ? "<h6>" . $row['day'] . " - Open, " . date('h:i A', strtotime($row['time_from'])) . ' - ' . date('h:i A', strtotime($row['time_to'])) . "</h6>" : "<h6>" . $row['day'] . " - Closed</h6>";
-                                                    break;
-                                            }            
-                                        }
-                                    }
-                                ?>
+                                <div class="row col">                                
+                                    <div class="col-auto">
+                                        <h6>Sunday</h6>
+                                        <h6>Monday</h6>
+                                        <h6>Tuesday</h6>
+                                        <h6>Wednesday</h6>
+                                        <h6>Thursday</h6>
+                                        <h6>Friday</h6>
+                                        <h6>Saturday</h6>
+                                    </div>
+    
+                                    <div class="col-auto">
+                                        <?php 
+                                            $sun = $mon = $tue = $wed = $thu = $fri = $sat = "";
+                                            $sun_id = $mon_id = $tue_id = $wed_id = $thu_id = $fri_id = $sat_id = "";
+                                            
+                                            $stmt = $conn->prepare("SELECT * FROM store_availability");
+                                            // $stmt->bind_param('i',$id);
+                                            $stmt->execute();
+                                            $result = $stmt->get_result();
+                                            $stmt->close();                                            
+    
+                                            if ($result->num_rows > 0) {
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    switch ($row['day']) {
+                                                        case 'Sunday':
+                                                            echo ($row['availability'] !== NULL) ? "<h6>Open, " . date('h:i A', strtotime($row['time_from'])) . ' - ' . date('h:i A', strtotime($row['time_to'])) . "</h6>" : "<h6>Closed</h6>";
+                                                            break;
+                                                        case 'Monday':
+                                                            echo ($row['availability'] !== NULL) ? "<h6>Open, " . date('h:i A', strtotime($row['time_from'])) . ' - ' . date('h:i A', strtotime($row['time_to'])) . "</h6>" : "<h6>Closed</h6>";
+                                                            break;
+                                                        case 'Tuesday':
+                                                            echo ($row['availability'] !== NULL) ? "<h6>Open, " . date('h:i A', strtotime($row['time_from'])) . ' - ' . date('h:i A', strtotime($row['time_to'])) . "</h6>" : "<h6>Closed</h6>";
+                                                            break;
+                                                        case 'Wednesday':
+                                                            echo ($row['availability'] !== NULL) ? "<h6>Open, " . date('h:i A', strtotime($row['time_from'])) . ' - ' . date('h:i A', strtotime($row['time_to'])) . "</h6>" : "<h6>Closed</h6>";
+                                                            break;
+                                                        case 'Thursday':
+                                                            echo ($row['availability'] !== NULL) ? "<h6>Open, " . date('h:i A', strtotime($row['time_from'])) . ' - ' . date('h:i A', strtotime($row['time_to'])) . "</h6>" : "<h6>Closed</h6>";
+                                                            break;
+                                                        case 'Friday':
+                                                            echo ($row['availability'] !== NULL) ? "<h6>Open, " . date('h:i A', strtotime($row['time_from'])) . ' - ' . date('h:i A', strtotime($row['time_to'])) . "</h6>" : "<h6>Closed</h6>";
+                                                            break;
+                                                        case 'Saturday':
+                                                            echo ($row['availability'] !== NULL) ? "<h6>Open, " . date('h:i A', strtotime($row['time_from'])) . ' - ' . date('h:i A', strtotime($row['time_to'])) . "</h6>" : "<h6>Closed</h6>";
+                                                            break;
+                                                    }            
+                                                }
+                                            }
+    
+                                        ?>
+                                    </div>
+                                </div>
                                 <hr>
                                 <h5>Dentist's Schedule:</h5>
                                 <table class="table text-center table-bordered">
@@ -356,7 +372,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                                 WHERE ac.status != 0;");
                                             $stmt->execute();
                                             $result = $stmt->get_result();
-
+                                            $stmt->close();
+        
                                             if ($result->num_rows > 0) {
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                         ?>
@@ -377,7 +394,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     </tbody>
                                 </table>
                             </div>
-                        </div>                    
+                        </div>
                     </div>
                 </div>
             </div>

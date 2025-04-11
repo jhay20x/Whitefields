@@ -7,6 +7,8 @@ $error;
 $message;
 $data = [];
 
+sleep(1);
+
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
     $status = $_POST["status"] ?? "";
     $id = $_POST["id"] ?? "";

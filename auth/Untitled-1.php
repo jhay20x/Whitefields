@@ -32,6 +32,7 @@ if (isset($_POST['loginUserEmail']) && isset($_POST['password'])) {
 		$stmt->bind_param("ss", $uname, $uname);
 		$stmt->execute();
 		$result = $stmt->get_result();
+		$stmt->close();
 
 		if ($result->num_rows == 1) {
 			$user = $result->fetch_assoc();

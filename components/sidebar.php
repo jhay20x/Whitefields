@@ -6,6 +6,7 @@ $stmt = $conn->prepare("SELECT * FROM `accounts` WHERE `username` = ?");
 $stmt->bind_param("s", $_SESSION['user_username']);
 $stmt->execute();
 $result = $stmt->get_result();
+$stmt->close();
 
 if ($result->num_rows == 1) {
     $user = $result->fetch_assoc();
@@ -116,8 +117,8 @@ if (is_int($id)) {
                 <div class="container-fluid">
                     <div class="text-center">
                         <h6>Are you sure to logout?</h6>
-                        <a href="../../auth/logout.php" id="logoutYesBtn" class="btn btn-sm btn-success m-2 me-0">Yes</a>
-                        <button type="button" value="" id="logoutNoBtn" class="btn btn-sm btn-danger m-2 me-0" data-bs-dismiss="modal" aria-label="Close">No</button>
+                        <a href="../../auth/logout.php" id="logoutYesBtn" class="btn btn-sm btn-outline-success m-2 me-0">Yes</a>
+                        <button type="button" value="" id="logoutNoBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-dismiss="modal" aria-label="Close">No</button>
                     </div>
                 </div>
             </div>

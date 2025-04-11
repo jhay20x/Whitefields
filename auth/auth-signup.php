@@ -29,6 +29,7 @@ if (isset($_POST['signUpEmail']) && isset($_POST['password']) && isset($_POST['s
 			$stmt->bind_param("ss", $signUpUsername, $signUpEmail);
 			$stmt->execute();
 			$result = $stmt->get_result();
+			$stmt->close();
 
 			if ($result->num_rows >= 1) {
 				foreach ($result as $row) {
@@ -49,6 +50,7 @@ if (isset($_POST['signUpEmail']) && isset($_POST['password']) && isset($_POST['s
 				$stmt->bind_param("sss", $signUpEmail, $signUpUsername, $hash);
 				$stmt->execute();
 				$accountID = $stmt->insert_id;
+				$stmt->close();
 
 				$_SESSION['user_username'] = $signUpUsername;
 				$_SESSION['email_address'] = $signUpEmail;

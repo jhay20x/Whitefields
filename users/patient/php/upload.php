@@ -99,7 +99,8 @@ function getFolderName() {
     $stmt = $conn->prepare("SELECT profile_path FROM accounts WHERE `id` = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
-    $result = $stmt->get_result();    
+    $result = $stmt->get_result();   
+	$stmt->close(); 
 
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();

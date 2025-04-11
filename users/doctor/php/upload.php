@@ -100,6 +100,7 @@ function getFolderName() {
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();    
+	$stmt->close();
 
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();

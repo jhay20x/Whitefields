@@ -89,6 +89,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 font-size: 0.8rem;
             }
         }
+
         .invalidPassword {
             color: red;
         }  
@@ -148,10 +149,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="changeStatusBtn" class="btn btn-sm btn-primary">Change Status</button>
-                    <button type="button" id="changeStatusBackBtn" class="btn btn-sm btn-primary" data-bs-dismiss="modal" aria-label="Close">Back</button>
-                    <button type="button" style="display: none;" id="changeStatusSaveBtn" class="btn btn-sm btn-success">Save</button>
-                    <button type="button" style="display: none;" id="changeStatusCancelBtn" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#changeStatusCancelConfirmModal">Cancel</button>
+                    <button type="button" id="changeStatusBtn" class="btn btn-sm btn-outline-success">Change Status</button>
+                    <button type="button" id="changeStatusBackBtn" class="btn btn-sm btn-outline-danger" data-bs-dismiss="modal" aria-label="Close">Back</button>
+                    <button type="button" style="display: none;" id="changeStatusSaveBtn" class="btn btn-sm btn-outline-success">Save</button>
+                    <button type="button" style="display: none;" id="changeStatusCancelBtn" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#changeStatusCancelConfirmModal">Cancel</button>
                 </div>
             </div>
         </div>
@@ -172,8 +173,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <div class="container-fluid">
                         <div class="text-center">
                             <h6>Are you sure to cancel editing this form?</h6>
-                            <button type="button" id="changeStatusConfirmYesBtn" class="btn btn-sm btn-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#dentistViewModal">Yes</button>
-                            <button type="button" id="changeStatusConfirmNoBtn" class="btn btn-sm btn-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#dentistViewModal">No</button>
+                            <button type="button" id="changeStatusConfirmYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#dentistViewModal">Yes</button>
+                            <button type="button" id="changeStatusConfirmNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#dentistViewModal">No</button>
                         </div>
                     </div>
                 </div>
@@ -229,14 +230,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <div class="input-group mb-3">
                                         <div class="input-group">
                                             <div class="form-floating">
-                                                <input required autocomplete="new-password" type="password" minlength="6" maxlength="20" id="userPasswordDentist" class="form-control" name="userPasswordDentist" placeholder="Confirm Password">
-                                                <label for="userPasswordDentist">Password</label>
+                                                <input required autocomplete="new-password" type="password" minlength="6" maxlength="20" id="userPasswordCheck" class="form-control" name="userPasswordCheck" placeholder="Confirm Password">
+                                                <label for="userPasswordCheck">Password</label>
                                             </div>
                                             <button class="btn btn-outline-secondary disableInputs input-group-text" type="button" id="togglePassword">
                                                 <i id="eyeicon" class="bi bi-eye"></i>
                                             </button>
                                         </div>
-                                        <div id="userPasswordDentistFeedback" class="mt-3" style="display: none;">
+                                        <div id="userPasswordCheckFeedback" class="mt-3" style="display: none;">
                                             <p id="userPassLower" class="invalidPassword">• Must use atleast one lower case letter.</p>
                                             <p id="userPassUpper" class="invalidPassword">• Must use atleast one upper case letter.</p>
                                             <p id="userPassNumber" class="invalidPassword">• Must use atleast one number.</p>
@@ -250,14 +251,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <div class="input-group mb-3">
                                         <div id="confirmPass" class="input-group is-invalid">
                                             <div class="form-floating">
-                                                <input disabled required autocomplete="new-password" type="password" minlength="6" maxlength="20" id="confirmUserPasswordDentist" class="form-control" name="confirmUserPasswordDentist" placeholder="Confirm Password">
-                                                <label for="confirmUserPasswordDentist">Confirm Password</label>
+                                                <input disabled required autocomplete="new-password" type="password" minlength="6" maxlength="20" id="confirmUserPasswordCheck" class="form-control" name="confirmUserPasswordCheck" placeholder="Confirm Password">
+                                                <label for="confirmUserPasswordCheck">Confirm Password</label>
                                             </div>
                                             <button disabled class="btn btn-outline-secondary disableInputs" type="button" id="toggleConfirmPassword">
                                                 <i id="eyeicon" class="bi bi-eye"></i>
                                             </button>
                                         </div>
-                                        <div id="confirmUserPasswordDentistFeedback" class="mt-3" style="display: none;">
+                                        <div id="confirmUserPasswordCheckFeedback" class="mt-3" style="display: none;">
                                             <p id="confirmPassCompare" class="invalidPassword">• Passwords do not match.</p>                                            
                                         </div>
                                     </div>
@@ -378,8 +379,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </div>
                     </div>               
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm btn-success" id="addDentistSubmitBtn" name="addDentistSubmitBtn">Submit</button>
-                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"data-bs-target="#cancelAddDentistConfirmModal">Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-outline-success" id="addDentistSubmitBtn" name="addDentistSubmitBtn">Submit</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"data-bs-target="#cancelAddDentistConfirmModal">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -401,8 +402,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <div class="container-fluid">
                         <div class="text-center">
                             <h6>Are you sure to cancel editing this form?</h6>
-                            <button type="button" id="aptCancelYesBtn" class="btn btn-sm btn-danger m-2 me-0" data-bs-dismiss="modal" aria-label="Close">Yes</button>
-                            <button type="button" id="aptCancelNoBtn" class="btn btn-sm btn-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addDentistModal">No</button>
+                            <button type="button" id="aptCancelYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-dismiss="modal" aria-label="Close">Yes</button>
+                            <button type="button" id="aptCancelNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addDentistModal">No</button>
                         </div>
                     </div>
                 </div>
@@ -424,9 +425,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="text-center">
-                            <h6>Checking this box will allow the system to create a dentist account without an email. However, password recovery via email will not be possible until the dentist registers an email themselves. Do you want to proceed?</h6>
-                            <button type="button" id="addDentistYesBtn" class="btn btn-sm btn-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addDentistModal">Yes</button>
-                            <button type="button" id="addDentistNoBtn" class="btn btn-sm btn-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#addDentistModal">No</button>
+                            <h6>Checking this box will allow the system to create a dentist account without an email. Moreover, password recovery via email will not be possible until the dentist registers an email themselves. Do you want to proceed?</h6>
+                            <button type="button" id="addDentistYesBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addDentistModal">Yes</button>
+                            <button type="button" id="addDentistNoBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#addDentistModal">No</button>
                         </div>
                     </div>
                 </div>
@@ -470,13 +471,15 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                         <tbody>
                             <?php
-                            $stmt = $conn->prepare("SELECT CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname) AS Name, 
+                            $stmt = $conn->prepare("SELECT CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
+                                CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS Name, 
                                 di.id AS ID, di.contactno AS Contact, di.specialist AS Specialist, ac.status as Status
                                 FROM dentist_info di
                                 LEFT OUTER JOIN accounts ac
                                 ON di.accounts_id = ac.id;");
                             $stmt->execute();
                             $result = $stmt->get_result();
+                            $stmt->close();
 
                             if ($result->num_rows > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
@@ -488,7 +491,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <td>' . $row['Specialist'] . '</td>
                                         <td class="fw-bold ' . ($row['Status'] === 1 ? "text-success" : "text-danger") . '">' . ($row['Status'] === 1 ? "Active" : "Inactive") . '</td>
                                         <td class="appointID">
-                                        <button type="button" value="' . $row['ID'] . '" class="btn btn-sm btn-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#dentistViewModal">View
+                                        <button type="button" value="' . $row['ID'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#dentistViewModal">View
                                         </button>
                                         </td>
                                     </tr>
@@ -527,7 +530,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $(document).ready(function () {
         $('#myTable thead th').eq(3).attr('width', '0%');
         
-        DataTable.Buttons.defaults.dom.button.className = 'btn btn-primary text-white';
+        DataTable.Buttons.defaults.dom.button.className = 'btn btn-outline-primary';
 
         let table = new DataTable('#myTable', {
             language: {
@@ -621,7 +624,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
 		$("#changeStatusSaveBtn").click(function(e){
             showLoader();
-            $("#errorMessage").empty();
+            $("#errorMessage, #addDentistMessage").empty();
 			e.preventDefault();
 
             var formData = {
@@ -667,7 +670,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
         $("#aptCancelYesBtn").on("click", function() {
             $("#myForm")[0].reset();
-            $("#userPasswordDentist, #confirmUserPasswordDentist").removeClass("is-invalid");
+            $("#userPasswordCheck, #confirmUserPasswordCheck").removeClass("is-invalid");
         });
 
         $("#changeStatusConfirmYesBtn").on("click", function() {
@@ -793,7 +796,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         });
 
         $("#togglePassword, #toggleConfirmPassword").on("click", function() {
-            let passwordInput = this.id == "togglePassword" ? "#userPasswordDentist" : "#confirmUserPasswordDentist";
+            let passwordInput = this.id == "togglePassword" ? "#userPasswordCheck" : "#confirmUserPasswordCheck";
             
             if ($(passwordInput).attr("type") == "password") {
                 $(passwordInput).attr("type", "text");
@@ -806,11 +809,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             }
         });
 
-        $('#userPasswordDentist, #confirmUserPasswordDentist').focusin("click", function() {
+        $('#userPasswordCheck, #confirmUserPasswordCheck').focusin("click", function() {
             $("#" + this.id + "Feedback").show();
         });
 
-        $('#userPasswordDentist, #confirmUserPasswordDentist').focusout("click", function() {
+        $('#userPasswordCheck, #confirmUserPasswordCheck').focusout("click", function() {
             $("#" + this.id + "Feedback").hide();
         });
 	});

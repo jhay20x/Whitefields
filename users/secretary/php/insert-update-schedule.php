@@ -39,6 +39,7 @@ function insertSchedule($conn, $id, $valueParam) {
     $stmt = $conn->prepare("INSERT INTO `schedules`(`dentist_id`, `Sun`, `Mon`, `Tue`, `Wed`, `Thu`, `Fri`, `Sat`) VALUES (?,?,?,?,?,?,?,?)");
     $stmt->bind_param("isssssss", $id, ...$valueParam); 
     $stmt->execute();
+	$stmt->close();
 }
 
 function updateSchedule($conn, $id, $valueParam) {
@@ -47,6 +48,7 @@ function updateSchedule($conn, $id, $valueParam) {
     $stmt = $conn->prepare("UPDATE `schedules` SET `Sun` = ?, `Mon` = ?, `Tue` = ?, `Wed` = ?, `Thu` = ?, `Fri` = ?, `Sat` = ? WHERE `dentist_id` = ?");
     $stmt->bind_param("sssssssi", ...$valueParam);
     $stmt->execute();
+	$stmt->close();
 }
 
 function checkSchedule($conn, $id) {
@@ -54,6 +56,7 @@ function checkSchedule($conn, $id) {
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
     
     if ($result->num_rows > 0) {
         return true;

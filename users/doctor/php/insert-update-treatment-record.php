@@ -13,6 +13,7 @@ function checkTreatmentRecord($conn, $aptId) {
     $stmt->bind_param("i", $aptId);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
     
     if ($result->num_rows > 0) {
         return true;
@@ -25,6 +26,7 @@ function updateAppointmentStatus($conn, $aptId) {
     $stmt = $conn->prepare("UPDATE `appointment_requests` SET `appoint_status_id` = 6 WHERE `id` = ?");
     $stmt->bind_param("i", $aptId);
     $stmt->execute();
+	$stmt->close();
 }
 
 function insertTreatmentRecord($conn, $pid, $dentist_id, $aptId, $patientToothNo, $dentistNote, $procedures, $timestamp) {

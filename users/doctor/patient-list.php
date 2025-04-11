@@ -446,7 +446,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-primary" data-bs-dismiss="modal" aria-label="Close">Back</button>
+                    <button class="btn btn-sm btn-outline-primary" data-bs-dismiss="modal" aria-label="Close">Back</button>
                 </div>
             </div>
         </div>
@@ -480,7 +480,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
                 </div>
             </div>
         </div>
@@ -502,7 +502,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
                 </div>
             </div>
         </div>
@@ -541,7 +541,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                         <tbody>
                             <?php
-                            $stmt = $conn->prepare("SELECT CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname) AS Name, 
+                            $stmt = $conn->prepare("SELECT CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
+                                CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name, 
                                 pi.id AS ID, pi.contactno AS Contact, pi.bdate AS Bdate, ar.id AS AppointmentID
                                 FROM patient_info pi
                                 LEFT OUTER JOIN appointment_requests ar
@@ -553,6 +554,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             $stmt->bind_param('i', $id);
                             $stmt->execute();
                             $result = $stmt->get_result();
+                            $stmt->close();
 
                             if ($result->num_rows > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
@@ -563,7 +565,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <td id="patientContact">' .  $row['Contact'] . '</td>
                                         <td id="patientAge">' . $row['Bdate'] . '</td>
                                         <td class="appointID">
-                                        <button type="button" data-p-id="' . $row['ID'] . '" value="' . $row['AppointmentID'] . '" class="btn btn-sm btn-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#patientViewModal">View
+                                        <button type="button" data-p-id="' . $row['ID'] . '" value="' . $row['AppointmentID'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#patientViewModal">View
                                         </button>
                                         </td>
                                     </tr>

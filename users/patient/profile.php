@@ -23,6 +23,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $stmt->bind_param('i',$id);
         $stmt->execute();
         $result = $stmt->get_result();
+        $stmt->close();
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -51,6 +52,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $stmt->bind_param('i',$id);
         $stmt->execute();
         $result = $stmt->get_result();
+        $stmt->close();
         
         $fields = ["fname", "lname", "mname", "suffix", "gender", "religion", "nationality", "contnum", "address", "occupation", "email", "username",];
 
@@ -81,6 +83,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $stmt->bind_param('i',$id);
         $stmt->execute();
         $result = $stmt->get_result();
+        $stmt->close();
 
         $fields = [
             "physician_name", "speciality", "office_address", "office_number", "id", "patient_id", "timestamp",
@@ -427,7 +430,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input type="submit" class="btn btn-sm btn-primary btn-md mt-1" value="Submit" name="profileSubmitBtn">
+                        <input type="submit" class="btn btn-sm btn-outline-primary btn-md mt-1" value="Submit" name="profileSubmitBtn">
                     </div>
                 </form>
             </div>
@@ -467,7 +470,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     </div>
                                 </div>
                             </div>
-                            <input type="submit" class="btn btn-sm btn-primary btn-md mt-1" value="Submit" name="dentalHistorySubmitBtn">
+                            <input type="submit" class="btn btn-sm btn-outline-primary btn-md mt-1" value="Submit" name="dentalHistorySubmitBtn">
                         </form>
                     </div>
                 </div>
@@ -1109,7 +1112,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 </div>
                             </div>
                             <div class="text-center">
-                                <input type="submit" class="btn btn-sm btn-primary btn-md mt-1" value="Submit" name="medicalSubmitBtn">
+                                <input type="submit" class="btn btn-sm btn-outline-primary btn-md mt-1" value="Submit" name="medicalSubmitBtn">
                             </div>
                         </form>
                     </div>
@@ -1150,6 +1153,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     $stmt->bind_param('i', $id);
                                     $stmt->execute();
                                     $result = $stmt->get_result();
+                                    $stmt->close();
 
                                     if ($result->num_rows > 0) {
                                         while ($row = mysqli_fetch_assoc($result)) {
@@ -1193,6 +1197,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             $stmt->bind_param('i', $id);
                             $stmt->execute();
                             $result = $stmt->get_result();
+                            $stmt->close();
 
                             if ($result->num_rows > 0) {
                                 $hasMedical = true;

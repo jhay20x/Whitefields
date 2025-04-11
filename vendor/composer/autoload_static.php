@@ -20,20 +20,8 @@ class ComposerStaticInitb1d700c4614c24013a24f9dbb524ef72
         ),
     );
 
-    public static $prefixesPsr0 = array (
-        'H' => 
-        array (
-            'HTTP_Request2' => 
-            array (
-                0 => __DIR__ . '/..' . '/pear/http_request2',
-            ),
-        ),
-    );
-
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Net_URL2' => __DIR__ . '/..' . '/pear/net_url2/Net/URL2.php',
-        'PEAR_Exception' => __DIR__ . '/..' . '/pear/pear_exception/PEAR/Exception.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -41,7 +29,6 @@ class ComposerStaticInitb1d700c4614c24013a24f9dbb524ef72
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitb1d700c4614c24013a24f9dbb524ef72::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitb1d700c4614c24013a24f9dbb524ef72::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitb1d700c4614c24013a24f9dbb524ef72::$prefixesPsr0;
             $loader->classMap = ComposerStaticInitb1d700c4614c24013a24f9dbb524ef72::$classMap;
 
         }, null, ClassLoader::class);

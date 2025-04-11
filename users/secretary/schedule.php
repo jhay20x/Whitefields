@@ -93,8 +93,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <div class="container-fluid">
                             <div class="text-center">
                                 <h6>Are you sure to cancel editing this form?</h6>
-                                <button type="button" id="editScheduleConfirmYesBtn" class="btn btn-sm btn-danger m-2 me-0">Yes</button>
-                                <button type="button" id="editScheduleConfirmNoBtn" class="btn btn-sm btn-success m-2 me-0" data-bs-dismiss="modal" aria-label="Close">No</button>
+                                <button type="button" id="editScheduleConfirmYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0">Yes</button>
+                                <button type="button" id="editScheduleConfirmNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-dismiss="modal" aria-label="Close">No</button>
                             </div>
                         </div>
                     </div>
@@ -123,8 +123,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <h3 class="col col-lg-8 col-xl-6">Dentist Schedule</h3>
                                     <div class="col-auto">
                                         <button id="editSchedule" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Dentist Schedule"><svg class="bi pe-none" width="16" height="16"><use xlink:href="#pencil-square"/></svg></button>                                
-                                        <button type="button" style="display: none;" id="editScheduleSaveBtn" class="btn btn-sm btn-success">Save</button>
-                                        <button type="button" style="display: none;" id="editScheduleCancelBtn" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#editScheduleCancelConfirmModal">Cancel</button>
+                                        <button type="button" style="display: none;" id="editScheduleSaveBtn" class="btn btn-sm btn-outline-success">Save</button>
+                                        <button type="button" style="display: none;" id="editScheduleCancelBtn" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#editScheduleCancelConfirmModal">Cancel</button>
                                     </div>
                                 </div>
                                 <span>Set the schedules of the dentists by day. Schedules set here will reflect on the appointment requests.</span>
@@ -139,7 +139,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     $count = 0;
                                     $checked = $checked2 = $checked3 = $checked4 = $checked5 = $checked6 = $checked7 = "";
 
-                                    $stmt = $conn->prepare("SELECT di.id AS ID, CONCAT(di.fname , ' ' , di.mname , ' ' , di.lname) AS Name,
+                                    $stmt = $conn->prepare("SELECT di.id AS ID, 
+                                        CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
+                                        CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS Name,
                                         sc.Sun, sc.Mon, sc.Tue, sc.Wed, sc.Thu, sc.Fri, sc.Sat
                                         FROM dentist_info di
                                         LEFT OUTER JOIN schedules sc ON sc.dentist_id = di.id
@@ -147,6 +149,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         WHERE ac.status != 0");
                                     $stmt->execute();
                                     $result = $stmt->get_result();
+                                    $stmt->close();
 
                                     if ($result->num_rows > 0) {
                                         while ($row = mysqli_fetch_assoc($result)) {                                            

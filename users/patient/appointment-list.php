@@ -143,12 +143,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             </div>
                              
                             <!-- <div class="d-flex justify-content-end">
-                                <button type="button" value="" id="aptCancelBtn" class="btn btn-sm btn-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#cancelRequestModal">Cancel Appointment</button>
+                                <button type="button" value="" id="aptCancelBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#cancelRequestModal">Cancel Appointment</button>
                             </div> -->
                         </div>
                     </div>
                     <div id="aptCancelBtn" class="modal-footer">
-                        <button type="button" value="" class="btn btn-sm btn-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#cancelRequestModal">Cancel Appointment</button>
+                        <button type="button" value="" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#cancelRequestModal">Cancel Appointment</button>
                     </div>
                 </div>
             </div>
@@ -171,7 +171,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                             <form autocomplete="off" action="php/request-appointment.php" method="POST" class="text-center" id="myForm">
                                 <div class="form-floating my-3">
-                                    <input required type="date" name="date" placeholder="Code"  id="date" id="date" class="form-control">
+                                    <input required type="date" name="date" placeholder="Date"  id="date" id="date" class="form-control">
                                     <label for="date">Date</label>
                                 </div>
                                 
@@ -207,17 +207,17 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <h6 id="ampmText" class="mx-3">--</h6>
                                 </div>
                                 
-                                <div class="input-group my-3">
+                                <!-- <div class="input-group my-3">
                                     <label class="input-group-text" for="dentist">Dentist</label>
                                     <input maxlength="100" required disabled type="text" name="dentist" placeholder="Dentist"  id="dentist" class="form-control">
-                                </div>
+                                </div> -->
                                 
                                 <div class="form-floating my-3">
                                     <input maxlength="100" required type="text" name="concern" placeholder="Oral Concern"  id="concern" class="form-control">
                                     <label for="concern">Oral Concern</label>
                                 </div>
 
-                                <input type="submit" class="btn btn-primary btn-md mt-1" value="Submit" name="addbtn" <?php echo $hasId ? '' : 'disabled'; ?>>
+                                <input type="submit" class="btn btn-outline-primary btn-md mt-1" value="Submit" name="addbtn" <?php echo $hasId ? '' : 'disabled'; ?>>
                             </form>
                         </div>
                     </div>
@@ -240,8 +240,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <div class="container-fluid">
                             <div class="text-center">
                                 <h6>Are you sure to cancel this Appointment?</h6>
-                                <button type="button" value="" id="aptCancelYesBtn" class="btn btn-sm btn-danger m-2 me-0">Yes</button>
-                                <button type="button" value="" id="aptCancelNoBtn" class="btn btn-sm btn-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#appointListModal">No</button>
+                                <button type="button" value="" id="aptCancelYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0">Yes</button>
+                                <button type="button" value="" id="aptCancelNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#appointListModal">No</button>
                             </div>
                         </div>
                     </div>
@@ -270,6 +270,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             $stmt = $conn->prepare("SELECT cr.id AS ID, cr.reason AS Reason FROM cancel_reasons cr;");
                                             $stmt->execute();
                                             $result = $stmt->get_result();
+                                            $stmt->close();
     
                                             if ($result->num_rows > 0) {
                                                 while ($row = mysqli_fetch_assoc($result)) {
@@ -288,8 +289,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <label for="cancelReasonOther">Reason for other...</label>
                                     </div>
                                 </div>
-                                <button type="button" value="" id="aptCancelContinueBtn" class="btn btn-sm btn-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#cancelRequestConfirmModal">Continue</button>
-                                <button type="button" value="" id="aptCancelBackBtn" class="btn btn-sm btn-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#appointListModal">Back</button>
+                                <button type="button" value="" id="aptCancelContinueBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#cancelRequestConfirmModal">Continue</button>
+                                <button type="button" value="" id="aptCancelBackBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#appointListModal">Back</button>
                             </div>
                         </div>
                     </div>
@@ -321,6 +322,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <table id="myTable" class="table-group-divider table table-hover table-striped">
                             <thead>
                                 <tr>
+                                    <th class="col">ID</th>
                                     <th class="col">Request Date</th>
                                     <th class="col">Appointment Date</th>
                                     <th class="col">Dentist</th>
@@ -338,7 +340,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 // DATE(ar.start_datetime) AS ApprovedDate, TIME(ar.start_datetime) AS ApprovedTime, 
 
                                 $stmt = $conn->prepare("SELECT ar.request_datetime AS RequestDateTime, 
-                                    CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname) AS Dentist,
+                                    CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
+                                    CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS Dentist,
                                     ar.start_datetime AS ApprovedDateTime, 
                                     st.status_name AS Status, ar.id AS ID
                                     FROM appointment_requests ar
@@ -346,10 +349,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     LEFT OUTER JOIN appointment_status st ON st.id = ar.appoint_status_id
                                     LEFT OUTER JOIN dentist_info di ON di.id = ar.dentist_info_id
                                     WHERE ar.patient_id = ?
-                                    ORDER BY RequestDateTime ASC;");
+                                    ORDER BY ar.id DESC;");
                                 $stmt->bind_param('i', $id);
                                 $stmt->execute();
                                 $result = $stmt->get_result();
+                                $stmt->close();
 
                                 $status = "";
 
@@ -371,12 +375,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         // <td id="appointApprovedTime">' .  $approvedtime . '</td>
                                         echo '
                                         <tr>
+                                            <td id="appointID">' . $row['ID'] . '</td>
                                             <td id="appointRequestDate">' . $requesttime . '</td>
                                             <td id="appointApprovedDate">' . $approvedtime . '</td>
                                             <td id="appointDentist">' . $row['Dentist'] . '</td>
                                             <td id="appointStatus" class="' . $status . ' fw-bold">' . $row['Status'] . '</td>
                                             <td class="appointID">
-                                            <button type="button" value="' . $row['ID'] . '" class="btn btn-sm btn-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#appointListModal">View
+                                            <button type="button" value="' . $row['ID'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#appointListModal">View
                                             </button>
                                             </td>
                                         </tr>
@@ -490,7 +495,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     type: "POST",
                     url: "php/fetch-dentist.php",
                     data: formData,
-                    dataType: 'json'                
+                    dataType: 'json'
                 }).done(function (data) {
                     if (!data.success) {
                         $("#dentist").val(data.error);
@@ -520,7 +525,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
             $('#myTable thead th').eq(3).attr('width', '0%');            
             
-            DataTable.Buttons.defaults.dom.button.className = 'btn btn-primary text-white';
+            DataTable.Buttons.defaults.dom.button.className = 'btn btn-outline-primary';
 
             loadTable();
 
@@ -571,7 +576,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             targets: []
                         },
                         {
-                            targets: [0,1,2,3],
+                            targets: [0,1,2,3,4,5],
                             className: 'dt-body-center dt-head-center'
                         }
                     ],

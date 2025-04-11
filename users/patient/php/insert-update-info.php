@@ -35,6 +35,7 @@ function checkInfo($user_id) {
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
 
     if ($result->num_rows > 0) {
         updateInfo($user_id, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $occupation, $address);
@@ -51,6 +52,7 @@ function insertInfo($user_id, $lname, $fname, $mname, $suffix, $contnumber, $bda
     $stmt = $conn->prepare("INSERT INTO `patient_info`(`accounts_id`, `lname`, `fname`, `mname`, `suffix`, `contactno`, `bdate`, `gender`, `religion`, `nationality`, `occupation`, `address`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
     $stmt->bind_param("ssssssssssss", $user_id, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $occupation, $address);
     $stmt->execute();
+	$stmt->close();
 }
 
 function updateInfo($user_id, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $occupation, $address) {
@@ -59,6 +61,7 @@ function updateInfo($user_id, $lname, $fname, $mname, $suffix, $contnumber, $bda
     $stmt = $conn->prepare("UPDATE `patient_info` SET `lname` = ?, `fname` = ?, `mname` = ?, `suffix` = ?, `contactno` = ?, `bdate` = ?, `gender` = ?, `religion` = ?, `nationality` = ?, `occupation` = ?, `address` = ? WHERE `accounts_id` = ?");
     $stmt->bind_param("sssssssssssi", $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $occupation, $address, $user_id);
     $stmt->execute();
+	$stmt->close();
 }
 
 if (!empty($error)) {

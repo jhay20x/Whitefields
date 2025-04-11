@@ -20,7 +20,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         // $stmt->bind_param('i',$id);
         $stmt->execute();
         $result = $stmt->get_result();
-        
+        $stmt->close();        
 
         if ($result->num_rows > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
@@ -194,7 +194,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 </div>
 
                                 <div>
-                                    <input type="submit" class="btn btn-primary btn-sm mt-1" value="Save" name="saveBtn">
+                                    <input type="submit" class="btn btn-outline-primary btn-sm mt-1" value="Save" name="saveBtn">
                                 </div>
                             </form>
                         </div>

@@ -21,7 +21,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $_SESSION["pid"] = $pid;
     $_SESSION["aptId"] = $aptId;
 
-    $stmt = $conn->prepare("SELECT CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname) AS Name,
+    $stmt = $conn->prepare("SELECT CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
+    CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name,
     pi.contactno, pi.bdate, pi.gender, 
     pi.religion, pi.nationality, pi.occupation, pi.address, ac.email_address, ac.username
     FROM `patient_info` pi
@@ -31,6 +32,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $stmt->bind_param('i',$pid);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
 
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
@@ -56,6 +58,7 @@ function fetchDental($conn, $pid, $data) {
     $stmt->bind_param("i", $pid);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
 
     $data = [];
     
@@ -88,7 +91,8 @@ function fetchMedical($conn, $pid, $data) {
         ORDER BY mh.timestamp DESC;");
     $stmt->bind_param('i', $pid);
     $stmt->execute();
-    $result = $stmt->get_result();    
+    $result = $stmt->get_result();
+	$stmt->close();    
 
     $fields = [
         "physician_name", "speciality", "office_address", "office_number", "id", "patient_id", "timestamp",

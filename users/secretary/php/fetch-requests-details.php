@@ -15,9 +15,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         DATE(ar.cancel_datetime) AS Cancel_Date, TIME(ar.cancel_datetime) AS Cancel_Time,
         DATE(th.timestamp) AS Examined_Date, TIME(th.timestamp) AS Examined_Time,
         DATE(ar.approved_datetime) AS Approved_Date, TIME(ar.approved_datetime) AS Approved_Time, st.status_name AS Status,
-        CONCAT(si.fname , CASE WHEN si.mname = 'None' THEN ' ' ELSE CONCAT(' ' , si.mname , ' ') END , si.lname) AS Approved_By, ar.approved_by AS Approved_ID,
-        CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname) AS Name, ar.id AS ID,
-        CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname) AS Dentist, ar.oral_concern AS Concern,
+        CONCAT(si.fname , CASE WHEN si.mname = 'None' THEN ' ' ELSE CONCAT(' ' , si.mname , ' ') END , si.lname, 
+        CASE WHEN si.suffix = 'None' THEN '' ELSE CONCAT(' ' , si.suffix) END ) AS Approved_By, ar.approved_by AS Approved_ID,
+        CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
+        CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name, ar.id AS ID,
+        CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
+        CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS Dentist, di.id as Dentist_ID, ar.oral_concern AS Concern,
         rr.reason AS Reason, ar.reason_other AS ReasonOther,
         cr.reason AS CancelReason, ar.cancel_reason_other AS CancelReasonOther
         FROM appointment_requests ar
@@ -32,6 +35,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
 
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
@@ -53,6 +57,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $data['CancelReason'] = $row['CancelReason'];
         $data['CancelReasonOther'] = $row['CancelReasonOther'];
         $data['Dentist'] = $row['Dentist'];
+        $data['Dentist_ID'] = $row['Dentist_ID'];
         $data['Status'] = $row['Status'];
         $data['Concern'] = $row['Concern'];
     }

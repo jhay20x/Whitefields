@@ -20,18 +20,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     if ($_SESSION['account_type'] == 1) {
         $id = fetchSecretaryID();
         
-        $fname = $lname = $mname = $email = $username = $age = $bdate = $gender = $religion = $nationality = $contnum = $address = $occupation = "";
+        $fname = $lname = $mname = $email = $username = $age = $bdate = $gender = $religion = $nationality = $contnum = $address = "";
 
         if (is_int($id)) {
             $stmt = $conn->prepare("SELECT si.lname, si.fname, si.mname, si.suffix, si.contactno, si.bdate, si.gender, 
-            si.religion, si.nationality, si.occupation, si.address, ac.email_address, ac.username
+            si.religion, si.nationality, si.address, ac.email_address, ac.username
             FROM `secretary_info` si
             LEFT OUTER JOIN accounts ac
             ON ac.id = si.accounts_id
             WHERE si.id = ?");
             $stmt->bind_param('i',$id);
             $stmt->execute();
-            $result = $stmt->get_result();            
+            $result = $stmt->get_result();        
+            $stmt->close();    
     
             if ($result->num_rows == 1) {
                 $row = $result->fetch_assoc();
@@ -47,7 +48,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $nationality = $row['nationality'];
                 $contnum = $row['contactno'];
                 $address = $row['address'];
-                $occupation = $row['occupation'];
                 $email = $row['email_address'];
                 $username = $row['username'];
             }
@@ -329,24 +329,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <label for="contnumber">Contact No.</label>
                                     </div>
                                 </div>
-                                    
-                                <div class="col-lg">
-                                    <div class="input-group mb-3">
-                                        <div class="form-floating">
-                                            <input required type="text" name="occupation" placeholder="Occupation" id="occupation" class="form-control">
-                                            <label for="occupation">Occupation</label>
-                                        </div>
-                                        <div class="input-group-text">
-                                            <input class="form-check-input mt-0" id="nooccupation" name="nooccupation" type="checkbox">
-                                            <label class="ms-1" for="nooccupation">N/A</label>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input type="submit" class="btn btn-primary btn-sm" value="Submit" name="submitbtn">
+                        <input type="submit" class="btn btn-outline-primary btn-sm" value="Submit" name="submitbtn">
                     </div>
                 </form>
             </div>
@@ -405,7 +392,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                                 <div class="row">
                                     <div class="col-xl-6">
-                                        <h5>Name: <span class="fw-normal"><?php echo $fname ?? ''; ?> <?php echo $mname == "None" ? '' : $mname; ?> <?php echo $lname ?? ''; ?></span></h5>
+                                        <h5>Name: <span class="fw-normal"><?php echo $fname ?? ''; ?> <?php echo $mname == "None" ? '' : $mname; ?> <?php echo $lname ?? ''; ?> <?php echo $suffix == "None" ? '' : $suffix; ?></span></h5>
                                         <h5>Username: <span class="fw-normal"><?php echo $username ?? '';?></span></h5>
                                         <h5>Age: <span class="fw-normal"><?php echo $age ?? '';?></span></h5>
                                         <h5>Birth Date: <span class="fw-normal"><?php echo $bdate ?? '';?></span></h5>
@@ -417,7 +404,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <h5>Religion: <span class="fw-normal"><?php echo $religion ?? '';?></span></h5>
                                         <h5>Nationality: <span class="fw-normal"><?php echo $nationality ?? '';?></span></h5>
                                         <h5>Address: <span class="fw-normal"><?php echo $address ?? '';?></span></h5>
-                                        <h5>Occupation: <span class="fw-normal"><?php echo $occupation ?? '';?></span></h5>
                                     </div>
                                 </div>
                             </div>
@@ -509,8 +495,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     $(detailsId[index]).val(details[index]);
                 }
 
-                let fields = [data.mname, data.suffix, data.occupation];
-                let nofields = ["#nomname", "#nosuffix", "#nooccupation"];
+                let fields = [data.mname, data.suffix];
+                let nofields = ["#nomname", "#nosuffix"];
 
                 for (let index = 0; index < fields.length; index++) {
                     if (fields[index] == "None") {

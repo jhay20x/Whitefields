@@ -57,6 +57,7 @@ function checkHaveAppointment($dayTxt) {
     $stmt->bind_param('s', $dayTxt);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();

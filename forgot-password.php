@@ -87,7 +87,7 @@ session_start();
 				</div>	
 				
 				<div class="d-flex flex-column align-items-center mb-3">
-					<button type="submit" name="verifyBtn" id="verifyBtn" class="btn p-2 col-12 mb-3 btn-primary disableInputs">CHECK</button>
+					<button type="submit" name="verifyBtn" id="verifyBtn" class="btn p-2 col-12 mb-3 btn-outline-primary disableInputs">CHECK</button>
 					<button type="button" disabled id="resendCodeBtn" class="btn btn-sm btn-outline-primary otpCodeBox">Resend New Code</button>
 				</div>			
 

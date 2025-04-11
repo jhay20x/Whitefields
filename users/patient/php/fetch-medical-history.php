@@ -25,6 +25,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $stmt->bind_param('i',$id);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
 
     $fields = [
         "physician_name", "speciality", "office_address", "office_number", "id", "patient_id", "timestamp",

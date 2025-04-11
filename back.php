@@ -48,6 +48,7 @@ function updateLoginAttempts($uname) {
     $stmt = $conn->prepare("UPDATE `accounts` SET `failed_login_attempts`= ?, `failed_login_timestamp` = ? WHERE `username` = ? OR `email_address` = ?");
     $stmt->bind_param("isss", $attempts, $failed_login_timestamp, $uname, $uname);
     $stmt->execute();    
+	$stmt->close();
 }
 
 function fecthLastFailedAttempt($uname){
@@ -57,6 +58,7 @@ function fecthLastFailedAttempt($uname){
 	$stmt->bind_param("ss", $uname, $uname);
 	$stmt->execute();
 	$result = $stmt->get_result();
+	$stmt->close();
 
 	if ($result->num_rows == 1) {
 		$row = $result->fetch_assoc();
@@ -72,6 +74,7 @@ function fetchAttempts($uname) {
 	$stmt->bind_param("ss", $uname, $uname);
 	$stmt->execute();
 	$result = $stmt->get_result();
+	$stmt->close();
 
 	if ($result->num_rows == 1) {
 		$row = $result->fetch_assoc();

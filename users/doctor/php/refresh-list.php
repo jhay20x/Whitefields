@@ -8,7 +8,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $id = fetchDentistID();
 
     $stmt = $conn->prepare("SELECT DATE(ar.start_datetime) AS Date, TIME(ar.start_datetime) AS Time, st.status_name AS Status, 
-        CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname) AS Name, ar.id AS ID, ar.patient_id AS PID
+        CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
+        CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name, ar.id AS ID, ar.patient_id AS PID
         FROM appointment_requests ar
         LEFT OUTER JOIN patient_info pi ON pi.id = ar.patient_id
         LEFT OUTER JOIN appointment_status st ON st.id = ar.appoint_status_id
@@ -16,6 +17,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $stmt->bind_param('i', $id);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
     
     $data = "";
     $status;
@@ -35,12 +37,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             }
             $data .= '
                 <tr>
+                    <td id="appointID">' . $row['ID'] . '</td>
                     <td id="appointDate">' . $row['Date'] . '</td>
                     <td id="appointTime">' .  $time . '</td>
                     <td id="appointName">' . $row['Name'] . '</td>
                     <td id="appointStatus" class="' . $status . ' fw-bold">' . $row['Status'] . '</td>
                     <td class="appointID">
-                        <button type="button" data-p-id="' . $row['PID'] . '" value="' . $row['ID'] . '" class="btn btn-sm btn-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#appointListModal">View
+                        <button type="button" data-p-id="' . $row['PID'] . '" value="' . $row['ID'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#appointListModal">View
                         </button>
                     </td>
                 </tr>

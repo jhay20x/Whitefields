@@ -14,6 +14,7 @@ if (isset($_POST['otpCode'])) {
         $stmt->bind_param("s", $_SESSION['email_address']);
         $stmt->execute();
         $result = $stmt->get_result();
+        $stmt->close();
 
         if ($result->num_rows == 1) {
             $user = $result->fetch_assoc();
@@ -27,6 +28,7 @@ if (isset($_POST['otpCode'])) {
                 $stmt = $conn->prepare("UPDATE `accounts` SET `email_verified`= 1 WHERE `email_address` = ?");
                 $stmt->bind_param("s", $_SESSION['email_address']);
                 $stmt->execute();
+                $stmt->close();
                 
                 $_SESSION['user_id'] = $user_id;
                 $_SESSION['user_username'] = $user_username;

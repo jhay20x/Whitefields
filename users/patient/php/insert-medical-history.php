@@ -173,6 +173,7 @@ function insertMedicalLogs($conn, $patient_id, $medicalHistoryId, $logType, $ite
     $stmt = $conn->prepare("INSERT INTO `medical_history_logs`(`patient_id`, `medical_history_id`, `remarks`, `timestamp`) VALUES (?,?,?,?)");
     $stmt->bind_param("isss", $patient_id, $medicalHistoryId, $data, $timestamp);
     $stmt->execute();
+	$stmt->close();
     
     // echo $data;
 
@@ -299,6 +300,7 @@ function checkMedicalHistory($patient_id) {
     $stmt->bind_param('i',$patient_id);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
     
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
@@ -316,6 +318,7 @@ function checkMedicalQuestions($patient_id) {
     $stmt->bind_param('i',$patient_id);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
     
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
@@ -333,6 +336,7 @@ function checkMedicalIllness($patient_id) {
     $stmt->bind_param('i',$patient_id);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
     
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();

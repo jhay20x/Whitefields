@@ -47,6 +47,7 @@ if (isset($_POST['loginUserEmail']) && isset($_POST['password'])) {
 			$stmt->bind_param("ss", $uname, $uname);
 			$stmt->execute();
 			$result = $stmt->get_result();
+			$stmt->close();
 
 			if ($result->num_rows == 1) {
 				$user = $result->fetch_assoc();
@@ -166,6 +167,7 @@ function checkHasFailedAttempt($uname){
 	$stmt->bind_param("ss", $uname, $uname);
 	$stmt->execute();
 	$result = $stmt->get_result();
+	$stmt->close();
 
 	if ($result->num_rows == 1) {
 		$row = $result->fetch_assoc();
@@ -215,4 +217,5 @@ function updateFailedLogin($attempts, $failed_login_timestamp, $uname) {
     $stmt = $conn->prepare("UPDATE `accounts` SET `failed_login_attempts`= ?, `failed_login_timestamp` = ? WHERE `username` = ? OR `email_address` = ?");
     $stmt->bind_param("isss", $attempts, $failed_login_timestamp, $uname, $uname);
     $stmt->execute();  
+	$stmt->close();
 }

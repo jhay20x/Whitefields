@@ -17,6 +17,7 @@ if (isset($_POST['newPass']) && isset($_POST['userEmail'])) {
         $stmt = $conn->prepare("UPDATE `accounts` SET `password`= ? WHERE `email_address` = ?");
         $stmt->bind_param("ss", $hashedPassword, $_POST['userEmail']);
         $stmt->execute();
+        $stmt->close();
     } else {
         $_SESSION['emailVerified'] = false;
         $error = "Password is required." . $_POST['newPass'];

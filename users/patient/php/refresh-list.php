@@ -11,7 +11,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     // DATE(ar.start_datetime) AS ApprovedDate, TIME(ar.start_datetime) AS ApprovedTime, 
 
     $stmt = $conn->prepare("SELECT ar.request_datetime AS RequestDateTime, 
-        CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname) AS Dentist,
+        CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
+        CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS Dentist,
         ar.start_datetime AS ApprovedDateTime, 
         st.status_name AS Status, ar.id AS ID
         FROM appointment_requests ar
@@ -19,10 +20,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         LEFT OUTER JOIN appointment_status st ON st.id = ar.appoint_status_id        
         LEFT OUTER JOIN dentist_info di ON di.id = ar.dentist_info_id
         WHERE ar.patient_id = ?
-        ORDER BY RequestDateTime ASC;");
+        ORDER BY ar.id DESC;");
     $stmt->bind_param('i', $id);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
 
     $status = "";
     $data = "";
@@ -45,12 +47,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             // <td id="appointApprovedTime">' .  $approvedtime . '</td>
             $data .= '
                 <tr>
+                    <td id="appointID">' . $row['ID'] . '</td>
                     <td id="appointRequestDate">' . $requesttime . '</td>
                     <td id="appointApprovedDate">' . $approvedtime . '</td>
                     <td id="appointDentist">' . $row['Dentist'] . '</td>
                     <td id="appointStatus" class="' . $status . ' fw-bold">' . $row['Status'] . '</td>
                     <td class="appointID">
-                    <button type="button" value="' . $row['ID'] . '" class="btn btn-sm btn-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#appointListModal">View
+                    <button type="button" value="' . $row['ID'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#appointListModal">View
                     </button>
                     </td>
                 </tr>

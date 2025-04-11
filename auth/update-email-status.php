@@ -12,12 +12,14 @@ if (isset($_SESSION['email_address'])) {
     if (!empty($_SESSION['email_address'])) {
         $stmt = $conn->prepare("UPDATE `accounts` SET `email_verified`= 1 WHERE `email_address` = ?");
         $stmt->bind_param("s", $_SESSION['email_address']);
-        $stmt->execute();        
+        $stmt->execute();   
+        $stmt->close();     
         
         $stmt = $conn->prepare("SELECT id, account_type_id, username FROM `accounts` WHERE `email_address` = ?");
         $stmt->bind_param("s", $_SESSION['email_address']);
         $stmt->execute();
         $result = $stmt->get_result();
+        $stmt->close();
 
         if ($result->num_rows == 1) {
             $user = $result->fetch_assoc();
@@ -26,7 +28,7 @@ if (isset($_SESSION['email_address'])) {
             $_SESSION["user_id"] = $user['id'];
             $_SESSION['user_username'] = $user['username'];
             $_SESSION['account_type'] = $user['account_type_id'];
-        } 
+        }
     }
 }
 

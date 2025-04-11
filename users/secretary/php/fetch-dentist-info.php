@@ -17,7 +17,8 @@ function calculateAge($birthdate) {
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
     $id = $_POST['id'];
 
-    $stmt = $conn->prepare("SELECT CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname) AS Name,
+    $stmt = $conn->prepare("SELECT CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
+    CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS Name,
     di.accounts_id, di.specialist, di.bdate, di.contactno, di.gender, di.address, di.about_me, di.religion, di.nationality, ac.email_address, ac.username, ac.status, ac.id as AccountID
     FROM dentist_info di
     LEFT OUTER JOIN accounts ac
@@ -25,7 +26,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     WHERE di.id = ?");
     $stmt->bind_param('i',$id);
     $stmt->execute();
-    $result = $stmt->get_result();    
+    $result = $stmt->get_result();  
+	$stmt->close();  
 
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();

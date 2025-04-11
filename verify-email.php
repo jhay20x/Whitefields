@@ -56,7 +56,7 @@ if (isset($_SESSION['email_address'])) {
 					</div>
 
 					<div class="d-flex flex-column align-items-center">
-						<button type="submit" name="verifyBtn" id="verifyBtn" class="btn p-2 mb-3 col-12 btn-primary disableInputs">VERIFY</button>
+						<button type="submit" name="verifyBtn" id="verifyBtn" class="btn p-2 mb-3 col-12 btn-outline-primary disableInputs">VERIFY</button>
 						<h6>
 							<button type="button" disabled id="resendCodeBtn" class="btn btn-sm btn-outline-primary">Resend New Code</button>
 							<!-- <a id="resendCodeBtn" href="#">Resend New Code</a> -->

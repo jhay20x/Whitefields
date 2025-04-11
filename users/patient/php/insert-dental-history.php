@@ -85,6 +85,7 @@ function insertHistoryLogs($patient_id, $remarks, $lastDental, $timestamp, $inse
     $stmt = $conn->prepare("INSERT INTO `dental_history_logs`(`patient_id`, `remarks`, `visit_date`, `timestamp`, `dental_history_id`) VALUES (?,?,?,?,?)");
     $stmt->bind_param("isssi", $patient_id, $remarks, $lastDental, $timestamp, $insertId);
     $stmt->execute();
+	$stmt->close();
 }
 
 // function checkHistoryDate($patient_id, $lastDental) {
@@ -94,6 +95,7 @@ function insertHistoryLogs($patient_id, $remarks, $lastDental, $timestamp, $inse
 //     $stmt->bind_param('si',$lastDental,$patient_id);
 //     $stmt->execute();
 //     $result = $stmt->get_result();
+//	   $stmt->close();
     
 //     if ($result->num_rows > 0) {
 //         $row = $result->fetch_assoc();
@@ -111,6 +113,7 @@ function checkHistory($patient_id) {
     $stmt->bind_param('i',$patient_id);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
     
     $data = ['hasId', 'id', 'last_dental'];
 

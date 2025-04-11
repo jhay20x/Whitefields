@@ -29,36 +29,38 @@ function checkInfo($user_id) {
     $nationality = $_POST['nationality'];
     $contnumber = $_POST['contnumber'];
     $address = $_POST['address'];
-    $occupation = $_POST['occupation'];
 
     $stmt = $conn->prepare("SELECT si.accounts_id FROM secretary_info si WHERE si.accounts_id = ?;");
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
 
     if ($result->num_rows > 0) {
-        updateInfo($user_id, $lname, $fname, $mname,$suffix, $contnumber, $bdate, $gender, $religion, $nationality, $occupation, $address);
+        updateInfo($user_id, $lname, $fname, $mname,$suffix, $contnumber, $bdate, $gender, $religion, $nationality, $address);
         $message = "Profile details has been successfully updated.";
     } else {
-        insertInfo($user_id, $lname, $fname, $mname,$suffix, $contnumber, $bdate, $gender, $religion, $nationality, $occupation, $address);
+        insertInfo($user_id, $lname, $fname, $mname,$suffix, $contnumber, $bdate, $gender, $religion, $nationality, $address);
         $message = "Profile details has been successfully saved.";
     }
 }
 
-function insertInfo($user_id, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $occupation, $address) {
+function insertInfo($user_id, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $address) {
     global $conn;
 
-    $stmt = $conn->prepare("INSERT INTO `secretary_info`(`accounts_id`, `lname`, `fname`, `mname`, `suffix`, `contactno`, `bdate`, `gender`, `religion`, `nationality`, `occupation`, `address`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
-    $stmt->bind_param("ssssssssssss", $user_id, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $occupation, $address);
+    $stmt = $conn->prepare("INSERT INTO `secretary_info`(`accounts_id`, `lname`, `fname`, `mname`, `suffix`, `contactno`, `bdate`, `gender`, `religion`, `nationality`, `address`) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+    $stmt->bind_param("sssssssssss", $user_id, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $address);
     $stmt->execute();
+	$stmt->close();
 }
 
-function updateInfo($user_id, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $occupation, $address) {
+function updateInfo($user_id, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $address) {
     global $conn;
 
-    $stmt = $conn->prepare("UPDATE `secretary_info` SET `lname` = ?, `fname` = ?, `mname` = ?, `suffix` = ?, `contactno` = ?, `bdate` = ?, `gender` = ?, `religion` = ?, `nationality` = ?, `occupation` = ?, `address` = ? WHERE `accounts_id` = ?");
-    $stmt->bind_param("sssssssssssi", $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $occupation, $address, $user_id);
+    $stmt = $conn->prepare("UPDATE `secretary_info` SET `lname` = ?, `fname` = ?, `mname` = ?, `suffix` = ?, `contactno` = ?, `bdate` = ?, `gender` = ?, `religion` = ?, `nationality` = ?, `address` = ? WHERE `accounts_id` = ?");
+    $stmt->bind_param("ssssssssssi", $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $address, $user_id);
     $stmt->execute();
+	$stmt->close();
 }
 
 if (!empty($error)) {

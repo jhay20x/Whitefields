@@ -144,9 +144,9 @@ function CheckPasswordDentist(inputtxt, type) {
     return error;
 }
 
-$("#userPasswordDentist").on("keyup focusout focusin", function(e){
+$("#userPasswordCheck").on("keyup focusout focusin", function(e){
     let userPassword = $(this).val();
-    let type = this.id == "userPasswordDentist" ? "userPass" : "confirmPass";
+    let type = this.id == "userPasswordCheck" ? "userPass" : "confirmPass";
 
     if (CheckPasswordDentist(userPassword, type)) {
         $(this).addClass("is-invalid");
@@ -157,8 +157,8 @@ $("#userPasswordDentist").on("keyup focusout focusin", function(e){
     };
 });
 
-$("#confirmUserPasswordDentist").on("keyup focusout focusin", function(e){
-    let userPassword = $("#userPasswordDentist").val();
+$("#confirmUserPasswordCheck").on("keyup focusout focusin", function(e){
+    let userPassword = $("#userPasswordCheck").val();
     let confirmPassword = $(this).val();
     
     if (userPassword !== confirmPassword) {

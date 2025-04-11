@@ -50,6 +50,7 @@ function checkUser($user_id) {
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
 
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
@@ -68,6 +69,7 @@ function checkTimeSched($time, $date){
     $stmt->bind_param("ss", $date,$time);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
 
     if ($result->num_rows > 0) {        
         $error = "The time slot you've chosen has already been taken. Please choose a different time.";
@@ -114,6 +116,7 @@ function checkStoreAvailability($date) {
     $stmt->bind_param('s', $date);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
 
     if ($result->num_rows == 0) {
         $error = "The clinic is closed for this day. Please select a different day for your appointment.";
@@ -129,6 +132,7 @@ function insertRequest($patient_id, $dentist, $requestdatetime, $datetime, $date
     $stmt = $conn->prepare("INSERT INTO `appointment_requests`(`patient_id`, `dentist_info_id`, `request_datetime`, `start_datetime`, `start_datetime_str`, `appoint_status_id`, `oral_concern`) VALUES (?,?,?,?,?,?,?);");
     $stmt->bind_param("iisssis", $patient_id, $dentist, $requestdatetime, $datetime, $datetimestr, $appoint_status, $concern);
     $stmt->execute();
+	$stmt->close();
 }
 
 function checkHavePending ($patient_id, $dentist, $requestdatetime, $datetime, $datetimestr, $appoint_status, $concern) {
@@ -144,6 +148,7 @@ function checkHavePending ($patient_id, $dentist, $requestdatetime, $datetime, $
         $stmt->bind_param("is", $patient_id, $date);
         $stmt->execute();
         $result = $stmt->get_result();
+        $stmt->close();
     
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -163,6 +168,7 @@ function countPendingAppointment($patient_id) {
     $stmt->bind_param("i", $patient_id);
     $stmt->execute();
     $result = $stmt->get_result();
+	$stmt->close();
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
