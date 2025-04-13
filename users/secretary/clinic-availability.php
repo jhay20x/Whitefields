@@ -68,8 +68,17 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         <title>Appointment List - Whitefields Dental Clinic</title>
         <link rel="stylesheet" href="../../resources/css/bootstrap.css">
         <link rel="stylesheet" href="../../resources/css/sidebar.css">
+        <link rel="stylesheet" href="../../resources/css/loader.css">
         <link rel="stylesheet" href="../../resources/css/jquery-ui.css">
         <link rel="stylesheet" href="../../vendor/twbs/bootstrap-icons/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="../../resources/css/dataTables.bootstrap5.css">
+        <link rel="stylesheet" href="../../resources/css/buttons.bootstrap5.css">
+        <link rel="stylesheet" href="../../resources/css/searchPanes.dataTables.css" />
+        <link rel="stylesheet" href="../../resources/css/select.dataTables.css" />
+        <link rel="stylesheet" href="../../resources/css/buttons.dataTables.css" />
+        <link rel="stylesheet" href="../../resources/css/searchBuilder.dataTables.css" />
+        <link rel="stylesheet" href="../../resources/css/dataTables.dateTime.css" />
+        <script src="../../resources/js/jquery-3.7.1.js"></script>
 
         <style>
             .bi {
@@ -94,6 +103,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 margin-top: 20px;
                 padding: 5rem;
                 width: 100%;
+            }
+        
+            input[type="date"]::-webkit-calendar-picker-indicator {
+                background: transparent;
+                bottom: 0;
+                color: transparent;
+                cursor: pointer;
+                height: auto;
+                left: 0;
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: auto;
             }
 
             @media only screen and (max-width: 600px) {
@@ -216,7 +238,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                 <div class="col-md-9 my-3 rounded shadow bg-white row">
                     <div class="mt-3 row">
-                        <div class="col-12 col-lg mb-3">
+                        <div class="col-12 col-lg-6 mb-3">
                             <div class="col">
                                 <h3>Clinic Availability</h3>
                                 <span>Set the operating time and day of the clinic that will reflect when requesting an appointment.</span>
@@ -224,9 +246,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             
                             <div class="mt-3">
                                 <div class="ms-3">
-                                    <div id="errorMessage" class="" role="alert"></div>
+                                    <div id="availabilityMessage" class="" role="alert"></div>
                                     <div class="row mb-3 align-items-center">
-                                        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
+                                        <div class="col-10 col-md-10 col-lg-9 col-xl-6">
                                             <h5 class="">Sunday</h5>
                                             <p class="mb-0"><?php echo $sun ?></p>
                                         </div>
@@ -235,7 +257,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
-                                        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
+                                        <div class="col-10 col-md-10 col-lg-9 col-xl-6">
                                             <h5 class="">Monday</h5>
                                             <p class="mb-0"><?php echo $mon ?></p>
                                         </div>
@@ -244,7 +266,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
-                                        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
+                                        <div class="col-10 col-md-10 col-lg-9 col-xl-6">
                                             <h5 class="">Tuesday</h5>
                                             <p class="mb-0"><?php echo $tue ?></p>
                                         </div>
@@ -253,7 +275,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
-                                        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
+                                        <div class="col-10 col-md-10 col-lg-9 col-xl-6">
                                             <h5 class="">Wednesday</h5>
                                             <p class="mb-0"><?php echo $wed ?></p>
                                         </div>
@@ -262,7 +284,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
-                                        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
+                                        <div class="col-10 col-md-10 col-lg-9 col-xl-6">
                                             <h5 class="">Thursday</h5>
                                             <p class="mb-0"><?php echo $thu ?></p>
                                         </div>
@@ -271,7 +293,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
-                                        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
+                                        <div class="col-10 col-md-10 col-lg-9 col-xl-6">
                                             <h5 class="">Friday</h5>
                                             <p class="mb-0"><?php echo $fri ?></p>
                                         </div>
@@ -280,7 +302,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
                                     <div class="row align-items-center">
-                                        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
+                                        <div class="col-10 col-md-10 col-lg-9 col-xl-6">
                                             <h5 class="">Saturday</h5>
                                             <p class="mb-0"><?php echo $sat ?></p>
                                         </div>
@@ -292,50 +314,147 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             </div>
                         </div>
 
-                        <!-- <div class="col-12 col-lg">
+                        <div class="col-12 col-lg-6 mt-5 mt-lg-0">
                             <div class="col">
-                                <h3>Holidays</h3>
-                                <span>Set the regular holidays that will reflect when requesting an appointment.</span>
+                                <h3>Specific Dates Closed</h3>
+                                <span>Define specific dates when the clinic is unavailable. These dates will be unavailable from the appointment scheduling process.</span>
                             </div>
                             
                             <div class="mt-3">
-                                <div class="row">
-                                    <div class="row mb-3">
-                                        <div class="ms-3">
-                                            <div id="errorMessage" class="" role="alert"></div>
-                                            <div class="row">
-                                                <span>January 1, 2025 - New Year's Day</span>
-                                                <span>April 9, 2025 - Day of Valor</span>
-                                                <span>April 17, 2025 - Maundy Thursday</span>
-                                                <span>April 18, 2025 - Good Friday</span>
-                                                <span>May 1, 2025 - Labor Day</span>
-                                                <span>June 12, 2025 - Independence Day</span>
-                                                <span>August 25, 2025 - National Heroes Day</span>
-                                                <span>November 30, 2025 - Bonifacio Day</span>
-                                                <span>December 25, 2025 - Christmas Day</span>
-                                                <span>December 30, 2025 - Rizal Day</span>
+                                <div class="row mb-3">
+                                    <div class="ms-3">
+                                        <div id="closedDateMessage" class="" role="alert"></div>
+                                        <form autocomplete="off" action="php/update-availability.php" method="POST" id="closedDateForm" class="row col text-center">
+                                            <div class="row align-items-center mb-3">
+                                                <div class="col-12 col-lg-6 col-xl-5 mb-3 mb-xl-0">
+                                                    <div class="form-floating">
+                                                        <input type="text" required name="remarks" placeholder="Remarks"  id="remarks" class="form-control onlyLettersNumbers">
+                                                        <label for="remarks">Remarks</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-6 col-xl-5 mb-3 mb-xl-0">
+                                                    <div class="form-floating">
+                                                        <input type="date" required name="closedDate" placeholder="Choose a date"  id="closedDate" class="form-control">
+                                                        <label for="closedDate">Choose a date</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-12 col-xl-2 mb-3 mb-lg-0 text-center">
+                                                    <button type="submit" id="closeDateSubmitBtn" class="btn btn-outline-primary">Set Date</button>
+                                                </div>
                                             </div>
+                                        </form>
+
+                                        <div class="table-responsive mb-3"  style="max-height: 400px;">
+                                            <table id="closedDatesTable" class="table-group-divider overflow-auto table table-hover table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="col">ID</th>
+                                                        <th class="col">Remarks</th>
+                                                        <th class="col">Date</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody id="closedDatesTableBody">
+                                                    <?php
+                                                    $stmt = $conn->prepare("SELECT * FROM store_closed_dates;");
+                                                    $stmt->execute();
+                                                    $result = $stmt->get_result();
+                                                    $stmt->close();
+
+                                                    $status;
+
+                                                    if ($result->num_rows > 0) {
+                                                        while ($row = mysqli_fetch_assoc($result)) {
+                                                            $closedDate = date('Y-m-d', strtotime($row['Date']));
+
+                                                            echo '
+                                                            <tr>
+                                                                <td id="closedDateID">' . $row['id'] . '</td>
+                                                                <td id="closedDateRemarks">' . $row['Remarks'] . '</td>
+                                                                <td id="closedDate">' . $closedDate . '</td>
+                                                            </tr>
+                                                        ';
+                                                        }
+                                                    }
+                                                    ?>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </body>
 
-    <script src="../../resources/js/jquery-3.7.1.js"></script>
+    <script src="../../resources/js/jquery-ui.js"></script>
     <script src="../../resources/js/bootstrap.bundle.min.js"></script>
+    <script src='../../resources/js/index.global.js'></script>
     <script src='../../resources/js/sidebar.js'></script>
+    <script src="../../resources/js/functions.js" defer></script>
+    <script src="../../resources/js/dataTables.js"></script>
+    <script src="../../resources/js/dataTables.searchBuilder.js"></script>
+    <script src="../../resources/js/searchBuilder.dataTables.js"></script>
+    <script src="../../resources/js/dataTables.dateTime.js"></script>
+    <script src="../../resources/js/dataTables.bootstrap5.js"></script>
+    <script src="../../resources/js/dataTables.buttons.js"></script>
+    <script src="../../resources/js/buttons.bootstrap5.js"></script>
+    <script src="../../resources/js/dataTables.searchPanes.js"></script>
+    <script src="../../resources/js/searchPanes.dataTables.js"></script>
+    <script src="../../resources/js/dataTables.select.js"></script>
+    <script src="../../resources/js/select.dataTables.js"></script>
+    <script src="../../resources/js/buttons.dataTables.js"></script>
 
     <script>
         $(document).ready(function() {
+            inputFilters();
+            
             let dayId;
 
+            loadclosedDateTable ();
+
+            $("#closedDateForm").submit(function(e) {
+                $("#availabilityMessage").empty();
+                $("#closedDateMessage").empty();
+                $("#errorMessageModal").empty();
+                e.preventDefault();
+                
+                let remarks = $('#remarks').val();
+                let closedDate = $('#closedDate').val();
+
+                var url = "php/add-closed-date.php";
+
+                var formData = {
+                    remarks: remarks,
+                    closedDate: closedDate
+                };
+
+                // console.log(formData);
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: formData,
+                    dataType: 'json'                
+                }).done(function (data) {
+                    if (!data.success) {
+                        $("#closedDateMessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
+                    } else {
+                        localStorage.setItem("closedDatediv", data.message);
+                        location.reload();
+                    }
+                    //console.log(data);
+                }).fail(function(data) {
+                    //console.log(data);
+                });
+            });
+
             $("#myForm").submit(function(e){
-                $("#errorMessage").empty();
+                $("#availabilityMessage").empty();
+                $("#closedDateMessage").empty();
                 $("#errorMessageModal").empty();
                 e.preventDefault();
                 
@@ -397,10 +516,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             if (localStorage.getItem("errordiv")) {
                 let message = localStorage.getItem("errordiv");
 
-                $("#errorMessage").append('<div class="alert alert-success">' + message +  '</div>');
+                $("#availabilityMessage").append('<div class="alert alert-success">' + message +  '</div>');
 
-                localStorage.removeItem("errordiv")
-            }         
+                localStorage.removeItem("errordiv");
+            } else if (localStorage.getItem("closedDatediv")) {
+                let message = localStorage.getItem("closedDatediv");
+
+                $("#closedDateMessage").append('<div class="alert alert-success">' + message +  '</div>');
+
+                localStorage.removeItem("closedDatediv");
+            }
 
             function loadDetails(id) {
                 dayId = id;
@@ -442,6 +567,38 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     //console.log(data);
                 }).fail(function(data) {
                     //console.log(data);
+                });
+            }
+
+            function loadclosedDateTable (){
+                let closedDatesTable = new DataTable('#closedDatesTable', {
+                    select: false,
+                    lengthMenu: [
+                        [5, 10, 15, -1],
+                        [5, 10, 15, 'All'],
+                    ],
+                    layout: {
+                        topStart:{
+                        },
+                        topEnd: {
+                            search: true,
+                        },
+                        top1: {
+                        },
+                        bottomStart: {
+                            pageLength: true
+                        }
+                    },
+                    columnDefs: [
+                        {
+                            targets: [0,1,2],
+                            className: 'dt-body-center dt-head-center align-middle'
+                        }
+                    ],
+                    autoWidth: false,
+                    paging: true,
+                    scrollX: true,
+                    order: [[0, "desc"]]
                 });
             }
         });

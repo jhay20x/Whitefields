@@ -21,7 +21,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" type="image/x-icon" href="../../resources/images/logo-icon-67459a47526b9.webp" />
-        <title>Appointment List - Whitefields Dental Clinic</title>
+        <title>Schedule - Whitefields Dental Clinic</title>
         <link rel="stylesheet" href="../../resources/css/bootstrap.css">
         <link rel="stylesheet" href="../../resources/css/loader.css">
         <link rel="stylesheet" href="../../resources/css/sidebar.css">

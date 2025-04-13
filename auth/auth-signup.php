@@ -46,7 +46,7 @@ if (isset($_POST['signUpEmail']) && isset($_POST['password']) && isset($_POST['s
 			} else {
 				$hash = password_hash($password, PASSWORD_DEFAULT);
 
-				$stmt = $conn->prepare("INSERT INTO `accounts`(`account_type_id`, `email_address`, `username`, `password`, `email_verified`) VALUES (2,?,?,?,0)");
+				$stmt = $conn->prepare("INSERT INTO `accounts`(`account_type_id`, `email_address`, `username`, `password`, `email_verified`, `status`) VALUES (2,?,?,?,0,1)");
 				$stmt->bind_param("sss", $signUpEmail, $signUpUsername, $hash);
 				$stmt->execute();
 				$accountID = $stmt->insert_id;

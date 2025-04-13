@@ -20,14 +20,60 @@ include 'php/fetch-id.php';
 // move_uploaded_file($file_tmp,"../../files/".$tablename."/".$file_name);
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
-    if ($_SESSION['account_type'] == 2) {
-        if (is_int(fetchPatientID())) {
+    function lastVisit($conn, $patient_id) {
+        $stmt = $conn->prepare("SELECT * FROM appointment_requests WHERE appoint_status_id = 6 AND patient_id = ? ORDER BY start_datetime DESC;");
+        $stmt->bind_param('i',$patient_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+
+            $lastVisitDate = date("F d, Y", strtotime($row['start_datetime']));
+            
+            return "Your last clinic appointment/visit was on $lastVisitDate.";
+        } else {
+            return "You haven't visited the clinic yet.";
+        }
+    }
+    function nextVisit($conn, $patient_id) {
+        $stmt = $conn->prepare("SELECT * FROM appointment_requests WHERE appoint_status_id = 1 AND patient_id = ? ORDER BY start_datetime DESC;");
+        $stmt->bind_param('i',$patient_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+
+            $curDate = date("Y-m-d");
+            $nextVisitDate = date("Y-m-d", strtotime($row['start_datetime']));
+
+            if ($nextVisitDate < $curDate) {
+                return "You have no upcoming appointments/visits.";
+            } else {
+                $nextVisitDate = date("F d, Y \\a\\t h:i:s A", strtotime($row['start_datetime']));
+            }
+            
+            return "Your next clinic appointment/visit was on $nextVisitDate.";
+        } else {
+            return "You have no upcoming appointments/visits.";
+        }
+    }
+
+    if ($_SESSION['account_type'] == 2) {        
+        $patient_id = fetchPatientID();
+
+        if (is_int($patient_id)) {
             $hasId = true;
         } else {
             $hasId = false;
         }
         
-        if ($hasId) {        
+        if ($hasId) {
+            $lastVisit = lastVisit($conn, $patient_id);
+            $nextVisit = nextVisit($conn, $patient_id);
 ?>
 
 <!DOCTYPE html>
@@ -130,21 +176,21 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <div class="row bg-white rounded shadow mt-3 p-3 d-flex justify-content-center row">
                         <div class="row">                                    
                             <h4 class="row">Upcoming Appointments:</h4>
-                            <span class="row">No upcoming appointments.</span>
+                            <span class="row"><?= $nextVisit ?></span>
                         </div>
                     </div>
 
-                    <div class="row bg-white rounded shadow mt-3 p-3 d-flex justify-content-center row">
+                    <!-- <div class="row bg-white rounded shadow mt-3 p-3 d-flex justify-content-center row">
                         <div class="row">                                    
                             <h4 class="row">Ongoing Procedures:</h4>
                             <span class="row">No ongoing procedures.</span>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="row bg-white rounded shadow mt-3 p-3 d-flex justify-content-center row">
                         <div class="row">                                    
                             <h4 class="row">Last Clinic Visit:</h4>
-                            <span class="row">You haven't visited the clinic yet.</span>
+                            <span class="row"><?= $lastVisit ?></span>
                         </div>
                     </div>
                 </div>

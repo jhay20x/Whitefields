@@ -599,7 +599,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $(document).ready(function () {
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-        
+
         let table = new DataTable('#myTable', {
             language: {
                 searchBuilder: {            

@@ -162,11 +162,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" id="appointRequestClose" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <div class="container-fluid">
-				            <div id="errorMessage" class="" role="alert"></div>
+                    <form autocomplete="off" action="php/request-appointment.php" method="POST" class="" id="myForm">
+                        <div class="modal-body">
+                            <div class="container-fluid">
+				                <div id="errorMessage" class="" role="alert"></div>
 
-                            <form autocomplete="off" action="php/request-appointment.php" method="POST" class="text-center" id="myForm">
                                 <div class="form-floating my-3">
                                     <input required type="date" name="date" placeholder="Date"  id="date" id="date" class="form-control">
                                     <label for="date">Date</label>
@@ -210,16 +210,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 </div> -->
                                 
                                 <div class="form-floating my-3">
-                                    <input maxlength="100" required type="text" name="concern" placeholder="Oral Concern"  id="concern" class="form-control">
-                                    <label for="concern">Oral Concern</label>
+                                    <input maxlength="100" required type="text" name="concern" placeholder="Oral Concern (100 characters only)"  id="concern" class="form-control onlyLettersNumbers">
+                                    <label for="concern">Oral Concern (100 characters only)</label>
                                 </div>
 
-                            </form>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="submit" class="btn btn-outline-primary btn-sm" value="Submit" name="addbtn" <?php echo $hasId ? '' : 'disabled'; ?>>
-                    </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-outline-primary btn-sm" value="Submit" name="addbtn" <?php echo $hasId ? '' : 'disabled'; ?>>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -410,6 +410,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     <script src="../../resources/js/bootstrap.bundle.min.js"></script>
     <script src='../../resources/js/index.global.js'></script>
     <script src='../../resources/js/sidebar.js'></script>
+    <script src='../../resources/js/functions.js'></script>
     <script src="../../resources/js/dataTables.js"></script>
     <script src="../../resources/js/dataTables.searchBuilder.js"></script>
     <script src="../../resources/js/searchBuilder.dataTables.js"></script>
@@ -427,7 +428,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $(document).ready(function() {
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-
+            inputFilters();
             // $('#cancelRequestModal').modal('show');
 
             let dentist_id;
@@ -437,6 +438,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
             $("#myForm").submit(function(e){
                 $("#errorMessage").empty();
+                $("#cancelMessage").empty();
                 e.preventDefault();
 
                 // $("#loginUserEmail, #userPassword, #signUpUsername, #signUpEmail").blur;
@@ -470,10 +472,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         $("#errorMessage").append('<div class="alert alert-success">' + data.message +  '</div>');
                     }
                     // console.log(formData);
-                    //console.log(data.responseText);
+                    // console.log(data);
                 }).fail(function(data) {
                     // console.log(formData);
-                    //console.log(data.responseText);
+                    // console.log(data);
                 });
             });
             

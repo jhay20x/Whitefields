@@ -11,6 +11,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS Dentist
         FROM appointment_requests ar
         LEFT OUTER JOIN patient_info pi ON pi.id = ar.patient_id
+        LEFT OUTER JOIN dentist_info di ON di.id = ar.dentist_info_id
         LEFT OUTER JOIN appointment_status st ON st.id = ar.appoint_status_id
         WHERE ar.appoint_status_id != 4
         ORDER BY ar.id  DESC;");

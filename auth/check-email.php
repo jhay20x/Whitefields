@@ -12,8 +12,9 @@ $emailVerified;
 if (isset($_POST['forgotEmail'])) {
     if (!empty($_POST['forgotEmail'])) {
         $email = $_POST['forgotEmail'];
-        $stmt = $conn->prepare("SELECT * FROM `accounts` WHERE `email_address` = ?");
-        $stmt->bind_param("s", $email);
+
+        $stmt = $conn->prepare("SELECT * FROM `accounts` WHERE `email_address` = ? OR Username = ?");
+        $stmt->bind_param("ss", $email, $email);
         $stmt->execute();
         $result = $stmt->get_result();
         $stmt->close();
@@ -21,9 +22,10 @@ if (isset($_POST['forgotEmail'])) {
         if ($result->num_rows == 1) {
             $user = $result->fetch_assoc();
             $user_username = $user['username'];
+            $user_email = $user['email_address'];
 
             $_SESSION["user_username"] = $user_username;
-            $_SESSION["email_address"] = $email;
+            $_SESSION["email_address"] = $user_email;
             $emailVerified = true;
         } else {
             $emailVerified = false;
@@ -44,7 +46,7 @@ if (!empty($error)) {
     $data['emailVerification'] = $emailVerified;
 } else {
     $data['success'] = true;
-    $data['message'] = 'Email found.';
+    $data['message'] = 'User found.';
     $data['emailVerification'] = $emailVerified;
     $data['username'] = $user_username;
 }

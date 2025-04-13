@@ -181,7 +181,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     
                                     <div id="reasonOtherDiv" class="col-lg">
                                         <div class="form-floating">
-                                            <input autocomplete="off" type="text" name="reasonOther" placeholder="Reason"  id="reasonOther" class="form-control">
+                                            <input autocomplete="off" type="text" name="reasonOther" placeholder="Reason"  id="reasonOther" class="form-control onlyLetters">
                                             <label for="reasonOther">Reason for Other</label>
                                         </div>
                                     </div>
@@ -542,8 +542,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </h6>
                         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="medicalHistoryLogsClose" aria-label="Close"></button> -->
                     </div>
-                    <div class="modal-body overflow-y-auto" style="max-height: 50vh;">
-                        <div class="accordion" id="medicalHistoryLogsAcc">
+                    <div class="table-responsive" style="max-height: 50vh;">
+                        <div class="accordion accordion-flush" id="medicalHistoryLogsAcc">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -678,6 +678,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
             loadTable();
             loadModal();
+            inputFilters();
+
             $('#appointmentListTable thead th').eq(3).attr('width', '0%');
 
             function loadTable() {
@@ -983,9 +985,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     $("#appointmentListTable").DataTable().destroy().clear();
                     $('#appointmentListTableBody').html(data);
                     loadTable();
-                    //console.log(data);
+                    // console.log(data);
                 }).fail(function(data) {
-                    //console.log(data);
+                    // console.log(data);
                 });
             }       
 

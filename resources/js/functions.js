@@ -252,6 +252,61 @@ function showLogin () {
     $('#myForm').attr('action', 'auth/auth-login.php');
 }
 
+function inputFilters() {
+    $('.onlyNumbers').each(function() {
+        setInputFilter(this, function(value) {
+            return /^-?\d*$/.test(value); }, "Numbers Only.");
+    });
+
+    $('.onlyNumbersDots').each(function() {
+        setInputFilter(this, function(value) {
+            return /^-?\d*\.?\d*$/.test(value); }, "Numbers Only.");
+    });
+    
+    $('.onlyLetters').each(function() {
+        setInputFilter(this, function(value) {
+            return /^[a-zA-Z.\-\s]*$/.test(value);
+        }, "Letters, dots, hyphens, and spaces only.");
+    });
+    
+    $('.onlyLettersNoSpace').each(function() {
+        setInputFilter(this, function(value) {
+            return /^[a-zA-Z.\-]*$/.test(value);
+        }, "Letters, dots, hyphens only.");
+    });
+    
+    $('.onlyEmail').each(function() {
+        setInputFilter(this, function(value) {
+            return /^[a-zA-Z0-9@._-]*$/.test(value);
+        }, "Only letters, numbers, @, dots, underscores, and hyphens are allowed.");
+    });
+    
+    $('.onlyLettersNumbers').each(function() {
+        setInputFilter(this, function(value) {
+            return /^[a-zA-Z0-9.\-\s]*$/.test(value);
+        }, "Letters, numbers, dots, hyphens, and spaces only.");
+    });
+    
+    $('.onlyAddress').each(function() {
+        setInputFilter(this, function(value) {
+            return /^[a-zA-Z0-9\s,.'-\/()#]*$/.test(value);
+        }, "Valid address characters only.");
+    });
+    
+    $('.onlyBlood').each(function() {
+        setInputFilter(this, function(value) {
+            return /^[0-9/]*$/.test(value);
+        }, "Numbers and slashes only.");
+    });
+    
+    $("#contnumber").on("focusin keypress focusout", function() {
+        if (!this.value.startsWith("09")) {
+            this.value = "09";
+        }
+    });
+}
+
+
 function setInputFilter(textbox, inputFilter, errMsg) {
     [ "input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout" ].forEach(function(event) {
         textbox.addEventListener(event, function(e) {

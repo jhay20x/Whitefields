@@ -188,7 +188,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     </div>
                                     <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-2 order-lg-1">
                                         <div class="form-floating">
-                                            <input type="text" name="patientToothNo[]" placeholder="Tooth No./s" id="patientToothNo_0" class="form-control">
+                                            <input type="text" name="patientToothNo[]" placeholder="Tooth No./s" id="patientToothNo_0" class="form-control onlyNumbers">
                                             <label for="patientToothNo_0">Tooth No./s</label>
                                         </div>
                                     </div>
@@ -229,7 +229,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form-floating mb-3">
-                                            <textarea maxlength="255" style="height: 125px;" required name="dentistNote" placeholder="Code" id="dentistNote" id="dentistNote" class="form-control"></textarea>
+                                            <textarea maxlength="255" style="height: 125px;" required name="dentistNote" placeholder="Code" id="dentistNote" id="dentistNote" class="form-control onlyLettersNumbers"></textarea>
                                             <label for="dentistNote">Notes</label>
                                         </div>
                                     </div>
@@ -541,8 +541,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </h6>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="medicalHistoryLogsClose" aria-label="Close"></button> -->
                 </div>
-                <div class="modal-body overflow-y-auto" style="max-height: 50vh;">
-                    <div class="accordion" id="medicalHistoryLogsAcc">
+                <div class="table-responsive" style="max-height: 50vh;">
+                    <div class="accordion accordion-flush" id="medicalHistoryLogsAcc">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -662,7 +662,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 <script>
     $(document).ready(function() {
         loadModal();
-        
+        inputFilters();
+
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -726,7 +727,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                     <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-2 order-lg-1">
                         <div class="form-floating">
-                            <input type="text" name="patientToothNo[]" placeholder="Tooth No./s" id="patientToothNo_${procedureIndex}" class="form-control">
+                            <input type="text" name="patientToothNo[]" placeholder="Tooth No./s" id="patientToothNo_${procedureIndex}" class="form-control onlyNumbers">
                             <label for="patientToothNo_${procedureIndex}">Tooth No./s</label>
                         </div>
                     </div>
@@ -740,7 +741,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                     <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-4 order-lg-3">
                         <div class="form-floating">
-                            <input type="text" name="patientPrice[]" placeholder="Procedure Price" id="patientPrice_${procedureIndex}" class="form-control patientPrice">
+                            <input type="text" name="patientPrice[]" placeholder="Procedure Price" id="patientPrice_${procedureIndex}" class="form-control patientPrice onlyNumbersDots">
                             <label for="patientPrice_${procedureIndex}">Procedure Price</label>
                         </div>
                     </div>
@@ -752,6 +753,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
             $('#proceduresList').append(newProcedure);
             procedureIndex++;
+            inputFilters();
         }
         
         $('#proceduresList').on('click', '.procedure-remove', function () {

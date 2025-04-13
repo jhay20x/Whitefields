@@ -14,9 +14,14 @@ $error;
 $data = [];
 
 if (isset($_SESSION['email_address'])) {
-    $userEmail = $_SESSION['email_address'];
-    $username = $_SESSION['user_username'];
-    $mode = $_POST['mode'];
+    if ($_SESSION['email_address'] == "None") {
+        $userEmail = "jhay20x@gmail.com";
+    } else {
+        $userEmail = $_SESSION['email_address'] ?? "";
+    }
+
+    $username = $_SESSION['user_username'] ?? "";
+    $mode = $_POST['mode'] ?? "";
 
     $otp = rand(100000, 999999);
     

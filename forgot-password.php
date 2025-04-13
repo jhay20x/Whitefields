@@ -48,16 +48,16 @@ session_start();
 				<div class="d-flex flex-column align-items-center">
 					<img src="./resources/images/wfdc-logo-67459a4f483d0.webp" class="mb-3" alt="Logo" width="250" height="80">
 					<h1 id="loginLabel" class="fs-4 mb-3">Forgot Password</h1>
-					<h6 class="emailBox">Enter your email address to proceed.</h6>
-					<h6 id="otpCodeBox" class="otpCodeBox">Enter the OTP code that was sent to your email address (<span class="fw-bold"></span>) to proceed.</h6>
+					<h6 class="emailBox">Enter your username or email address to proceed.</h6>
+					<h6 id="otpCodeBox" class="otpCodeBox">Enter the OTP code that was sent to your email address to proceed.</h6>
 					<h6 class="passwordBox">Enter your new password.</h6>
 				</div>
 
 				<div id="errorMessage" role="alert"></div>
 
 				<div class="mb-3 form-floating emailBox">
-					<input type="email" maxlength="30" class="form-control disableInputs" name="forgotEmail" id="forgotEmail" placeholder="Email Address">
-					<label for="forgotEmail">Email Address</label>
+					<input type="text" maxlength="30" class="form-control disableInputs" name="forgotEmail" id="forgotEmail" placeholder="Email Address">
+					<label for="forgotEmail">Username or Email Address</label>
 				</div>
 
 				
@@ -330,7 +330,6 @@ session_start();
 		$(".emailBox").hide();
 		enableInputs();
 		$("#verifyBtn").text("VERIFY");
-		$(".otpCodeBox span").text(userEmail);
 		$("#otpCode").text("");
 		$("#otpCode").focus();
 		fetchOTP();

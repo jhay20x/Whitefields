@@ -39,6 +39,10 @@ function checkUser($user_id) {
     
     if (!checkStoreAvailability($date)) {
         return;
+    };  
+    
+    if (!checkStoreClosed($date)) {
+        return;
     };
 
     if (!checkTimeSched($time, $date)) {
@@ -124,6 +128,23 @@ function checkStoreAvailability($date) {
 	$stmt->close();
 
     if ($result->num_rows == 0) {
+        $error = "The clinic is closed for this day. Please select a different day for your appointment.";
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function checkStoreClosed($closedDate) {
+    global $conn, $error;
+
+    $stmt = $conn->prepare("SELECT Date FROM store_closed_dates WHERE Date = ?;");
+    $stmt->bind_param("s", $closedDate);
+    $stmt->execute();
+    $result = $stmt->get_result();
+	$stmt->close();
+
+    if ($result->num_rows != 0) {
         $error = "The clinic is closed for this day. Please select a different day for your appointment.";
         return false;
     } else {

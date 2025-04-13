@@ -42,7 +42,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     if ($result->num_rows > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             $procedures = [];
-            $patientProcedures = explode("-", $row['procedures']);
+            $patientProcedures = explode("-", $row['procedures_id']);
 
             foreach ($patientProcedures as $value) {
                 if (isset($proceduresList[$value])) {

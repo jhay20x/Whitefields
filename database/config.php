@@ -1,14 +1,14 @@
 <?php
     // Database Configuration
-    // $host = 'localhost';
-    // $username = 'root';
-    // $password = '';
-    // $database = 'whitefieldsdb';
+    $host = 'localhost';
+    $username = 'root';
+    $password = '';
+    $database = 'whitefieldsdb';
     
-    $host = '153.92.15.45';
-    $username = 'u659352537_whitefields';
-    $password = 'Wfdc2021';
-    $database = 'u659352537_whitefields';
+    // $host = '153.92.15.45';
+    // $username = 'u659352537_whitefields';
+    // $password = 'Wfdc2021';
+    // $database = 'u659352537_whitefields';
 
     // $host = 'sql307.infinityfree.com';
     // $username = 'if0_36016256';

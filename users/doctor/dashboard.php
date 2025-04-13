@@ -245,9 +245,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="d-flex row mx-3 my-2 justify-content-center">
                     <div class="card rounded shadow h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-auto mx-xl-2 my-xl-2 col-xxl-auto mx-xxl-2 my-xxl-2">
                         <div class="card-body">
-                            <div class="d-flex column card-icon">
-                                <i class="bi bi-calendar3"></i>
-                                <h5 class="card-text">Appointment Today</h5>
+                            <div class="d-flex column card-icon align-items-center">
+                                <h1><i class="bi bi-calendar3"></i></h1>
+                                <h5 class="card-text ms-3">Appointment Today</h5>
                             </div>
                             <h1 class="card-title"><?php echo $AppointToday?></h1>
                         </div>
@@ -255,9 +255,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                     <div class="card rounded shadow h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-auto mx-xl-2 my-xl-2 col-xxl-auto mx-xxl-2 my-xxl-2">
                         <div class="card-body">
-                            <div class="d-flex column card-icon">
-                                <i class="bi bi-calendar3"></i>
-                                <h5 class="card-text">Total Appointment</h5>
+                            <div class="d-flex column card-icon align-items-center">
+                                <h1><i class="bi bi-calendar3"></i></h1>
+                                <h5 class="card-text ms-3">Total Appointment</h5>
                             </div>
                             <h1 class="card-title"><?php echo $AppointAll?></h1>
                         </div>
@@ -265,9 +265,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                     <div class="card rounded shadow h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-auto mx-xl-2 my-xl-2 col-xxl-auto mx-xxl-2 my-xxl-2">
                         <div class="card-body">                                
-                            <div class="d-flex column card-icon">
-                                <i class="bi bi-person"></i>
-                                <h5 class="card-text">Total Patient</h5>
+                            <div class="d-flex column card-icon align-items-center">
+                                <h1><i class="bi bi-person"></i></h1>
+                                <h5 class="card-text ms-3">Total Patient</h5>
                             </div>
                             <h1 class="card-title"><?php echo $TotalPatient?></h1>
                         </div>

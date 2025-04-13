@@ -520,7 +520,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="medicalHistoryLogsClose" aria-label="Close"></button> -->
                 </div>
                 <div class="table-responsive" style="max-height: 50vh;">
-                    <div class="accordion" id="medicalHistoryLogsAcc">
+                    <div class="accordion accordion-flush" id="medicalHistoryLogsAcc">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -553,7 +553,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <div class="row">
                                 <div class="col-lg">
                                     <div class="form-floating mb-3">
-                                        <input maxlength="35" autocomplete="off" required name="username" placeholder="Username"  id="username" class="form-control">
+                                        <input maxlength="35" autocomplete="off" required name="username" placeholder="Username"  id="username" class="form-control onlyLettersNoSpace">
                                         <label for="username">Username</label>
                                     </div>
                                 </div>
@@ -561,7 +561,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="col-lg">
                                     <div class="input-group mb-3">
                                         <div class="form-floating">
-                                            <input maxlength="35" required autocomplete="off" type="email" name="email" placeholder="Email" id="email" class="form-control">
+                                            <input maxlength="35" required autocomplete="off" type="email" name="email" placeholder="Email" id="email" class="form-control onlyEmail">
                                             <label for="email">Email</label>
                                         </div>
                                         <div class="input-group-text">
@@ -621,7 +621,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="col-lg">
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input maxlength="35" type="text" required name="fname" placeholder="First Name"  id="fname" class="form-control">
+                                            <input maxlength="35" type="text" required name="fname" placeholder="First Name"  id="fname" class="form-control onlyLetters">
                                             <label for="fname">First Name</label>
                                         </div>
                                     </div>
@@ -629,7 +629,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <div class="col-lg">
                                         <div class="input-group mb-3">
                                             <div class="form-floating">
-                                                <input maxlength="35" type="text" required name="mname" placeholder="Middle Name" id="mname"  class="form-control">
+                                                <input maxlength="35" type="text" required name="mname" placeholder="Middle Name" id="mname"  class="form-control onlyLetters">
                                                 <label for="mname">M. Name</label>
                                             </div>
                                             <div class="input-group-text">
@@ -641,7 +641,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input maxlength="35" type="text" required name="lname" placeholder="Last Name"  id="lname" class="form-control">
+                                            <input maxlength="35" type="text" required name="lname" placeholder="Last Name"  id="lname" class="form-control onlyLetters">
                                             <label for="lname">Last Name</label>
                                         </div>
                                     </div>
@@ -649,7 +649,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <div class="col-lg">
                                         <div class="input-group mb-3">
                                             <div class="form-floating">
-                                                <input maxlength="10" type="text" required name="suffix" placeholder="Middle Name" id="suffix" class="form-control">
+                                                <input maxlength="10" type="text" required name="suffix" placeholder="Middle Name" id="suffix" class="form-control onlyLetters">
                                                 <label for="suffix">Suffix</label>
                                             </div>
                                             <div class="input-group-text">
@@ -671,7 +671,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <div class="col-lg">
                                         <div class="input-group mb-3">
                                             <div class="form-floating">
-                                                <input maxlength="10" type="text" required name="occupation" placeholder="Middle Name" id="occupation" class="form-control">
+                                                <input maxlength="10" type="text" required name="occupation" placeholder="Middle Name" id="occupation" class="form-control onlyLetters">
                                                 <label for="occupation">Occupation</label>
                                             </div>
                                             <div class="input-group-text">
@@ -697,19 +697,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input maxlength="25" type="text" required name="religion" placeholder="Religion"  id="religion" class="form-control">
+                                            <input maxlength="25" type="text" required name="religion" placeholder="Religion"  id="religion" class="form-control onlyLetters">
                                             <label for="religion">Religion</label>
                                         </div>
                                     </div>
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input maxlength="25" type="text" required name="nationality" placeholder="Nationality"  id="nationality" class="form-control">
+                                            <input maxlength="25" type="text" required name="nationality" placeholder="Nationality"  id="nationality" class="form-control onlyLetters">
                                             <label for="nationality">Nationality</label>
                                         </div>
                                     </div>
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input maxlength="11" type="text" required name="contnumber" placeholder="Contact Number" value="09" id="contnumber" class="form-control">
+                                            <input maxlength="11" type="text" required name="contnumber" placeholder="Contact Number" value="09" id="contnumber" class="form-control onlyNumbers">
                                             <label for="contnumber">Contact No.</label>
                                         </div>
                                     </div>    
@@ -717,7 +717,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             </div>
                             <div class="col-lg">
                                 <div class="form-floating mb-3">
-                                    <input maxlength="100" type="text" required name="address" placeholder="Address"  id="address" class="form-control">
+                                    <input maxlength="100" type="text" required name="address" placeholder="Address"  id="address" class="form-control onlyAddress">
                                     <label for="address">Address</label>
                                 </div>                                             
                             </div>
@@ -870,6 +870,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
 <script>
     $(document).ready(function () {
+        inputFilters();
+
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
         
