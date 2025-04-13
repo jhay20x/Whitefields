@@ -6,7 +6,7 @@
     <title>Contact Us - Whitefields Dental Clinic</title>
 	<link rel="shortcut icon" type="image/x-icon" href="./resources/images/logo-icon-67459a47526b9.webp"/>
     <link rel="stylesheet" href="./resources/css/bootstrap.css">
-    <link rel="stylesheet" href="./resources/css/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="./vendor/twbs/bootstrap-icons/font/bootstrap-icons.css">
     <script src="./resources/js/bootstrap.bundle.js"></script>
 
 </head>

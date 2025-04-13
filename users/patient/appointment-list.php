@@ -26,7 +26,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         <link rel="stylesheet" href="../../resources/css/bootstrap.css">
         <link rel="stylesheet" href="../../resources/css/sidebar.css">
         <link rel="stylesheet" href="../../resources/css/jquery-ui.css">
-        <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="../../vendor/twbs/bootstrap-icons/font/bootstrap-icons.css">
         <link rel="stylesheet" href="../../resources/css/dataTables.bootstrap5.css">
         <link rel="stylesheet" href="../../resources/css/buttons.bootstrap5.css">
         <link rel="stylesheet" href="../../resources/css/searchPanes.dataTables.css" />
@@ -37,7 +37,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
         <style>
             .bi {
-                vertical-align: -.125em;
                 fill: currentColor;
             }
 
@@ -100,9 +99,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center">
                         <h6 class="modal-title" id="appointListLabel">
-                            <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#calendar3"/></svg>
+                            <i class="bi bi-calendar3"></i> Appointment Details | Status: <strong id="aptdtlsstatus" class=""></strong>
                         </h6>
-                        <h6 class="ms-2">Appointment Details | Status: <strong id="aptdtlsstatus" class=""></strong></h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" id="appointListClose" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -122,7 +120,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <h6>Appointment Time: <span id="aptdtlsstarttime" class="fw-normal"></span></h6>
                                 </div>
                                 <div class="col-12 col-lg">
-                                    <h6><span class="text-primary" id="exclamationIcon" data-bs-toggle="tooltip" data-bs-title="Your scheduled dentist might change."><svg class="bi pe-none" width="16" height="16"><use xlink:href="#exclamation-circle"/></svg></span> Scheduled Dentist: <span id="aptdtlsdentist" class="fw-normal"></span></h6>
+                                    <h6><span class="text-primary" id="exclamationIcon" data-bs-toggle="tooltip" data-bs-title="Your scheduled dentist might change."><i class="bi bi-exclamation-circle"></i></span> Scheduled Dentist: <span id="aptdtlsdentist" class="fw-normal"></span></h6>
                                     <h6>Oral Concern: <span id="aptdtlsconcern" class="fw-normal"></span></h6>
                                 </div>
                             </div>
@@ -160,9 +158,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center">
                         <h6 class="modal-title" id="appointRequestLabel">
-                            <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#calendar3"/></svg>
+                            <i class="bi bi-calendar3"></i> Appointment Request Form
                         </h6>
-                        <h6 class="ms-2">Appointment Request Form</h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" id="appointRequestClose" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -217,9 +214,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <label for="concern">Oral Concern</label>
                                 </div>
 
-                                <input type="submit" class="btn btn-outline-primary btn-md mt-1" value="Submit" name="addbtn" <?php echo $hasId ? '' : 'disabled'; ?>>
                             </form>
                         </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-outline-primary btn-sm" value="Submit" name="addbtn" <?php echo $hasId ? '' : 'disabled'; ?>>
                     </div>
                 </div>
             </div>
@@ -231,9 +230,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center">
                         <h6 class="modal-title" id="cancelRequestConfirmLabel">
-                            <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#calendar3"/></svg>
+                            <i class="bi bi-calendar3"></i> Appointment Cancellation Form
                         </h6>
-                        <h6 class="ms-2">Appointment Cancellation Form</h6>
                         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body">
@@ -255,9 +253,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center">
                         <h6 class="modal-title" id="cancelRequestLabel">
-                            <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#calendar3"/></svg>
+                            <i class="bi bi-calendar3"></i> Appointment Cancellation Form
                         </h6>
-                        <h6 class="ms-2">Appointment Cancellation Form</h6>
                         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestClose" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body">
@@ -303,10 +300,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="title position-sticky top-0 start-0 z-3 bg-white d-flex flex-row shadow align-items-center p-3">
                     <button id="" class="sidebarCollapse btn btn-outline-secondary me-3 position-relative">
                         <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                        <svg class="bi pe-none" width="16" height="16"><use xlink:href="#list"/></svg>
+                        <i class="bi bi-list"></i>
                     </button>
-                    <svg class="bi pe-none me-2" width="32" height="32"><use xlink:href="#calendar3"/></svg>
-                    <h1 class="col">My Appointments</h1>
+                    <h1><i class="bi bi-calendar3"></i></h1>
+                    <h1 class="col ms-3">My Appointments</h1>
 
                     <?php include "../../components/notification.php" ?>
                 </div>
@@ -499,15 +496,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 }).done(function (data) {
                     if (!data.success) {
                         $("#dentist").val(data.error);
+                        dentist_id = 0;
                     } else {
                         $("#dentist").val(data.dentist);
                         dentist_id = data.dentist_id;
                     }
                     // console.log(formData);
-                    //console.log(data.responseText);
+                    // console.log(data.responseText);
                 }).fail(function(data) {
                     // console.log(formData);
-                    //console.log(data.responseText);
+                    // console.log(data.responseText);
                 });
             });
 
@@ -525,7 +523,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
             $('#myTable thead th').eq(3).attr('width', '0%');            
             
-            DataTable.Buttons.defaults.dom.button.className = 'btn btn-outline-primary';
+            DataTable.Buttons.defaults.dom.button.className = 'btn btn-sm btn-outline-primary';
 
             loadTable();
 

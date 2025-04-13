@@ -26,7 +26,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         <link rel="stylesheet" href="../../resources/css/sidebar.css">
         <link rel="stylesheet" href="../../resources/css/loader.css">
         <link rel="stylesheet" href="../../resources/css/jquery-ui.css">
-        <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="../../vendor/twbs/bootstrap-icons/font/bootstrap-icons.css">
         <link rel="stylesheet" href="../../resources/css/dataTables.bootstrap5.css">
         <link rel="stylesheet" href="../../resources/css/buttons.bootstrap5.css">
         <link rel="stylesheet" href="../../resources/css/searchPanes.dataTables.css" />
@@ -38,7 +38,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
         <style>
             .bi {
-                vertical-align: -.125em;
                 fill: currentColor;
             }
 
@@ -96,9 +95,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center">
                         <h6 class="modal-title" id="appointListLabel">
-                            <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#calendar3"/></svg>                        
+                            <i class="bi bi-calendar3"></i> Appointment Details | Status: <strong id="" class="aptdtlsstatus"></strong>
                         </h6>
-                        <h6 class="ms-2">Appointment Details | Status: <strong id="" class="aptdtlsstatus"></strong></h6>
                         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="patientUpdateStatusClose" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body">
@@ -205,9 +203,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center">
                         <h6 class="modal-title" id="appointListLabel">
-                            <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#calendar3"/></svg>                            
+                            <i class="bi bi-calendar3"></i> Appointment Details | Status: <strong id="" class="aptdtlsstatus"></strong>
                         </h6>
-                        <h6 class="ms-2">Appointment Details | Status: <strong id="" class="aptdtlsstatus"></strong></h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" id="appointListClose" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -225,8 +222,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="col-12 col-lg">                                 
                                     <h6>Name: 
                                         <span id="" class="aptdtlsname fw-normal"></span>
-                                        <button class="btn btn-sm p-0 viewPatientDetail" data-bs-toggle="modal" data-bs-target="#patientViewModal">
-                                            <svg class="" width="16" height="16" style="vertical-align: -.125em"><use xlink:href="#eye"/></svg> View Records
+                                        <button class="btn btn-sm text-primary p-0 viewPatientDetail" data-bs-toggle="modal" data-bs-target="#patientViewModal">
+                                            <i class="bi bi-eye"></i> View Records
                                         </button>
                                     </h6>
                                     <h6>Appointment Date: <span id="" class="aptdtlsStartDate fw-normal"></span></h6>
@@ -267,9 +264,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center">
                         <h6 class="modal-title" id="cancelSetStatusLabel">
-                            <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#calendar3"/></svg>
+                            <i class="bi bi-calendar3"></i> Update Appointment Form
                         </h6>
-                        <h6 class="ms-2">Update Appointment Form</h6>
                         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelSetStatusClose" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body">
@@ -291,9 +287,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center">
                         <h6 class="modal-title" id="appointListLabel">
-                            <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#file-medical"/></svg>                        
+                            <i class="bi bi-file-medical"></i> Medical Information
                         </h6>
-                        <h6 class="ms-2">Medical Information</h6>
                         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="patientViewClose" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body">
@@ -336,7 +331,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <div class="d-flex justify-content-end float-end">
                                                 <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View Records">
                                                     <button id="" class="btn btn-outline-secondary position-relative" data-bs-toggle="modal" data-bs-target="#dentalHistoryLogsModal">
-                                                        <svg class="bi pe-none" width="16" height="16"><use xlink:href="#file-earmark-text"/></svg>
+                                                        <i class="bi bi-file-earmark-text"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -358,7 +353,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <div class="d-flex justify-content-end float-end">
                                                 <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View Records">
                                                     <button id="" class="btn btn-outline-secondary mb-3 position-relative" data-bs-toggle="modal" data-bs-target="#medicalHistoryLogsModal">
-                                                        <svg class="bi pe-none" width="16" height="16"><use xlink:href="#file-earmark-text"/></svg>
+                                                        <i class="bi bi-file-earmark-text"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -510,9 +505,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center">
                         <h6 class="modal-title" id="dentalHistoryLogsLabel">
-                            <svg class="bi" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person-vcard"/></svg>
+                            <i class="bi bi-person-vcard"></i> Dental History Records
                         </h6>
-                        <h6 class="ms-2">Dental History Records</h6>
                         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="dentalHistoryLogsClose" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body">
@@ -544,9 +538,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center">
                         <h6 class="modal-title" id="medicalHistoryLogsLabel">
-                            <svg class="bi" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#file-medical"/></svg>
+                            <i class="bi bi-file-medical"></i> Medical History Records
                         </h6>
-                        <h6 class="ms-2">Medical History Records</h6>
                         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="medicalHistoryLogsClose" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body overflow-y-auto" style="max-height: 50vh;">
@@ -565,10 +558,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="title position-sticky top-0 start-0 z-3 bg-white d-flex flex-row shadow align-items-center p-3">
                     <button id="" class="sidebarCollapse btn btn-outline-secondary me-3 position-relative">
                         <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                        <svg class="bi pe-none" width="16" height="16"><use xlink:href="#list"/></svg>
+                        <i class="bi bi-list"></i>
                     </button>
-                    <svg class="bi pe-none me-2" width="32" height="32"><use xlink:href="#calendar3"/></svg>
-                    <h1 class="col">Appointments</h1>
+                    <h1><i class="bi bi-calendar3"></i></h1>
+                    <h1 class="col ms-3">Appointments</h1>
 
                     <?php include "../../components/notification.php" ?>
                 </div>

@@ -69,11 +69,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         <link rel="stylesheet" href="../../resources/css/bootstrap.css">
         <link rel="stylesheet" href="../../resources/css/sidebar.css">
         <link rel="stylesheet" href="../../resources/css/jquery-ui.css">
-        <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="../../vendor/twbs/bootstrap-icons/font/bootstrap-icons.css">
 
         <style>
             .bi {
-                vertical-align: -.125em;
                 fill: currentColor;
             }
 
@@ -123,9 +122,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center">
                         <h6 class="modal-title" id="availabilityLabel">
-                            <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#calendar3"/></svg>
+                            <i class="bi bi-calendar3"></i> Set Store Availability: <span id="day"></span>
                         </h6>
-                        <h6 class="ms-2">Set Store Availability: <span id="day"></span></h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" id="availabilityClose" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -208,10 +206,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="title position-sticky top-0 start-0 z-3 bg-white d-flex flex-row shadow align-items-center p-3">
                     <button id="" class="sidebarCollapse btn btn-outline-secondary me-3 position-relative">
                         <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                        <svg class="bi pe-none" width="16" height="16"><use xlink:href="#list"/></svg>
+                        <i class="bi bi-list"></i>
                     </button>
-                    <svg class="bi pe-none me-2" width="32" height="32"><use xlink:href="#building-gear"/></svg>
-                    <h1 class="col">Management</h1>
+                    <h1><i class="bi bi-building-gear"></i></h1>
+                    <h1 class="col ms-3">Management</h1>
 
                     <?php include "../../components/notification.php" ?>
                 </div>
@@ -233,7 +231,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <p class="mb-0"><?php echo $sun ?></p>
                                         </div>
                                         <div class="col">
-                                            <button class="btn btn-sm btn-outline-secondary availabilityBtn" value="<?php echo $sun_id ?>" data-bs-toggle="modal" data-bs-target="#availabilityModal"><svg class="bi pe-none" width="16" height="16"><use xlink:href="#pencil-square"/></svg></button>
+                                            <button class="btn btn-sm btn-outline-secondary availabilityBtn" value="<?php echo $sun_id ?>" data-bs-toggle="modal" data-bs-target="#availabilityModal"><i class="bi bi-pencil-square"></i></button>
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
@@ -242,7 +240,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <p class="mb-0"><?php echo $mon ?></p>
                                         </div>
                                         <div class="col">
-                                            <button class="btn btn-sm btn-outline-secondary availabilityBtn" value="<?php echo $mon_id ?>" data-bs-toggle="modal" data-bs-target="#availabilityModal"><svg class="bi pe-none" width="16" height="16"><use xlink:href="#pencil-square"/></svg></button>
+                                            <button class="btn btn-sm btn-outline-secondary availabilityBtn" value="<?php echo $mon_id ?>" data-bs-toggle="modal" data-bs-target="#availabilityModal"><i class="bi bi-pencil-square"></i></button>
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
@@ -251,7 +249,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <p class="mb-0"><?php echo $tue ?></p>
                                         </div>
                                         <div class="col">
-                                            <button class="btn btn-sm btn-outline-secondary availabilityBtn" value="<?php echo $tue_id ?>" data-bs-toggle="modal" data-bs-target="#availabilityModal"><svg class="bi pe-none" width="16" height="16"><use xlink:href="#pencil-square"/></svg></button>
+                                            <button class="btn btn-sm btn-outline-secondary availabilityBtn" value="<?php echo $tue_id ?>" data-bs-toggle="modal" data-bs-target="#availabilityModal"><i class="bi bi-pencil-square"></i></button>
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
@@ -260,7 +258,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <p class="mb-0"><?php echo $wed ?></p>
                                         </div>
                                         <div class="col">
-                                            <button class="btn btn-sm btn-outline-secondary availabilityBtn" value="<?php echo $wed_id ?>" data-bs-toggle="modal" data-bs-target="#availabilityModal"><svg class="bi pe-none" width="16" height="16"><use xlink:href="#pencil-square"/></svg></button>
+                                            <button class="btn btn-sm btn-outline-secondary availabilityBtn" value="<?php echo $wed_id ?>" data-bs-toggle="modal" data-bs-target="#availabilityModal"><i class="bi bi-pencil-square"></i></button>
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
@@ -269,7 +267,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <p class="mb-0"><?php echo $thu ?></p>
                                         </div>
                                         <div class="col">
-                                            <button class="btn btn-sm btn-outline-secondary availabilityBtn" value="<?php echo $thu_id ?>" data-bs-toggle="modal" data-bs-target="#availabilityModal"><svg class="bi pe-none" width="16" height="16"><use xlink:href="#pencil-square"/></svg></button>
+                                            <button class="btn btn-sm btn-outline-secondary availabilityBtn" value="<?php echo $thu_id ?>" data-bs-toggle="modal" data-bs-target="#availabilityModal"><i class="bi bi-pencil-square"></i></button>
                                         </div>
                                     </div>
                                     <div class="row mb-3 align-items-center">
@@ -278,7 +276,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <p class="mb-0"><?php echo $fri ?></p>
                                         </div>
                                         <div class="col">
-                                            <button class="btn btn-sm btn-outline-secondary availabilityBtn" value="<?php echo $fri_id ?>" data-bs-toggle="modal" data-bs-target="#availabilityModal"><svg class="bi pe-none" width="16" height="16"><use xlink:href="#pencil-square"/></svg></button>
+                                            <button class="btn btn-sm btn-outline-secondary availabilityBtn" value="<?php echo $fri_id ?>" data-bs-toggle="modal" data-bs-target="#availabilityModal"><i class="bi bi-pencil-square"></i></button>
                                         </div>
                                     </div>
                                     <div class="row align-items-center">
@@ -287,7 +285,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <p class="mb-0"><?php echo $sat ?></p>
                                         </div>
                                         <div class="col">
-                                            <button class="btn btn-sm btn-outline-secondary availabilityBtn" value="<?php echo $sat_id ?>" data-bs-toggle="modal" data-bs-target="#availabilityModal"><svg class="bi pe-none" width="16" height="16"><use xlink:href="#pencil-square"/></svg></button>
+                                            <button class="btn btn-sm btn-outline-secondary availabilityBtn" value="<?php echo $sat_id ?>" data-bs-toggle="modal" data-bs-target="#availabilityModal"><i class="bi bi-pencil-square"></i></button>
                                         </div>
                                     </div>
                                 </div>

@@ -26,7 +26,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     <link rel="stylesheet" href="../../resources/css/sidebar.css">
     <link rel="stylesheet" href="../../resources/css/loader.css">
     <link rel="stylesheet" href="../../resources/css/jquery-ui.css">
-    <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../vendor/twbs/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../../resources/css/dataTables.bootstrap5.css">
     <link rel="stylesheet" href="../../resources/css/buttons.bootstrap5.css">
     <link rel="stylesheet" href="../../resources/css/searchPanes.dataTables.css" />
@@ -34,11 +34,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     <link rel="stylesheet" href="../../resources/css/buttons.dataTables.css" />
     <link rel="stylesheet" href="../../resources/css/searchBuilder.dataTables.css" />
     <link rel="stylesheet" href="../../resources/css/dataTables.dateTime.css" />
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">	
     
     <style>
         .bi {
-            vertical-align: -.125em;
             fill: currentColor;
         }
 
@@ -112,9 +110,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="appointListLabel">
-                        <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person-vcard"/></svg>                        
+                        <i class="bi bi-person-vcard"></i> Dentist Information
                     </h6>
-                    <h6 class="ms-2">Dentist Information</h6>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="dentistViewClose" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
@@ -164,9 +161,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="changeStatusCancelConfirmLabel">
-                        <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person"/></svg>
+                        <i class="bi bi-person"></i> Change Status Form
                     </h6>
-                    <h6 class="ms-2">Change Status Form</h6>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
@@ -188,9 +184,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="addDentistLabel">
-                        <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person-vcard"/></svg>
+                        <i class="bi bi-person-vcard"></i> Profile Information
                     </h6>
-                    <h6 class="ms-2">Profile Information</h6>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="addDentistClose" aria-label="Close"></button> -->
                 </div>
                 <form autocomplete="off" action="php/add-dentist.php" method="POST" class="col" id="myForm">
@@ -393,9 +388,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="cancelAddDentistConfirmLabel">
-                        <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person"/></svg>
+                        <i class="bi bi-person"></i> Add Dentist Form
                     </h6>
-                    <h6 class="ms-2">Add Dentist Form</h6>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
@@ -417,9 +411,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="noEmailConfirmLabel">
-                        <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person"/></svg>
+                        <i class="bi bi-person"></i> No Email Confirmation
                     </h6>
-                    <h6 class="ms-2">No Email Confirmation</h6>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
@@ -440,10 +433,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="title position-sticky top-0 start-0 z-3 bg-white d-flex flex-row shadow align-items-center p-3">
                 <button id="" class="sidebarCollapse btn btn-outline-secondary me-3 position-relative">
                     <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                    <svg class="bi pe-none" width="16" height="16"><use xlink:href="#list"/></svg>
+                    <i class="bi bi-list"></i>
                 </button>
-                <svg class="bi pe-none me-2" width="32" height="32"><use xlink:href="#person-vcard"/></svg>
-                <h1 class="col">Dentist</h1>
+                <h1><i class="bi bi-person-vcard"></i></h1>
+                <h1 class="col ms-3">Dentist</h1>
 
                 <?php include "../../components/notification.php" ?>
             </div>
@@ -530,7 +523,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $(document).ready(function () {
         $('#myTable thead th').eq(3).attr('width', '0%');
         
-        DataTable.Buttons.defaults.dom.button.className = 'btn btn-outline-primary';
+        DataTable.Buttons.defaults.dom.button.className = 'btn btn-sm btn-outline-primary';
 
         let table = new DataTable('#myTable', {
             language: {

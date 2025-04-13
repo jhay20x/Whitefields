@@ -60,7 +60,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     
     <style>
         .bi {
-            vertical-align: -.125em;
             fill: currentColor;
         }
 
@@ -227,11 +226,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             
             <div class="title d-flex flex-row align-items-center p-3">
                 <div class="col-xs-1">
-                    <button id="" class="sidebarCollapse btn btn-outline-secondary me-4"><svg class="bi pe-none" width="16" height="16"><use xlink:href="#list"/></svg></button>
+                    <button id="" class="sidebarCollapse btn btn-outline-secondary me-4"><i class="bi bi-list"></i></button>
                 </div>
 
                 <div class="col-xs-1">
-                    <svg class="bi pe-none me-2" width="32" height="32"><use xlink:href="#columns-gap"/></svg>
+                    <i class="bi bi-columns-gap"></i>
                 </div>
 
                 <div class="col-xs-auto">

@@ -2,7 +2,7 @@
                 <!-- Notification -->
                 <div class="dropdown me-3">
                     <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Notifications">
-                        <svg class="bi pe-none me-2" width="32" height="32"><use xlink:href="#bell"/></svg>
+                        <i class="bi bi-bell"></i>
 
                         <?php                        
                         $host = 'localhost';

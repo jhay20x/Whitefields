@@ -39,10 +39,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     <title>Dashboard - Whitefields Dental Clinic</title>
     <link rel="stylesheet" href="../../resources/css/bootstrap.css">
     <link rel="stylesheet" href="../../resources/css/sidebar.css">
-    
+    <link rel="stylesheet" href="../../vendor/twbs/bootstrap-icons/font/bootstrap-icons.css">
+
     <style>
         .bi {
-            vertical-align: -.125em;
             fill: currentColor;
         }
 
@@ -106,10 +106,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="title position-sticky top-0 start-0 z-3 bg-white d-flex flex-row shadow align-items-center p-3">
                 <button id="" class="sidebarCollapse btn btn-outline-secondary me-3 position-relative">
                     <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                    <svg class="bi pe-none" width="16" height="16"><use xlink:href="#list"/></svg>
+                    <i class="bi bi-list"></i>
                 </button>
-                <svg class="bi pe-none me-2" width="32" height="32"><use xlink:href="#columns-gap"/></svg>
-                <h1 class="col">Dashboard: Patient</h1>
+                <h1><i class="bi bi-columns-gap"></i></h1>
+                <h1 class="col ms-3">Dashboard: Patient</h1>
 
                 <?php include "../../components/notification.php" ?>
             </div>

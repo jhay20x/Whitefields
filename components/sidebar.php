@@ -100,6 +100,10 @@ if (is_int($id)) {
       <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
       <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
     </symbol>
+    <symbol id="envelope-at" viewBox="0 0 16 16">
+      <path d="M2 2a2 2 0 0 0-2 2v8.01A2 2 0 0 0 2 14h5.5a.5.5 0 0 0 0-1H2a1 1 0 0 1-.966-.741l5.64-3.471L8 9.583l7-4.2V8.5a.5.5 0 0 0 1 0V4a2 2 0 0 0-2-2zm3.708 6.208L1 11.105V5.383zM1 4.217V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v.217l-7 4.2z"/>
+      <path d="M14.247 14.269c1.01 0 1.587-.857 1.587-2.025v-.21C15.834 10.43 14.64 9 12.52 9h-.035C10.42 9 9 10.36 9 12.432v.214C9 14.82 10.438 16 12.358 16h.044c.594 0 1.018-.074 1.237-.175v-.73c-.245.11-.673.18-1.18.18h-.044c-1.334 0-2.571-.788-2.571-2.655v-.157c0-1.657 1.058-2.724 2.64-2.724h.04c1.535 0 2.484 1.05 2.484 2.326v.118c0 .975-.324 1.39-.639 1.39-.232 0-.41-.148-.41-.42v-2.19h-.906v.569h-.03c-.084-.298-.368-.63-.954-.63-.778 0-1.259.555-1.259 1.4v.528c0 .892.49 1.434 1.26 1.434.471 0 .896-.227 1.014-.643h.043c.118.42.617.648 1.12.648m-2.453-1.588v-.227c0-.546.227-.791.573-.791.297 0 .572.192.572.708v.367c0 .573-.253.744-.564.744-.354 0-.581-.215-.581-.8Z"/>
+    </symbol>
 </svg>
 
 <!-- Modal -->
@@ -107,10 +111,7 @@ if (is_int($id)) {
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header d-flex align-items-center">
-                <h6 class="modal-title" id="logoutConfirmLabel">
-                    <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person"/></svg>
-                </h6>
-                <h6 class="ms-2">Logout Confirmation</h6>
+                <h6 class="modal-title" id="logoutConfirmLabel"><span><i class="bi bi-person"></i> Confirmation</span></h6>
                 <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
             </div>
             <div class="modal-body">
@@ -151,13 +152,13 @@ if (is_int($id)) {
         <ul class="list-unstyled ps-0 mb-auto">
           <li class="mb-1 ms-3">
             <a href="dashboard.php" class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#columns-gap"/></svg>
+                <i class="bi bi-columns-gap me-1"></i>
                 Dashboard
             </a>
           </li>
           <li class="mb-1">
             <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#appointment-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#calendar3"/></svg>
+                <i class="bi bi-calendar3 me-1"></i>
                 Appointments
             </button>
             <div class="collapse" id="appointment-collapse">
@@ -169,38 +170,26 @@ if (is_int($id)) {
           </li>
           <li class="mb-1 ms-3">
             <a href="patient-list.php" class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#person"/></svg>
+                <i class="bi bi-person me-1"></i>
                 Patients
             </a>
           </li>
           <li class="mb-1 ms-3">
             <a href="dentist-list.php" class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#person-vcard"/></svg>
+                <i class="bi bi-person-vcard me-1"></i>
                 Dentists
             </a>
           </li>
           <li class="mb-1 ms-3">
             <a href="schedule.php" class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
+                <i class="bi bi-table me-1"></i>
                 Schedule
             </a>
           </li>
-          <!-- <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#schedule-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
-                Schedules
-            </button>
-            <div class="collapse" id="schedule-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Add Schedule</a></li>
-                <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Schedule List</a></li>
-              </ul>
-            </div>
-          </li> -->
           </li>
           <li class="mb-1">
             <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#consent-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#file-earmark-text"/></svg>
+                <i class="bi bi-file-earmark-text me-1"></i>
                 Consent Forms
             </button>
             <div class="collapse" id="consent-collapse">
@@ -211,7 +200,7 @@ if (is_int($id)) {
           </li>
           <li class="mb-1">
             <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#transaction-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#clock-history"/></svg>
+                <i class="bi bi-clock-history me-1"></i>
                 Transactions
             </button>
             <div class="collapse" id="transaction-collapse">
@@ -222,7 +211,7 @@ if (is_int($id)) {
           </li>
           <li class="mb-1">
             <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#management-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#building-gear"/></svg>
+                <i class="bi bi-building-gear me-1"></i>
                 Management
             </button>
             <div class="collapse" id="management-collapse">
@@ -241,91 +230,16 @@ if (is_int($id)) {
         <ul class="list-unstyled ps-0 mb-auto">
           <li class="mb-1 ms-3">
             <a href="dashboard.php" class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#columns-gap"/></svg>
+                <i class="bi bi-columns-gap me-1"></i>
                 Dashboard
             </a>
           </li>
           <li class="mb-1 ms-3">
             <a href="appointment-list.php" class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#calendar3"/></svg>
+                <i class="bi bi-calendar3 me-1"></i>
                 My Appointments
             </a>
           </li>
-          <!-- <li class="mb-1 ms-3">
-            <a href="appointment-list.php" class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#clipboard-data"/></svg>
-                Treatment Record
-            </a>
-          </li> -->
-          <!-- <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#appointment-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#calendar3"/></svg>
-                Appointments
-            </button>
-            <div class="collapse" id="appointment-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="appointment-request.php" class="d-inline-flex text-decoration-none rounded text-white">Appointment Request</a></li>
-                <li><a href="appointment-list.php" class="d-inline-flex text-decoration-none rounded text-white">Appointment List</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#patient-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#person"/></svg>
-                Patients
-            </button>
-            <div class="collapse" id="patient-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="patient-list.php" class="d-inline-flex text-decoration-none rounded text-white">Patient List</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dentist-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#person-vcard"/></svg>
-                Dentists
-            </button>
-            <div class="collapse" id="dentist-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Add Doctor</a></li>
-                <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Dentist List</a></li>
-            </div>
-          </li>
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#schedule-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
-                Schedules
-            </button>
-            <div class="collapse" id="schedule-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Add Schedule</a></li>
-                <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Schedule List</a></li>
-              </ul>
-            </div>
-          </li>
-          </li>
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#consent-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#file-earmark-text"/></svg>
-                Consent Forms
-            </button>
-            <div class="collapse" id="consent-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Placeholder</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#transaction-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#clock-history"/></svg>
-                Transactions & History
-            </button>
-            <div class="collapse" id="transaction-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Placeholder</a></li>
-              </ul>
-            </div>
-          </li> -->
         </ul>      
       <?php
 
@@ -337,78 +251,22 @@ if (is_int($id)) {
         <ul class="list-unstyled ps-0 mb-auto">
           <li class="mb-1 ms-3">
             <a href="dashboard.php" class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#columns-gap"/></svg>
+                <i class="bi bi-columns-gap me-1"></i>
                 Dashboard
             </a>
           </li>
           <li class="mb-1 ms-3">
             <a href="appointment-list.php" class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#calendar3"/></svg>
+                <i class="bi bi-calendar3 me-1"></i>
                 My Appointments
             </a>
           </li>
           <li class="mb-1 ms-3">
             <a href="patient-list.php" class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#person"/></svg>
+                <i class="bi bi-person me-1"></i>
                 Patients
             </a>
           </li>
-          <!-- <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#patient-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#person"/></svg>
-                Patients
-            </button>
-            <div class="collapse" id="patient-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="patient-list.php" class="d-inline-flex text-decoration-none rounded text-white">Patient List</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dentist-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#person-vcard"/></svg>
-                Dentists
-            </button>
-            <div class="collapse" id="dentist-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Add Doctor</a></li>
-                <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Dentist List</a></li>
-            </div>
-          </li>
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#schedule-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
-                Schedules
-            </button>
-            <div class="collapse" id="schedule-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Add Schedule</a></li>
-                <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Schedule List</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#consent-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#file-earmark-text"/></svg>
-                Consent Forms
-            </button>
-            <div class="collapse" id="consent-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Placeholder</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#transaction-collapse" aria-expanded="false">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#clock-history"/></svg>
-                Transactions & History
-            </button>
-            <div class="collapse" id="transaction-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Placeholder</a></li>
-              </ul>
-            </div>
-          </li> -->
         </ul>      
       <?php
 
@@ -418,23 +276,19 @@ if (is_int($id)) {
     
     <hr>
   
-      <!-- <div class="dropdown mb-5 mb-sm-0">   -->
       <div class="dropdown">  
         <ul class="list-unstyled ps-0 mb-auto">
           <li class="mb-1 ms-3">
-            <a href="profile.php" class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white position-relative">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#person"/></svg>
+            <a href="profile.php" class="btn btn-dash d-inline-flex border rounded border-0 text-white position-relative">
+                <i class="bi bi-person me-1"></i>
                 <span class="position-absolute <?php echo ($hasId) ? 'visually-hidden' : ''; ?> top-50 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
                 My Profile
             </a>
           </li>
           
-          <!-- <hr> -->
-
           <li class="mb-1 ms-3">
-            <a class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white" data-bs-toggle="modal" data-bs-target="#logoutConfirmModal">
-                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#box-arrow-right"/></svg>
-                Log Out
+            <a class="btn btn-dash d-inline-flex border rounded border-0 text-white" data-bs-toggle="modal" data-bs-target="#logoutConfirmModal">
+                <i class="bi bi-box-arrow-right me-1"></i>Log Out
             </a>
           </li>
         </ul>

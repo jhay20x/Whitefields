@@ -26,7 +26,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     <link rel="stylesheet" href="../../resources/css/loader.css">
     <link rel="stylesheet" href="../../resources/css/sidebar.css">
     <link rel="stylesheet" href="../../resources/css/jquery-ui.css">
-    <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../vendor/twbs/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../../resources/css/dataTables.bootstrap5.css">
     <link rel="stylesheet" href="../../resources/css/buttons.bootstrap5.css">
     <link rel="stylesheet" href="../../resources/css/searchPanes.dataTables.css" />
@@ -38,7 +38,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
     <style>
         .bi {
-            vertical-align: -.125em;
             fill: currentColor;
         }
 
@@ -105,9 +104,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="appointListLabel">
-                        <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#calendar3"/></svg>                            
-                    </h6>
-                    <h6 class="ms-2">Appointment Details | Status: <strong id="aptdtlsstatus" class=""></strong></h6>
+                        <i class="bi bi-calendar3"></i> Appointment Details | Status: <strong id="aptdtlsstatus" class=""></strong>
+                    </h6>                    
                     <button type="button" class="btn-close" data-bs-dismiss="modal" id="appointListClose" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -130,8 +128,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <div class="col-12 col-lg">
                                 <h6>Name: 
                                     <span id="aptdtlsname" class="fw-normal"></span>
-                                    <button class="btn btn-sm p-0 viewPatientDetail" data-bs-toggle="modal" data-bs-target="#patientViewModal">
-                                        <svg class="" width="16" height="16" style="vertical-align: -.125em"><use xlink:href="#eye"/></svg> View Records
+                                    <button class="btn btn-sm text-primary p-0 viewPatientDetail" data-bs-toggle="modal" data-bs-target="#patientViewModal">
+                                        <i class="bi bi-eye"></i> View Records
                                     </button>
                                 </h6>
                                 <h6>Appointment Date: <span id="aptdtlsstartdate" class="fw-normal"></span></h6>
@@ -160,9 +158,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="treatPatientLabel">
-                        <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person"/></svg>                            
+                        <i class="bi bi-person"></i> Treatment Record
                     </h6>
-                    <h6 class="ms-2">Treatment Record</h6>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="appointListClose" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
@@ -183,39 +180,58 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             </div>
                             
                             <hr>
-                            
-                            <div class="d-flex justify-content-center align-items-start row">
-                                <div class="col-12 col-lg-6">
-                                    <div class="form-floating my-3">
-                                        <input type="text" name="patientToothNo" placeholder="Tooth No./s" id="patientToothNo" class="form-control">
-                                        <label for="patientToothNo">Tooth No./s</label>
+
+                            <div class="row justify-content-center overflow-auto" style="max-height: 300px;" id="proceduresList">
+                                <div class="row flex-row jus align-items-center mb-3" id="procedureRow_0">
+                                    <div class="col col-lg-1 mb-3 mb-lg-0 order-0 order-lg-0">
+                                        <h6><span class="d-inline d-lg-none">Procedure </span>1</h6>
                                     </div>
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="procedure">Procedure</label>
-                                        <select required multiple class="selectpicker form-control" title="Select a procedure..." name="procedure[]" id="procedure" data-hide-disabled="true">
-                                            <?php
-                                                $stmt = $conn->prepare("SELECT * FROM `procedures`;");
-                                                $stmt->execute();
-                                                $result = $stmt->get_result();
-                                                $stmt->close();
-    
-                                                if ($result->num_rows > 0) {
-                                                    while ($row = mysqli_fetch_assoc($result)) {
-                                                        echo '
-                                                            <option value="' . $row['id'] . '">' . $row['name'] . '</option>
-                                                        ';
+                                    <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-2 order-lg-1">
+                                        <div class="form-floating">
+                                            <input type="text" name="patientToothNo[]" placeholder="Tooth No./s" id="patientToothNo_0" class="form-control">
+                                            <label for="patientToothNo_0">Tooth No./s</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-4 mb-3 mb-lg-0 order-3 order-lg-2">
+                                        <div class="form-floating">
+                                            <select required class="form-control" name="patientProcedure[]" id="patientProcedure_0">
+                                                <?php
+                                                    $stmt = $conn->prepare("SELECT * FROM `procedures`;");
+                                                    $stmt->execute();
+                                                    $result = $stmt->get_result();
+                                                    $stmt->close();
+        
+                                                    if ($result->num_rows > 0) {
+                                                        while ($row = mysqli_fetch_assoc($result)) {
+                                                            echo '
+                                                                <option value="' . $row['id'] . '">' . $row['name'] . '</option>
+                                                            ';
+                                                        }
                                                     }
-                                                }
-                                            ?>
-                                        </select>
+                                                ?>
+                                            </select>
+                                            <label class="form-label" for="patientProcedure_0">Procedure</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-4 order-lg-3">
+                                        <div class="form-floating">
+                                            <input type="text" required name="patientPrice[]" placeholder="Procedure Price" id="patientPrice_0" class="form-control patientPrice">
+                                            <label for="patientPrice_0">Procedure Price</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto col-lg-1 mb-3 mb-lg-0 order-1 order-lg-4">
+                                        <button type="button" class="btn btn-outline-danger procedure-remove"><i class="bi bi-x-lg"></i></button>
                                     </div>
                                 </div>
-                                <div class="col-12">
-                                    <div class="form-floating my-3">
-                                        <textarea maxlength="255" style="height: 125px;" required name="dentistNote" placeholder="Code" id="dentistNote" id="dentistNote" class="form-control"></textarea>
-                                        <label for="dentistNote">Notes</label>
+                            </div>
+
+                            <div class="row justify-content-center">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <textarea maxlength="255" style="height: 125px;" required name="dentistNote" placeholder="Code" id="dentistNote" id="dentistNote" class="form-control"></textarea>
+                                            <label for="dentistNote">Notes</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -229,6 +245,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 
                             <div id="aptTreatPatientSaveDiv">
                                 <div class="d-flex justify-content-end">
+                                    <button type="button" id="aptTreatPatientAddProcedureBtn" class="btn btn-sm btn-outline-primary m-2 me-0">Add Procedure</button>
                                     <button type="submit" id="aptTreatPatientSaveBtn" class="btn btn-sm btn-outline-success m-2 me-0">Save</button>
                                     <button type="button" id="aptTreatPatientCancelBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#cancelRequestConfirmModal">Cancel</button>
                                 </div>
@@ -246,9 +263,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="cancelRequestConfirmLabel">
-                        <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#calendar3"/></svg>
+                        <i class="bi bi-calendar3"></i> Appointment Cancellation Form
                     </h6>
-                    <h6 class="ms-2">Appointment Cancellation Form</h6>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
@@ -270,9 +286,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="appointListLabel">
-                        <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#file-medical"/></svg>                        
+                        <i class="bi bi-file-medical"></i> Medical Information
                     </h6>
-                    <h6 class="ms-2">Medical Information</h6>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="patientViewClose" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
@@ -315,7 +330,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <div class="d-flex justify-content-end float-end">
                                             <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View Records">
                                                 <button id="" class="btn btn-outline-secondary position-relative" data-bs-toggle="modal" data-bs-target="#dentalHistoryLogsModal">
-                                                    <svg class="bi pe-none" width="16" height="16"><use xlink:href="#file-earmark-text"/></svg>
+                                                    <i class="bi bi-file-earmark-text"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -337,7 +352,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <div class="d-flex justify-content-end float-end">
                                             <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View Records">
                                                 <button id="" class="btn btn-outline-secondary mb-3 position-relative" data-bs-toggle="modal" data-bs-target="#medicalHistoryLogsModal">
-                                                    <svg class="bi pe-none" width="16" height="16"><use xlink:href="#file-earmark-text"/></svg>
+                                                    <i class="bi bi-file-earmark-text"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -489,9 +504,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="dentalHistoryLogsLabel">
-                        <svg class="bi" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person-vcard"/></svg>
+                        <i class="bi bi-person-vcard"></i> Dental History Records
                     </h6>
-                    <h6 class="ms-2">Dental History Records</h6>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="dentalHistoryLogsClose" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
@@ -523,9 +537,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="medicalHistoryLogsLabel">
-                        <svg class="bi" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#file-medical"/></svg>
+                        <i class="bi bi-file-medical"></i> Medical History Records
                     </h6>
-                    <h6 class="ms-2">Medical History Records</h6>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="medicalHistoryLogsClose" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body overflow-y-auto" style="max-height: 50vh;">
@@ -544,10 +557,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="title position-sticky top-0 start-0 z-3 bg-white d-flex flex-row shadow align-items-center p-3">
                 <button id="" class="sidebarCollapse btn btn-outline-secondary me-3 position-relative">
                     <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                    <svg class="bi pe-none" width="16" height="16"><use xlink:href="#list"/></svg>
+                    <i class="bi bi-list"></i>
                 </button>
-                <svg class="bi pe-none me-2" width="32" height="32"><use xlink:href="#calendar3"/></svg>
-                <h1 class="col">My Appointments</h1>
+                <h1><i class="bi bi-calendar3"></i></h1>
+                <h1 class="col ms-3">My Appointments</h1>
 
                 <?php include "../../components/notification.php" ?>
             </div>
@@ -650,12 +663,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $(document).ready(function() {
         loadModal();
         
-        // var today = new Date();
-        // var dd = String(today.getDate()).padStart(2, '0');
-        // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        // var yyyy = today.getFullYear();
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
 
-        // today = yyyy + '-' + mm + '-' + dd;
+        today = yyyy + '-' + mm + '-' + dd;
 
         // console.log(today); 
 
@@ -676,11 +689,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 refreshList();
                 $("#errorMessage").append('<div class="alert alert-success mt-3">' + data.message +  '</div>');
 
-                let detailsId = ["#patientToothNo", "#dentistNote", "#procedure"];
-    
-                for (let index = 0; index < detailsId.length; index++) {
-                    $(detailsId[index]).prop('disabled', true);
-                }
+                $("#myForm").find("input, select, textarea").prop("disabled", true);
                 $("#aptTreatPatientUpdateDiv").show();
                 $("#aptTreatPatientSaveDiv").hide();
                 $("#aptdtlsstatus")
@@ -688,14 +697,98 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     .addClass("text-secondary")
                     .text("Evaluated");
                 refreshTreatment(patient_id);
-				// console.log(data);
+				// console.log(data.responseText);
 			}).fail(function(data) {
-				// console.log(data);
+				// console.log(data.responseText);
 			});
 		});
 
         let patient_id;
+
+        let procedureIndex = 1;
+
+        $('#aptTreatPatientAddProcedureBtn').on('click', function () {
+            $("#errorMessage").empty();
+
+            if (procedureIndex == 20) {
+                $("#errorMessage").append('<div class="alert alert-danger">Max procedures reached.</div>');
+                return;
+            }
+
+            appendProcedureRow();
+        });
+
+        function appendProcedureRow() {
+            const newProcedure = `
+                <div class="row flex-row align-items-center mb-3" id="procedureRow_${procedureIndex}">
+                    <div class="col col-lg-1 mb-3 mb-lg-0 order-0 order-lg-0">
+                        <h6><span class="d-inline d-lg-none">Procedure </span>${procedureIndex + 1}</h6>
+                    </div>
+                    <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-2 order-lg-1">
+                        <div class="form-floating">
+                            <input type="text" name="patientToothNo[]" placeholder="Tooth No./s" id="patientToothNo_${procedureIndex}" class="form-control">
+                            <label for="patientToothNo_${procedureIndex}">Tooth No./s</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 mb-3 mb-lg-0 order-3 order-lg-2">
+                        <div class="form-floating">
+                            <select required class="form-control" name="patientProcedure[]" id="patientProcedure_${procedureIndex}">
+                                ${procedureOptions}
+                            </select>
+                            <label for="patientProcedure_${procedureIndex}">Procedure</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-4 order-lg-3">
+                        <div class="form-floating">
+                            <input type="text" name="patientPrice[]" placeholder="Procedure Price" id="patientPrice_${procedureIndex}" class="form-control patientPrice">
+                            <label for="patientPrice_${procedureIndex}">Procedure Price</label>
+                        </div>
+                    </div>
+                    <div class="col-auto col-lg-1 mb-3 mb-lg-0 order-1 order-lg-4">
+                        <button type="button" class="btn btn-outline-danger procedure-remove"><i class="bi bi-x-lg"></i></button>
+                    </div>
+                </div>
+            `;
+
+            $('#proceduresList').append(newProcedure);
+            procedureIndex++;
+        }
         
+        $('#proceduresList').on('click', '.procedure-remove', function () {
+            $("#errorMessage").empty();
+                
+            if ($('#proceduresList .row').length <= 1) {
+                $("#errorMessage").append('<div class="alert alert-danger">At least one procedure is required.</div>');
+                return;
+            }
+
+            $(this).closest('.row').remove();
+
+            $('#proceduresList .row').each(function (index) {
+                $(this).attr('id', `procedureRow_${index}`);
+
+                $(this).find('h6').html(`<span class="d-inline d-lg-none">Procedure </span>${index + 1}`);
+
+                $(this).find('input[name="patientToothNo[]"]').attr('id', `patientToothNo_${index}`);
+                $(this).find('label[for^="patientToothNo_"]').attr('for', `patientToothNo_${index}`);
+
+                $(this).find('select[name="patientProcedure[]"]').attr('id', `patientProcedure_${index}`);
+                $(this).find('label[for^="patientProcedure_"]').attr('for', `patientProcedure_${index}`);
+
+                $(this).find('input[name="patientPrice[]"]').attr('id', `patientPrice_${index}`);
+                $(this).find('label[for^="patientPrice_"]').attr('for', `patientPrice_${index}`);
+            });
+
+            procedureIndex = $('#proceduresList .row').length;
+        });
+    
+        $('body').on("blur", ".patientPrice", function () {                
+            let val = parseFloat(this.value);
+            if (!isNaN(val)) {
+                this.value = val.toFixed(2);
+            }
+        });
+
         loadTable();
 
         $('#dentistTable thead th').eq(3).attr('width', '0%');
@@ -826,7 +919,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             refreshMedicalList(patient_id);
             refreshTreatment(patient_id);
             loadDetails(id);
-            loadTreatmentRecord(id);
         });
 
         $('body').on('click', '#aptCancelYesBtn', function(){
@@ -847,11 +939,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         });
 
         $('body').on('click', '#aptTreatPatientUpdateBtn', function(){
-            let detailsId = ["#patientToothNo", "#dentistNote", "#procedure"];
-
-            for (let index = 0; index < detailsId.length; index++) {
-                $(detailsId[index]).prop('disabled', false);
-            }
+            $("#myForm").find("input, select, textarea, button").prop("disabled", false);
 
             $("#aptTreatPatientSaveDiv").show();
             $("#aptTreatPatientUpdateDiv").hide();
@@ -1010,9 +1098,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     $('#had_hospitalized').text(hadHospitalized['#had_hospitalized']);
                 }
                 
-                console.log(data);
+                // console.log(data);
             }).fail(function(data) {
-                console.log(data);
+                // console.log(data);
             });
         }
 
@@ -1068,11 +1156,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $('#treatmentTable').DataTable().destroy().clear();
                 $('#tableBody').html(data);
                 loadtreatmentTable();
-                // console.log(data.responseText);
+                console.log(data.responseText);
             }).fail(function(data) {
-                // console.log(data.responseText);
+                console.log(data.responseText);
             });
         }
+
+        let procedureOptions = $('#patientProcedure_0').html();
 
         function loadTreatmentRecord(id) {
             $("#errorMessage").empty();
@@ -1086,30 +1176,62 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 url: 'php/fetch-treatment-record.php',
                 data: formData,
                 dataType: 'json'
-            }).done(function (data) {                
-                if (data.length != 0) {
-                    let details = [data.toothNumber, data.dentistNote];
-                    let detailsId = ["#patientToothNo", "#dentistNote"];
-                    let proceduresList = data.procedures;
+            }).done(function (data) {
+                if (data.length != 0) {                    
+                    $('#proceduresList').empty();
+    
+                    data.forEach((item, index) => {
+                        const newRow = `
+                            <div class="row flex-row align-items-center mb-3" id="procedureRow_${index}">
+                                <div class="col col-lg-1 mb-3 mb-lg-0 order-0 order-lg-0">
+                                    <h6><span class="d-inline d-lg-none">Procedure </span>${index + 1}</h6>
+                                </div>
+                                <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-2 order-lg-1">
+                                    <div class="form-floating">
+                                        <input type="text" name="patientToothNo[]" placeholder="Tooth No./s" id="patientToothNo_${index}" class="form-control" value="${item.tooth_number}">
+                                        <label for="patientToothNo_${index}">Tooth No./s</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-4 mb-3 mb-lg-0 order-3 order-lg-2">
+                                    <div class="form-floating">
+                                        <select required class="form-control" name="patientProcedure[]" id="patientProcedure_${index}">
+                                            ${procedureOptions}
+                                        </select>
+                                        <label for="patientProcedure_${index}">Procedure</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-4 order-lg-3">
+                                    <div class="form-floating">
+                                        <input type="text" name="patientPrice[]" placeholder="Procedure Price" id="patientPrice_${index}" class="form-control patientPrice" value="${parseFloat(item.procedure_price).toFixed(2)}">
+                                        <label for="patientPrice_${index}">Procedure Price</label>
+                                    </div>
+                                </div>
+                                <div class="col-auto col-lg-1 mb-3 mb-lg-0 order-1 order-lg-4">
+                                    <button disabled type="button" class="btn btn-outline-danger procedure-remove"><i class="bi bi-x-lg"></i></button>
+                                </div>
+                            </div>
+                        `;
+    
+                        $('#proceduresList').append(newRow);
+    
+                        $(`#patientProcedure_${index}`).val(item.procedures_id);
+                    });
 
-                    let procedures = proceduresList.split("-");
-    
-                    for (let index = 0; index < details.length; index++) {
-                        $(detailsId[index]).val(details[index]);
-                        $(detailsId[index]).prop('disabled', true);
-                    }
-    
-                    $('#procedure').selectpicker('val', procedures);
-                    $('#procedure').prop('disabled', true);
-                    $("#aptTreatPatientUpdateDiv").show();
+                    $("#dentistNote").val(data[0].dentist_note);
+                    procedureIndex = data.length;
+                    $("#myForm").find("input, select, textarea").prop("disabled", true);
                     $("#aptTreatPatientSaveDiv").hide();
+                    $("#aptTreatPatientUpdateDiv").show();
                 } else {
-                    $("#patientToothNo, #dentistNote, #procedure").prop('disabled', false);
-                    $("#patientToothNo, #dentistNote").val("");
-                    $('#procedure').selectpicker('val', "");
+                    $('#proceduresList').empty();
+                    $("#dentistNote").val("");
+                    procedureIndex = data.length;
 
-                    $("#aptTreatPatientSaveDiv").show();
+                    appendProcedureRow();
+
+                    $("#myForm").find("input, select, textarea").prop("disabled", false);
                     $("#aptTreatPatientUpdateDiv").hide();
+                    $("#aptTreatPatientSaveDiv").show();
                 }
                 // console.log(data);
             }).fail(function(data) {

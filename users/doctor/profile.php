@@ -66,10 +66,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     <link rel="stylesheet" href="../../resources/css/bootstrap.css">
     <link rel="stylesheet" href="../../resources/css/sidebar.css">
     <link rel="stylesheet" href="../../resources/css/loader.css">
+    <link rel="stylesheet" href="../../vendor/twbs/bootstrap-icons/font/bootstrap-icons.css">
     
     <style>
         .bi {
-            vertical-align: -.125em;
             fill: currentColor;
         }
 
@@ -230,9 +230,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="profileLabel">
-                        <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#calendar3"/></svg>
+                        <i class="bi bi-calendar3"></i> Profile Information
                     </h6>
-                    <h6 class="ms-2">Profile Information</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" id="profileClose" aria-label="Close"></button>
                 </div>
                 <form autocomplete="off" action="php/insert-update-info.php" method="POST" class="text-center col" id="myForm">
@@ -361,10 +360,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="title position-sticky top-0 start-0 z-3 bg-white d-flex flex-row shadow align-items-center p-3">
                 <button id="" class="sidebarCollapse btn btn-outline-secondary me-3 position-relative">
                     <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                    <svg class="bi pe-none" width="16" height="16"><use xlink:href="#list"/></svg>
+                    <i class="bi bi-list"></i>
                 </button>
-                <svg class="bi pe-none me-2" width="32" height="32"><use xlink:href="#person"/></svg>
-                <h1 class="col">Profile</h1>
+                <h1><i class="bi bi-person"></i></h1>
+                <h1 class="col ms-3">Profile</h1>
 
                 <?php include "../../components/notification.php" ?>
             </div>
@@ -399,7 +398,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="col-auto">
                                     <button id="profileEditBtn" class="btn btn-outline-secondary position-relative" data-bs-toggle="modal" data-bs-target="#profileModal">
                                         <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                                        <svg class="bi pe-none" width="16" height="16"><use xlink:href="#pencil-square"/></svg>
+                                        <i class="bi bi-pencil-square"></i>
                                     </button>                                
                                 </div>
                             </div>

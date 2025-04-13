@@ -22,6 +22,12 @@ function checkUser($user_id) {
     $date = $_POST['date'];
     $time_str = $_POST['timeHour'] . ":" . $_POST['timeMinute'] . ' ' . $_POST['ampmText'];
     $time = date("H:i:s", strtotime($time_str));
+    $dentist = $_POST['dentist'];
+
+    if ($dentist == 0) {
+        $error = "No dentist available on this date. Please choose another date.";
+        return;
+    }
     
     if (!checkDateTime($date, $time)) {
         return;
@@ -41,7 +47,6 @@ function checkUser($user_id) {
     
     $datetime = date('Y-m-d H:i:s', strtotime("$date $time"));
     $datetimestr = $_POST['date'] . 'T' . date('H:i:s', strtotime("$time"));
-    $dentist = $_POST['dentist'];
     $concern = $_POST['concern'];
     $requestdatetime = date('Y/m/d H:i:s', time());
     $appoint_status = 4;

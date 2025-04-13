@@ -26,11 +26,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         <link rel="stylesheet" href="../../resources/css/loader.css">
         <link rel="stylesheet" href="../../resources/css/sidebar.css">
         <link rel="stylesheet" href="../../resources/css/jquery-ui.css">
-        <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="../../vendor/twbs/bootstrap-icons/font/bootstrap-icons.css">
 
         <style>
             .bi {
-                vertical-align: -.125em;
                 fill: currentColor;
             }
 
@@ -84,9 +83,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center">
                         <h6 class="modal-title" id="editScheduleCancelConfirmLabel">
-                            <svg class="" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person"/></svg>
+                            <i class="bi bi-person"></i> Change Status Form
                         </h6>
-                        <h6 class="ms-2">Change Status Form</h6>
                         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body">
@@ -107,10 +105,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="title position-sticky top-0 start-0 z-3 bg-white d-flex flex-row shadow align-items-center p-3">
                     <button id="" class="sidebarCollapse btn btn-outline-secondary me-3 position-relative">
                         <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                        <svg class="bi pe-none" width="16" height="16"><use xlink:href="#list"/></svg>
+                        <i class="bi bi-list"></i>
                     </button>
-                    <svg class="bi pe-none me-2" width="32" height="32"><use xlink:href="#table"/></svg>
-                    <h1 class="col">Schedule</h1>
+                    <h1><i class="bi bi-table"></i></h1>
+                    <h1 class="col ms-3">Schedule</h1>
 
                     <?php include "../../components/notification.php" ?>
                 </div>
@@ -122,7 +120,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="row">
                                     <h3 class="col col-lg-8 col-xl-6">Dentist Schedule</h3>
                                     <div class="col-auto">
-                                        <button id="editSchedule" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Dentist Schedule"><svg class="bi pe-none" width="16" height="16"><use xlink:href="#pencil-square"/></svg></button>                                
+                                        <button id="editSchedule" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Dentist Schedule"><i class="bi bi-pencil-square"></i></button>                                
                                         <button type="button" style="display: none;" id="editScheduleSaveBtn" class="btn btn-sm btn-outline-success">Save</button>
                                         <button type="button" style="display: none;" id="editScheduleCancelBtn" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#editScheduleCancelConfirmModal">Cancel</button>
                                     </div>

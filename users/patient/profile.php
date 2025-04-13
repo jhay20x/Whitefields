@@ -142,10 +142,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     <link rel="stylesheet" href="../../resources/css/bootstrap.css">
     <link rel="stylesheet" href="../../resources/css/sidebar.css">
     <link rel="stylesheet" href="../../resources/css/loader.css">
+    <link rel="stylesheet" href="../../vendor/twbs/bootstrap-icons/font/bootstrap-icons.css">
     
     <style>
         .bi {
-            vertical-align: -.125em;
             fill: currentColor;
         }
 
@@ -312,9 +312,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="profileLabel">
-                        <svg class="bi" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person"/></svg>
+                        <i class="bi bi-person"></i> Profile Information
                     </h6>
-                    <h6 class="ms-2">Profile Information</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" id="profileClose" aria-label="Close"></button>
                 </div>
                 <form autocomplete="off" action="php/insert-update-info.php" method="POST" class="text-center col" id="myForm">
@@ -438,14 +437,78 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     </div>
 
     <!-- Modal -->
+    <div class="modal fade" id="emailAccountModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="emailAccountLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center">
+                    <h6 class="modal-title" id="emailAccountLabel">
+                        <i class="bi bi-envelope-at"></i> Email Account
+                    </h6>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="emailAccountClose" aria-label="Close"></button> -->
+                </div>
+                <form autocomplete="off" action="" method="POST" class="col" id="emailAccountFormVerify">
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div id="emailAccountMessage" role="alert"></div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="email" required disabled data-email-add="<?= empty($profileData['email']) || $profileData['email'] == "None" ? 'Not Set' : $profileData['email'];?>" value="<?= empty($profileData['email']) || $profileData['email'] == "None" ? 'Not Set' : $profileData['email'];?>" name="emailAccount" placeholder="Email Address"  id="emailAccount" class="form-control">
+                                        <label for="emailAccount">Email Address</label>
+                                    </div>
+                                </div>
+                                <div id="otpCodeInput" class="col-12 mt-3 d-none">
+                                    <div class="form-floating">
+                                        <input type="text" maxlength="6" required disabled name="emailAccountOTP" placeholder="OTP Codea"  id="emailAccountOTP" class="form-control">
+                                        <label for="emailAccountOTP">OTP Code</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="emailAccountUpdateBtn">Update</button>
+                        <button type="submit" class="btn btn-sm btn-outline-success d-none" id="emailAccountVerifyBtn">Verify</button>
+                        <button type="submit" class="btn btn-sm btn-outline-success d-none" disabled id="emailAccountSaveBtn">Save</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" id="emailAccountCancelBtn" data-bs-toggle="modal" data-bs-target="#cancelEmailChangeModal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+        
+    <!-- Modal -->
+    <div class="modal fade" id="cancelEmailChangeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cancelEmailChangeLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center">
+                    <h6 class="modal-title" id="cancelEmailChangeLabel">
+                        <i class="bi bi-envelope-at"></i> Email Account Form
+                    </h6>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelEmailChangeClose" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="text-center">
+                            <h6>Are you sure to cancel editing this form?</h6>
+                            <button type="button" value="" id="emailChangeCancelYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-dismiss="modal" aria-label="Close">Yes</button>
+                            <button type="button" value="" id="emailChangeCancelNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#emailAccountModal">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
     <div class="modal fade" id="dentalHistoryModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="dentalHistoryLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="dentalHistoryLabel">
-                        <svg class="bi" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person-vcard"/></svg>
+                        <i class="bi bi-person-vcard"></i> Dental History
                     </h6>
-                    <h6 class="ms-2">Dental History</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" id="dentalHistoryClose" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -484,9 +547,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="medicalHistoryLabel">
-                        <svg class="bi" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#file-medical"/></svg>
+                        <i class="bi bi-file-medical"></i> Medical History
                     </h6>
-                    <h6 class="ms-2">Medical History</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" id="medicalHistoryClose" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -680,7 +742,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                                 <div class="col-lg-6">
                                                     <div class="form-floating">
                                                         <input type="text" maxlength="50" name="is_taking_prescription_medication" required placeholder="If so, please specify?" id="isTakingPrescriptionMedication" class="form-control">
-                                                        <label for="is_taking_prescription_medication">Medication(s)</label>
+                                                        <label for="isTakingPrescriptionMedication">Medication(s)</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1127,9 +1189,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="dentalHistoryLogsLabel">
-                        <svg class="bi" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#person-vcard"/></svg>
+                        <i class="bi bi-person-vcard"></i> Dental History Records
                     </h6>
-                    <h6 class="ms-2">Dental History Records</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" id="dentalHistoryLogsClose" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -1183,9 +1244,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="medicalHistoryLogsLabel">
-                        <svg class="bi" width="20" height="20" style="vertical-align: -.125em"><use xlink:href="#file-medical"/></svg>
+                        <i class="bi bi-file-medical"></i> Medical History Records
                     </h6>
-                    <h6 class="ms-2">Medical History Records</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" id="medicalHistoryLogsClose" aria-label="Close"></button>
                 </div>
                 <div class="modal-body overflow-y-scroll" style="height: 400px;">
@@ -1277,10 +1337,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="title position-sticky top-0 start-0 z-3 bg-white d-flex flex-row shadow align-items-center p-3">
                 <button id="" class="sidebarCollapse btn btn-outline-secondary me-3 position-relative">
                     <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                    <svg class="bi pe-none" width="16" height="16"><use xlink:href="#list"/></svg>
+                    <i class="bi bi-list"></i>
                 </button>
-                <svg class="bi pe-none me-2" width="32" height="32"><use xlink:href="#person"/></svg>
-                <h1 class="col">Profile</h1>
+                <h1><i class="bi bi-person"></i></h1>
+                <h1 class="col ms-3">Profile</h1>
 
                 <?php include "../../components/notification.php" ?>
             </div>
@@ -1299,7 +1359,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <input class="btn btn-outline-secondary" type="submit" name="uploadsubmitbtn" value="Upload Image" >
                         </div>
                     </form>
-                    <small>Note: Profile photo might not reflect immediately.</small>
+                    <small>*Profile photo might not reflect immediately.</small>
                 </div>
             </div>
 
@@ -1309,10 +1369,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <div class="p-3 p-md-4 p-lg-4 col">
                             <div class="d-flex align-items-center flex-row">
                                 <h1 class="col">Personal Information</h1>
-                                <div class="col-auto" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Profile Information">
+                                <div class="col-auto" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Email Account">
+                                    <button id="emailEditBtn" class="btn btn-outline-secondary position-relative" data-bs-toggle="modal" data-bs-target="#emailAccountModal">
+                                        <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                                        <i class="bi bi-envelope-at"></i>
+                                    </button>                                
+                                </div>
+                                <div class="col-auto ms-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Profile Information">
                                     <button id="profileEditBtn" class="btn btn-outline-secondary position-relative" data-bs-toggle="modal" data-bs-target="#profileModal">
                                         <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                                        <svg class="bi pe-none" width="16" height="16"><use xlink:href="#pencil-square"/></svg>
+                                        <i class="bi bi-pencil-square"></i>
                                     </button>                                
                                 </div>
                             </div>
@@ -1335,7 +1401,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     </div>
                                     <div class="col-xl">
                                         <h5 class="">Contact Number: <span class="fw-normal"><?php echo $profileData['contnum'] ?? 'Not Set';?></span></h5>
-                                        <h5 class="">Email Address: <span class="fw-normal"><?php echo $profileData['email'] ?? 'Not Set';?></span></h5>
+                                        <h5 class="">Email Address: <span class="fw-normal"><?php echo empty($profileData['email']) || $profileData['email'] == "None" ? 'Not Set' : $profileData['email'];?></span></h5>
                                         <h5 class="">Religion: <span class="fw-normal"><?php echo $profileData['religion'] ?? 'Not Set';?></span></h5>
                                         <h5 class="">Nationality: <span class="fw-normal"><?php echo $profileData['nationality'] ?? 'Not Set';?></span></h5>
                                         <h5 class="">Address: <span class="fw-normal"><?php echo $profileData['address'] ?? 'Not Set';?></span></h5>
@@ -1351,12 +1417,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <h1 class="col">Dental History</h1>
                                 <div class="col-auto" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View Records">
                                     <button id="" class="btn btn-outline-secondary position-relative" <?php echo ($dentalData['hasDental'] ?? '') ? '' : 'disabled'; ?> data-bs-toggle="modal" data-bs-target="#dentalHistoryLogsModal">
-                                        <svg class="bi pe-none" width="16" height="16"><use xlink:href="#file-earmark-text"/></svg>
+                                        <i class="bi bi-file-earmark-text"></i>
                                     </button>
                                 </div>
                                 <div class="col-auto ms-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Dental History">
                                     <button id="" class="btn btn-outline-secondary position-relative" <?php echo ($hasId ?? '') ? '' : 'disabled'; ?> data-bs-toggle="modal" data-bs-target="#dentalHistoryModal">
-                                        <svg class="bi pe-none" width="16" height="16"><use xlink:href="#pencil-square"/></svg>
+                                        <i class="bi bi-pencil-square"></i>
                                     </button>                               
                                 </div>
                             </div>
@@ -1381,12 +1447,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <h1 class="col">Medical History</h1>
                                 <div class="col-auto" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View Records">
                                     <button id="" class="btn btn-outline-secondary position-relative" <?php echo ($medicalData['hasMedical'] ?? '') ? '' : 'disabled'; ?> data-bs-toggle="modal" data-bs-target="#medicalHistoryLogsModal">
-                                        <svg class="bi pe-none" width="16" height="16"><use xlink:href="#file-earmark-text"/></svg>
+                                        <i class="bi bi-file-earmark-text"></i>
                                     </button>
                                 </div>
                                 <div class="col-auto ms-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Medical History">
                                     <button id="medicalHistoryEditBtn" class="btn btn-outline-secondary position-relative" <?php echo ($hasId ?? '') ? '' : 'disabled'; ?> data-bs-toggle="modal" data-bs-target="#medicalHistoryModal">
-                                        <svg class="bi pe-none" width="16" height="16"><use xlink:href="#pencil-square"/></svg>
+                                        <i class="bi bi-pencil-square"></i>
                                     </button>
                                 </div>
                             </div>
@@ -1536,6 +1602,89 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $(document).ready(function () {
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+        $("#emailAccountUpdateBtn").on("click", function() {
+            if ($("#emailAccount").val() == "Not Set") {
+                $("#emailAccount").prop("disabled", false).val("").focus();
+            } else {
+                $("#emailAccount").prop("disabled", false).focus();
+            }
+            $(this).prop("disabled", true).addClass("d-none");
+            $("#emailAccountVerifyBtn").prop("disabled", false).removeClass("d-none");
+        }); 
+
+        $("#emailChangeCancelYesBtn").on("click", function() {
+            let email = $("#emailAccount").data("email-add");
+
+            $("#emailAccount").prop("disabled", true).val(email);
+            $("#emailAccountUpdateBtn").prop("disabled", false).removeClass("d-none");
+            $("#emailAccountSaveBtn").prop("disabled", true).addClass("d-none");
+            $("#emailAccountVerifyBtn").prop("disabled", true).addClass("d-none");
+        });
+
+        $("body").on("submit", "#emailAccountFormVerify", function(e) {
+            showLoader();
+            $("#emailAccountMessage").empty();
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "php/send-otp.php",
+                data: $(this).serialize(),
+                dataType: 'json'
+            }).done(function(data) {
+                hideLoader();
+
+                if (data.success) {
+                    $('#emailAccountFormVerify').attr('id', 'emailAccountFormSubmit');
+                    $("#emailAccountMessage").append('<div class="alert alert-success">' + data.message + '</div>');
+                    $("#emailAccount").prop("disabled", true);
+                    $("#otpCodeInput").removeClass("d-none");
+                    $("#emailAccountVerifyBtn").prop("disabled", true).addClass("d-none");
+                    $("#emailAccountSaveBtn").prop("disabled", false).removeClass("d-none");
+                    $("#otpCodeInput input").prop("disabled", false).focus();
+                } else {
+                    $("#emailAccountMessage").append('<div class="alert alert-danger">' + data.error + '</div>');
+                }
+                // console.log(data);
+            }).fail(function(data) {
+                // console.log(data);
+            });
+        });
+
+        $("body").on("submit", "#emailAccountFormSubmit", function(e) {
+            showLoader();
+            e.preventDefault();
+            $("#emailAccountMessage").empty();
+            let emailAccount = $("#emailAccount").val();
+            $.ajax({
+                type: "POST",
+                url: "php/verify-otp.php",
+                data: $(this).serialize() + '&emailAccount=' + encodeURIComponent(emailAccount),
+                dataType: 'json'
+            }).done(function(data) {
+                hideLoader();
+
+                if (data.success) {
+                    $("#emailAccountMessage").append('<div class="alert alert-success">' + data.message + '</div>');
+                    $("#emailAccountFormSubmit").find("input, button").prop("disabled", true);
+                    setTimeout(() => {
+                        showLoader;
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    }, 1000);
+                } else {
+                    $("#emailAccountMessage").append('<div class="alert alert-danger">' + data.error + '</div>');
+                }
+                // console.log(data);
+            }).fail(function(data) {
+                // console.log(data);
+            });
+        });        
+	
+        setInputFilter(document.getElementById("emailAccountOTP"), function(value) {
+            return /^-?\d*$/.test(value); }, "Number Only");
         
         $("#isUnderTreatmentDiv, #hadOperationDiv, #hadHospitalizedDiv, #isTakingPrescriptionDiv, #isAllergicOthersDiv, #otherDiv").hide();
         $("#isGoodHealthDiv input, #isUnderTreatmentDiv input, #hadOperationDiv input, #hadHospitalizedDiv input, #isTakingPrescriptionDiv input, #usesTobaccoDiv input, #usesAlcoholDrugsDiv input, #isAllergicOthersDiv input, #isPregnantDiv input, #isNursingDiv input, #isBirthControlDiv input, #otherDiv input").prop('disabled', true);

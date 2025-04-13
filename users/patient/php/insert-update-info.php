@@ -19,17 +19,17 @@ function checkInfo($user_id) {
     global $conn;
     global $message;
         
-    $fname = $_POST['fname'];
-    $mname = $_POST['mname'];
-    $lname = $_POST['lname'];
-    $suffix = $_POST['suffix'];
-    $bdate = $_POST['bdate'];
-    $gender = $_POST['gender'];
-    $religion = $_POST['religion'];
-    $nationality = $_POST['nationality'];
-    $contnumber = $_POST['contnumber'];
-    $address = $_POST['address'];
-    $occupation = $_POST['occupation'];
+    $fname = $_POST['fname'] ?? "";
+    $mname = $_POST['mname'] ?? "";
+    $lname = $_POST['lname'] ?? "";
+    $suffix = $_POST['suffix'] ?? "";
+    $bdate = $_POST['bdate'] ?? "";
+    $gender = $_POST['gender'] ?? "";
+    $religion = $_POST['religion'] ?? "";
+    $nationality = $_POST['nationality'] ?? "";
+    $contnumber = $_POST['contnumber'] ?? "";
+    $address = $_POST['address'] ?? "";
+    $occupation = $_POST['occupation'] ?? "";
 
     $stmt = $conn->prepare("SELECT pi.accounts_id FROM patient_info pi WHERE pi.accounts_id = ?;");
     $stmt->bind_param("i", $user_id);

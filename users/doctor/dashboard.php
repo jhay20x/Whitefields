@@ -70,10 +70,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     <title>Dashboard - Whitefields Dental Clinic</title>
     <link rel="stylesheet" href="../../resources/css/bootstrap.css">
     <link rel="stylesheet" href="../../resources/css/sidebar.css">
+    <link rel="stylesheet" href="../../vendor/twbs/bootstrap-icons/font/bootstrap-icons.css">
     
     <style>
         .bi {
-            vertical-align: -.125em;
             fill: currentColor;
         }
 
@@ -222,10 +222,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="title position-sticky top-0 start-0 z-3 bg-white d-flex flex-row shadow align-items-center p-3">
                 <button id="" class="sidebarCollapse btn btn-outline-secondary me-3 position-relative">
                     <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                    <svg class="bi pe-none" width="16" height="16"><use xlink:href="#list"/></svg>
+                    <i class="bi bi-list"></i>
                 </button>
-                <svg class="bi pe-none me-2" width="32" height="32"><use xlink:href="#columns-gap"/></svg>
-                <h1 class="col">Dashboard: Dentist</h1>
+                <h1><i class="bi bi-columns-gap"></i></h1>
+                <h1 class="col ms-3">Dashboard: Dentist</h1>
 
                 <?php include "../../components/notification.php" ?>
             </div>
@@ -246,7 +246,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <div class="card rounded shadow h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-auto mx-xl-2 my-xl-2 col-xxl-auto mx-xxl-2 my-xxl-2">
                         <div class="card-body">
                             <div class="d-flex column card-icon">
-                                <svg class="bi pe-none me-2" width="35" height="35"><use xlink:href="#calendar3"/></svg>
+                                <i class="bi bi-calendar3"></i>
                                 <h5 class="card-text">Appointment Today</h5>
                             </div>
                             <h1 class="card-title"><?php echo $AppointToday?></h1>
@@ -256,7 +256,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <div class="card rounded shadow h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-auto mx-xl-2 my-xl-2 col-xxl-auto mx-xxl-2 my-xxl-2">
                         <div class="card-body">
                             <div class="d-flex column card-icon">
-                                <svg class="bi pe-none me-2" width="35" height="35"><use xlink:href="#calendar3"/></svg>
+                                <i class="bi bi-calendar3"></i>
                                 <h5 class="card-text">Total Appointment</h5>
                             </div>
                             <h1 class="card-title"><?php echo $AppointAll?></h1>
@@ -266,7 +266,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <div class="card rounded shadow h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-auto mx-xl-2 my-xl-2 col-xxl-auto mx-xxl-2 my-xxl-2">
                         <div class="card-body">                                
                             <div class="d-flex column card-icon">
-                                <svg class="bi pe-none me-2" width="35" height="35"><use xlink:href="#person"/></svg>
+                                <i class="bi bi-person"></i>
                                 <h5 class="card-text">Total Patient</h5>
                             </div>
                             <h1 class="card-title"><?php echo $TotalPatient?></h1>

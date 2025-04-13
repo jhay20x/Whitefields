@@ -31,7 +31,7 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 	<link rel="shortcut icon" type="image/x-icon" href="./resources/images/logo-icon-67459a47526b9.webp"/>
     <link rel="stylesheet" href="./resources/css/bootstrap.css">
     <link rel="stylesheet" href="./resources/css/loader.css">
-    <!-- <link rel="stylesheet" href="./resources/css/bootstrap-icons.min.css"> -->
+    <!-- <link rel="stylesheet" href="./vendor/twbs/bootstrap-icons/font/bootstrap-icons.css"> -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">	
 	
 	<title>Login - Whitefields Dental Clinic</title>
