@@ -308,8 +308,8 @@ function inputFilters() {
 
 
 function setInputFilter(textbox, inputFilter, errMsg) {
-    [ "input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout" ].forEach(function(event) {
-        textbox.addEventListener(event, function(e) {
+    [ "input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout", "blur" ].forEach(function(event) {  
+    textbox.addEventListener(event, function(e) {
         if (inputFilter(this.value)) {
             if ([ "keydown", "mousedown", "focusout" ].indexOf(e.type) >= 0){
             this.classList.remove("input-error");

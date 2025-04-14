@@ -22,7 +22,23 @@ function checkTreatmentRecord($conn, $aptId) {
     }
 }
 
-function updateTreatmentRecord($conn, $pid, $dentist_id, $aptId, $patientToothNo, $dentistNote, $proceduresList, $proceduresPrice, $timestamp) {
+function fetchTimestamp($conn, $aptId) {    
+    $stmt = $conn->prepare("SELECT th.timestamp FROM treatment_history th WHERE th.appointment_requests_id = ?;");
+    $stmt->bind_param("i", $aptId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+	$stmt->close();
+    
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        
+        return $row["timestamp"];
+    } else {
+        return false;
+    }
+}
+
+function updateTreatmentRecord($conn, $pid, $dentist_id, $aptId, $patientToothNo, $dentistNote, $proceduresList, $proceduresPrice, $prevTimestamp) {
     $data = [];
 
     $stmt = $conn->prepare("DELETE FROM treatment_history WHERE appointment_requests_id = ?");
@@ -35,7 +51,7 @@ function updateTreatmentRecord($conn, $pid, $dentist_id, $aptId, $patientToothNo
     $stmt = $conn->prepare("INSERT INTO `treatment_history`(`patient_id`, `dentist_id`, `appointment_requests_id`, `tooth_number`, `dentist_note`, `procedures_id`, `procedure_price`, `timestamp`) VALUES (?,?,?,?,?,?,?,?)");
     
     for ($i = 0; $i < count($proceduresList); $i++) {
-        $stmt->bind_param("iiisssss", $pid, $dentist_id, $aptId, $patientToothNo[$i], $dentistNote, $proceduresList[$i], $proceduresPrice[$i], $timestamp);
+        $stmt->bind_param("iiisssss", $pid, $dentist_id, $aptId, $patientToothNo[$i], $dentistNote, $proceduresList[$i], $proceduresPrice[$i], $prevTimestamp);
         
         if (!$stmt->execute()) {
             $allSuccess = false;
@@ -102,9 +118,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $proceduresPrice = $_POST["patientPrice"] ?? [];
 
     $timestamp = date('Y-m-d H:i:s', time());
+    $prevTimestamp = fetchTimestamp($conn, $aptId);
 
     if (checkTreatmentRecord($conn, $aptId)) {
-        $data = updateTreatmentRecord($conn, $pid, $dentist_id, $aptId, $patientToothNo, $dentistNote, $proceduresList, $proceduresPrice, $timestamp);
+        $data = updateTreatmentRecord($conn, $pid, $dentist_id, $aptId, $patientToothNo, $dentistNote, $proceduresList, $proceduresPrice, $prevTimestamp);
     } else {
         $data = insertTreatmentRecord($conn, $pid, $dentist_id, $aptId, $patientToothNo, $dentistNote, $proceduresList, $proceduresPrice, $timestamp);
     }

@@ -21,7 +21,7 @@ include 'php/fetch-id.php';
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
     function lastVisit($conn, $patient_id) {
-        $stmt = $conn->prepare("SELECT * FROM appointment_requests WHERE appoint_status_id = 6 AND patient_id = ? ORDER BY start_datetime DESC;");
+        $stmt = $conn->prepare("SELECT * FROM appointment_requests WHERE appoint_status_id = 6 AND patient_id = ? AND start_datetime < NOW() ORDER BY start_datetime DESC LIMIT 1;");
         $stmt->bind_param('i',$patient_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -38,7 +38,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         }
     }
     function nextVisit($conn, $patient_id) {
-        $stmt = $conn->prepare("SELECT * FROM appointment_requests WHERE appoint_status_id = 1 AND patient_id = ? ORDER BY start_datetime DESC;");
+        $stmt = $conn->prepare("SELECT * FROM appointment_requests WHERE appoint_status_id = 1 AND patient_id = ? AND start_datetime >= NOW() ORDER BY start_datetime ASC LIMIT 1;");
         $stmt->bind_param('i',$patient_id);
         $stmt->execute();
         $result = $stmt->get_result();

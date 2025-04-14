@@ -124,7 +124,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                                 CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
                                                 CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS Dentist
                                                 FROM dentist_info di
-                                                LEFT OUTER JOIN Accounts ac ON ac.id = di.accounts_id
+                                                LEFT OUTER JOIN accounts ac ON ac.id = di.accounts_id
                                                 WHERE ac.status != 0;");
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();

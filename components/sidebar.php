@@ -113,7 +113,7 @@ if (is_int($id)) {
             </a>
           </li>
           </li>
-          <li class="mb-1">
+          <!-- <li class="mb-1">
             <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#consent-collapse" aria-expanded="false">
                 <i class="bi bi-file-earmark-text me-1"></i>
                 Consent Forms
@@ -123,11 +123,11 @@ if (is_int($id)) {
                 <li><a href="#" class="d-inline-flex text-decoration-none rounded text-white">Placeholder</a></li>
               </ul>
             </div>
-          </li>
+          </li> -->
           <li class="mb-1 ms-3">
             <a href="transactions.php" class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white">
                 <i class="bi bi-clock-history me-1"></i>
-                Transactions
+                Payment and Transactions
             </a>
           </li>
           <!-- <li class="mb-1">
