@@ -196,15 +196,17 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <div class="form-floating">
                                             <select required class="form-control" name="patientProcedure[]" id="patientProcedure_0">
                                                 <?php
-                                                    $stmt = $conn->prepare("SELECT * FROM `procedures`;");
+                                                    $stmt = $conn->prepare("SELECT * FROM `procedures`");
                                                     $stmt->execute();
                                                     $result = $stmt->get_result();
                                                     $stmt->close();
         
                                                     if ($result->num_rows > 0) {
                                                         while ($row = mysqli_fetch_assoc($result)) {
+                                                            !$row['status'] ? $disabled = "disabled" : $disabled = "";
+
                                                             echo '
-                                                                <option value="' . $row['id'] . '">' . $row['name'] . '</option>
+                                                                <option ' . $disabled . ' value="' . $row['id'] . '">' . $row['name'] . '</option>
                                                             ';
                                                         }
                                                     }
@@ -229,7 +231,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form-floating mb-3">
-                                            <textarea maxlength="255" style="height: 125px;" required name="dentistNote" placeholder="Code" id="dentistNote" id="dentistNote" class="form-control onlyLettersNumbers"></textarea>
+                                            <textarea maxlength="255" style="height: 125px;" name="dentistNote" placeholder="Code" id="dentistNote" id="dentistNote" class="form-control onlyLettersNumbers"></textarea>
                                             <label for="dentistNote">Notes</label>
                                         </div>
                                     </div>
@@ -461,7 +463,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     </div>
                                 </div>
                             </div>
-                            <div id="tratmentItem" class="accordion-item">
+                            <div id="treatmentItem" class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#treatmentInfo" aria-expanded="false" aria-controls="treatmentInfo">
                                         <span class="h6">Treatment History</span>
@@ -660,7 +662,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 <script src="../../resources/js/buttons.dataTables.js"></script>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function() {        
         loadModal();
         inputFilters();
 
@@ -688,6 +690,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 			}).done(function (data) {
                 hideLoader();
                 refreshList();
+                $(".patientPrice").removeClass("is-valid is-invalid");
+                $(this).find("[data-bs-toggle='tooltip']").attr("title", "").tooltip('dispose');
                 $("#errorMessage").append('<div class="alert alert-success mt-3">' + data.message +  '</div>');
 
                 $("#myForm").find("input, select, textarea").prop("disabled", true);
@@ -743,9 +747,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <label for="patientProcedure_${procedureIndex}">Procedure</label>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-4 order-lg-3">
+                    <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-4 order-lg-3" data-bs-toggle="tooltip" data-bs-placement="top" title="">
                         <div class="form-floating">
-                            <input type="text" name="patientPrice[]" placeholder="Procedure Price" id="patientPrice_${procedureIndex}" class="form-control patientPrice onlyNumbersDots">
+                            <input type="text" required name="patientPrice[]" placeholder="Procedure Price" id="patientPrice_${procedureIndex}" class="form-control patientPrice onlyNumbersDots">
                             <label for="patientPrice_${procedureIndex}">Procedure Price</label>
                         </div>
                     </div>
@@ -758,7 +762,97 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $('#proceduresList').append(newProcedure);
             procedureIndex++;
             inputFilters();
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+            fetchPrice(1);
         }
+
+        let procedurePrice;
+
+        $("body").on("keyup blur click focusin", ".patientPrice", function (){
+            const $input = $(this);
+            const $row = $input.closest(".row, [class^='col']");
+            const $procedureSelect = $row.parent().find("select[name='patientProcedure[]']");
+            const selectedProcedure = $procedureSelect.val();
+            
+            if (!procedurePrice || $.isEmptyObject(procedurePrice)) {
+                fetchPrice(selectedProcedure);
+            }
+
+            const price = parseFloat($input.val());
+            const tooltipTarget = $input.closest("[data-bs-toggle='tooltip']");
+            tooltipTarget.attr("title", "").tooltip('dispose');
+
+            showTooltip (selectedProcedure, tooltipTarget, $input, price);
+        });
+
+        $("body").on("change", "select[name='patientProcedure[]']", function () {
+            procedurePrice = [];
+
+            const $select = $(this);
+            const $row = $select.closest(".row");
+            const $input = $row.find(".patientPrice");
+            const selectedProcedure = $select.val();
+
+            fetchPrice(selectedProcedure);
+
+            const price = parseFloat($input.val());
+            const tooltipTarget = $input.closest("[data-bs-toggle='tooltip']");
+            tooltipTarget.attr("title", "").tooltip('dispose');
+
+            setTimeout(() => {
+                showTooltip(selectedProcedure, tooltipTarget, $input, price);                
+            }, 1000);            
+        });
+
+        function showTooltip (selectedProcedure, tooltipTarget, $input, price) {
+            let priceSet = parseFloat(price);
+            let price_Min = parseFloat(procedurePrice.price_min);
+            let price_Max = parseFloat(procedurePrice.price_max);
+
+            if (priceSet > price_Max) {
+                $input.addClass("is-invalid").removeClass("is-valid");
+                tooltipTarget.attr("title", "Price can't be over than maximum price " + price_Max + ".").tooltip('show');
+                return;
+            } 
+            
+            if (priceSet < price_Min) {
+                $input.addClass("is-invalid").removeClass("is-valid");
+                tooltipTarget.attr("title", "Price can't be less than minimum price " + price_Min + ".").tooltip('dispose').tooltip('show');
+                return;
+            } 
+            
+            if (isNaN(priceSet) || priceSet === 0.00) {
+                $input.addClass("is-invalid").removeClass("is-valid");
+                tooltipTarget.attr("title", "Price can't be zero.").tooltip('dispose').tooltip('show');
+                return;
+            }
+                                
+            $input.removeClass("is-invalid").addClass("is-valid");
+            tooltipTarget.attr("title", "").tooltip('dispose');
+        }
+
+        function fetchPrice(pid) {
+            showLoader();
+            var formData = {
+                pid: pid
+            };
+
+            $.ajax({
+                type: "POST",
+                url: 'php/fetch-procedure-price.php',
+                data: formData,
+                dataType: 'json'
+            }).done(function (data) {
+                setTimeout(() => {
+                    hideLoader();
+                }, 1000);
+                procedurePrice = data;
+                // console.log(data);
+            }).fail(function(data) {
+                // console.log(data);
+            });
+        };
         
         $('#proceduresList').on('click', '.procedure-remove', function () {
             $("#errorMessage").empty();
@@ -892,7 +986,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             });
         }
 
-        $('#tratmentItem').on('click', function () {
+        $('#treatmentItem').on('click', function () {
             $('#treatmentTable').DataTable().columns.adjust();
         });      
 
@@ -911,9 +1005,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         }
         
         $("#aptTreatPatientUpdateDiv, #aptTreatPatientSaveDiv").hide();
-
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
         $('body').on('click', '.viewAptDetail', function(){
             let id = $(this).attr('value');
@@ -1162,9 +1253,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $('#treatmentTable').DataTable().destroy().clear();
                 $('#tableBody').html(data);
                 loadtreatmentTable();
-                console.log(data.responseText);
+                // console.log(data.responseText);
             }).fail(function(data) {
-                console.log(data.responseText);
+                // console.log(data.responseText);
             });
         }
 
@@ -1206,7 +1297,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <label for="patientProcedure_${index}">Procedure</label>
                                     </div>
                                 </div>
-                                <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-4 order-lg-3">
+                                <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-4 order-lg-3" data-bs-toggle="tooltip" data-bs-placement="top" title="">
                                     <div class="form-floating">
                                         <input type="text" name="patientPrice[]" placeholder="Procedure Price" id="patientPrice_${index}" class="form-control patientPrice" value="${parseFloat(item.procedure_price).toFixed(2)}">
                                         <label for="patientPrice_${index}">Procedure Price</label>
@@ -1221,6 +1312,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         $('#proceduresList').append(newRow);
     
                         $(`#patientProcedure_${index}`).val(item.procedures_id);
+                        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+                        fetchPrice(1);
                     });
 
                     $("#dentistNote").val(data[0].dentist_note);

@@ -1,0 +1,41 @@
+<?php
+session_start();
+
+require_once '../../../database/config.php';
+include 'fetch-id.php';
+
+$error;
+$data = [];
+$id;
+
+if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {    
+    $id = fetchSecretaryID();
+
+    $stmt = $conn->prepare("SELECT ar.id, 
+        COUNT(CASE WHEN DATE(ar.start_datetime) = CURDATE() AND ar.appoint_status_id = 1
+            THEN 1 
+            END) AppointToday, 
+        COUNT(CASE WHEN ar.appoint_status_id = 4
+            THEN 1
+               END) AppointAll,
+        (SELECT COUNT(di.id) FROM dentist_info di
+        LEFT OUTER JOIN accounts ac
+        ON di.accounts_id = ac.id
+        WHERE ac.status != 0) TotalDentist,            
+        (SELECT COUNT(pi.id) FROM patient_info pi) TotalPatient
+        FROM appointment_requests ar;");
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+
+        $data['AppointToday'] = $row['AppointToday'];
+        $data['AppointAll'] = $row['AppointAll'];
+        $data['TotalDentist'] = $row['TotalDentist'];
+        $data['TotalPatient'] = $row['TotalPatient'];
+    }
+}
+echo json_encode($data);

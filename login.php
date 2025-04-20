@@ -180,9 +180,9 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 					$("#loginUserEmail").val(data.username);
 					$("#userPassword").val("");
 					grecaptcha.reset();
-					$("#errorMessage").append('<div class="alert alert-danger" role="alert">' + data.error +  '</div>');
+					$("#errorMessage").append('<div class="alert alert-danger" style="width: 300px;" role="alert">' + data.error +  '</div>');
 				} else {
-					$("#errorMessage").append('<div class="alert alert-success" role="alert">' + data.message +  '</div>');
+					$("#errorMessage").append('<div class="alert alert-success" style="width: 300px;" role="alert">' + data.message +  '</div>');
 					disableInputs();
 					setTimeout(showLoader, 2000);
 					if (data.emailVerification) {

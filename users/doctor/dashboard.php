@@ -21,44 +21,44 @@ include 'php/fetch-id.php';
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
     if ($_SESSION['account_type'] == 3) {
-        $id = fetchDentistID();
+        // $id = fetchDentistID();
 
-        $AppointToday;
-        $AppointAll;
-        $TotalDentist;
-        $TotalPatient;
+        // $AppointToday;
+        // $AppointAll;
+        // $TotalDentist;
+        // $TotalPatient;
 
-        if (is_int($id)) {
-            $stmt = $conn->prepare("SELECT ar.id, 
-                COUNT(CASE WHEN DATE(ar.start_datetime) = CURDATE() AND ar.appoint_status_id = 1
-                    THEN 1 
-                    END) AppointToday, 
-                COUNT(CASE WHEN ar.appoint_status_id = 1
-                    THEN 1
-                    END) AppointAll,         
-                COUNT(DISTINCT CASE WHEN ar.dentist_info_id = ? AND (ar.appoint_status_id = 6 OR ar.appoint_status_id = 5 OR ar.appoint_status_id = 1)
-                    THEN ar.patient_id
-                    END) TotalPatient
-                FROM appointment_requests ar
-                WHERE ar.dentist_info_id = ?;");
+        // if (is_int($id)) {
+        //     $stmt = $conn->prepare("SELECT ar.id, 
+        //         COUNT(CASE WHEN DATE(ar.start_datetime) = CURDATE() AND ar.appoint_status_id = 1
+        //             THEN 1 
+        //             END) AppointToday, 
+        //         COUNT(CASE WHEN ar.appoint_status_id = 1
+        //             THEN 1
+        //             END) AppointAll,         
+        //         COUNT(DISTINCT CASE WHEN ar.dentist_info_id = ? AND (ar.appoint_status_id = 6 OR ar.appoint_status_id = 5 OR ar.appoint_status_id = 1)
+        //             THEN ar.patient_id
+        //             END) TotalPatient
+        //         FROM appointment_requests ar
+        //         WHERE ar.dentist_info_id = ?;");
 
-            $stmt->bind_param('ii', $id,$id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $stmt->close();
+        //     $stmt->bind_param('ii', $id,$id);
+        //     $stmt->execute();
+        //     $result = $stmt->get_result();
+        //     $stmt->close();
 
-            if ($result->num_rows == 1) {
-                $row = $result->fetch_assoc();
+        //     if ($result->num_rows == 1) {
+        //         $row = $result->fetch_assoc();
 
-                $AppointToday = $row['AppointToday'];
-                $AppointAll = $row['AppointAll'];
-                $TotalPatient = $row['TotalPatient'];
-            }
-        } else {
-            $AppointToday = 0;
-            $AppointAll = 0;
-            $TotalPatient = 0;
-        }        
+        //         $AppointToday = $row['AppointToday'];
+        //         $AppointAll = $row['AppointAll'];
+        //         $TotalPatient = $row['TotalPatient'];
+        //     }
+        // } else {
+        //     $AppointToday = 0;
+        //     $AppointAll = 0;
+        //     $TotalPatient = 0;
+        // }
 ?>
 
 <!DOCTYPE html>
@@ -225,7 +225,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <i class="bi bi-list"></i>
                 </button>
                 <h1><i class="bi bi-columns-gap"></i></h1>
-                <h1 class="col ms-3">Dashboard: Dentist</h1>
+                <h1 class="col ms-3">Dashboard</h1>
 
                 <?php include "../../components/notification.php" ?>
             </div>
@@ -249,7 +249,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <h1><i class="bi bi-calendar3"></i></h1>
                                 <h5 class="card-text ms-3">Appointment Today</h5>
                             </div>
-                            <h1 class="card-title"><?php echo $AppointToday?></h1>
+                            <h1 class="card-title" id="AppointToday">0</h1>
                         </div>
                     </div>
 
@@ -259,7 +259,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <h1><i class="bi bi-calendar3"></i></h1>
                                 <h5 class="card-text ms-3">Total Appointment</h5>
                             </div>
-                            <h1 class="card-title"><?php echo $AppointAll?></h1>
+                            <h1 class="card-title" id="AppointAll">0</h1>
                         </div>
                     </div>
 
@@ -269,7 +269,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <h1><i class="bi bi-person"></i></h1>
                                 <h5 class="card-text ms-3">Total Patient</h5>
                             </div>
-                            <h1 class="card-title"><?php echo $TotalPatient?></h1>
+                            <h1 class="card-title" id="TotalPatient">0</h1>
                         </div>
                     </div>
                 </div>
@@ -419,6 +419,22 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         });
 
         calendar.render();
+        setInterval(updateDashboard, 15000);
+        updateDashboard();
+
+        function updateDashboard() {
+            $.ajax({
+                url: 'php/update-dashboard-data.php',
+                dataType: 'json'
+            }).done(function (data) {
+                $("#TotalPatient").text(data.TotalPatient);
+                $("#AppointAll").text(data.AppointAll);
+                $("#AppointToday").text(data.AppointToday);
+                // console.log(data);
+            }).fail(function(data) {
+                // console.log(data);
+            });
+        }
 	});
 
 </script>

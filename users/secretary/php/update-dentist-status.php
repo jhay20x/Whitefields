@@ -21,6 +21,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     } else {
         $error = "Dentist account status has failed to be updated. Please try again.";
     }
+    
+    $stmt->close();
 }
 
 if (!empty($error)) {

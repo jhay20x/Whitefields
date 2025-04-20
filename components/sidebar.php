@@ -149,6 +149,8 @@ if (is_int($id)) {
             <div class="collapse" id="management-collapse">
               <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <li><a href="clinic-availability.php" class="d-inline-flex text-decoration-none rounded text-white">Clinic Availabilty</a></li>
+                <li><a href="procedures-list.php" class="d-inline-flex text-decoration-none rounded text-white">Procedures</a></li>
+              </ul>
             </div>
           </li>
         </ul>

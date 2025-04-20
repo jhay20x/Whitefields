@@ -376,7 +376,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <div class="p-3 p-md-4 p-lg col">
                             <div class="d-flex align-items-center flex-row">
                                 <h1 class="col">Personal Information</h1>
-                                <div class="col-auto">
+                                <div class="col-auto" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Profile Information">
                                     <button id="profileEditBtn" class="btn btn-outline-secondary position-relative" data-bs-toggle="modal" data-bs-target="#profileModal">
                                         <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
                                         <i class="bi bi-pencil-square"></i>
@@ -422,6 +422,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
 <script>
     $(document).ready(function () {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
         $("#uploadForm").on('submit',(function(e) {
             showLoader();
             e.preventDefault();

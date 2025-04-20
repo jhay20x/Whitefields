@@ -38,7 +38,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $status = "text-success";
             } else if ($row['Status'] == "Denied" || $row['Status'] == "Cancelled") {
                 $status = "text-danger";
-            } else if ($row['Status'] == "Evaluated") {
+            } else if ($row['Status'] == "Evaluated" || $row['Status'] == "Completed") {
                 $status = "text-secondary";
             } else {
                 $status = "text-warning";

@@ -155,7 +155,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <i class="bi bi-list"></i>
                 </button>
                 <h1><i class="bi bi-columns-gap"></i></h1>
-                <h1 class="col ms-3">Dashboard: Patient</h1>
+                <h1 class="col ms-3">Dashboard</h1>
 
                 <?php include "../../components/notification.php" ?>
             </div>
