@@ -129,7 +129,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                                 <div class="col-lg-12">
                                     <div class="form-floating mb-3">
-                                        <input maxlength="255" autocomplete="off" required name="procedureDesc" placeholder="Description"  id="procedureDesc" class="form-control onlyLetters">
+                                        <input maxlength="255" autocomplete="off" name="procedureDesc" placeholder="Description"  id="procedureDesc" class="form-control onlyLetters">
                                         <label for="procedureDesc">Description</label>
                                     </div>
                                 </div>

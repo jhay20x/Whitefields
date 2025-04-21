@@ -74,7 +74,7 @@ if (isset($_SESSION['email_address'])) {
 <script>
 	$(document).ready(function () {
 		let otpFromUser, otpCode;
-		const timer = "";
+		const timer = '';
 		// let user_id = <?php // echo isset($_SESSION['user_id']) ? "'" . $_SESSION['user_id'] . "'" : "''"; ?>;
 		let username = <?php echo isset($_SESSION['username']) ? "'" . $_SESSION['username'] . "'" : "''"; ?>;
 		let userEmail = <?php echo isset($_SESSION['email_address']) ? "'" . $_SESSION['email_address'] . "'" : "''"; ?>;
@@ -115,110 +115,110 @@ if (isset($_SESSION['email_address'])) {
 			$("#otpCode").blur();
 			setTimeout(checkOTP, 2000);
 		});
-	});	
-
-	function startTimer() {
-		let count = sessionStorage.getItem("timer");
 		
-		timer = setInterval(function() {
-			count--;
-			sessionStorage.setItem("timer", count);
-			$("#resendCodeBtn").text("Resend New Code in " + count + " seconds.");
+		function startTimer() {
+			let count = sessionStorage.getItem("timer");
 			
-			if (count === 0 || count <= 0) {
-				clearInterval(timer);
-				sessionStorage.removeItem("timer");
-				$("#resendCodeBtn").text("Resend New Code");
-				$("#resendCodeBtn").prop("disabled", false);
-			}
-		}, 1000);
-	};
-
-	function checkOTP() {
-		otpFromUser = $("#otpCode").val();
-
-		if (otpFromUser == "") {
-			hideLoader();
-			$("#errorMessage").append('<div class="alert alert-danger">OTP is required. Please try again.</div>');
-			enableInputs();
-			$("#otpCode").focus();
-		}
-		else if (otpFromUser == otpCode) {
-			hideLoader();
-			disableInputs();
-			sessionStorage.removeItem("timer");
-			clearInterval(timer);
-			$("#errorMessage").append('<div class="alert alert-success">Email is successfully verified.</div>');
-			setTimeout(showLoader, 1000);
-			setTimeout(updateEmailStatus, 2000);
-			setTimeout(redirectDashboard, 2500);
-
-		} else {
-			hideLoader();
-			$("#errorMessage").append('<div class="alert alert-danger">OTP code mismatch. Please try again.</div>');
-			$("#otpCode").focus();
-		}
-	}
-
-	function updateEmailStatus() {
-		$.ajax({
-			type: "POST",
-			url: "auth/update-email-status.php",
-			dataType: "json"
-		}).done(function (data) {
-			//console.log(data);
-		}).fail(function(data) {
-			//console.log(data);
-		});
-	}
-
-	function fetchOTP() {
-		$.ajax({
-			type: "POST",
-			url: "auth/fetch-otp.php",
-			dataType: "json"
-		}).done(function (data) {
-			otpCode = data.otpCode;
-			//console.log(data);
-		}).fail(function(data) {
-			//console.log(data);
-		});
-	}
-
-	function sendOTP() {
-		var formData = {
-			mode: "verifyEmail"
+			timer = setInterval(function() {
+				count--;
+				sessionStorage.setItem("timer", count);
+				$("#resendCodeBtn").text("Resend New Code in " + count + " seconds.");
+				
+				if (count === 0 || count <= 0) {
+					clearInterval(timer);
+					sessionStorage.removeItem("timer");
+					$("#resendCodeBtn").text("Resend New Code");
+					$("#resendCodeBtn").prop("disabled", false);
+				}
+			}, 1000);
 		};
 
-		$.ajax({
-			type: "POST",
-			url: "auth/send-otp.php",
-			data: formData,
-			dataType: "json"
-		}).done(function (data) {
-			//console.log(data);
-			hideLoader();
-			if (!data.success) {
-				enableInputs();
-				$("#resendCodeBtn").prop("disabled", false);
-				$("#forgotEmail").focus();
-				$("#errorMessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
-			} else {				
-				sessionStorage.setItem("timer", 60);
-				$("#resendCodeBtn").prop("disabled", true);
-				startTimer();
-				fetchOTP();
+		function checkOTP() {
+			otpFromUser = $("#otpCode").val();
+
+			if (otpFromUser == "") {
 				hideLoader();
+				$("#errorMessage").append('<div class="alert alert-danger">OTP is required. Please try again.</div>');
 				enableInputs();
+				$("#otpCode").focus();
 			}
-			// console.log(data);
-		}).fail(function(data) {
-			// console.log(data);
-		});
-	}
-	
-	setInputFilter(document.getElementById("otpCode"), function(value) {
-		return /^-?\d*$/.test(value); }, "Number Only");
+			else if (otpFromUser == otpCode) {
+				hideLoader();
+				disableInputs();
+				sessionStorage.removeItem("timer");
+				clearInterval(timer);
+				$("#errorMessage").append('<div class="alert alert-success">Email is successfully verified.</div>');
+				setTimeout(showLoader, 1000);
+				setTimeout(updateEmailStatus, 2000);
+				setTimeout(redirectDashboard, 2500);
+
+			} else {
+				hideLoader();
+				$("#errorMessage").append('<div class="alert alert-danger">OTP code mismatch. Please try again.</div>');
+				$("#otpCode").focus();
+			}
+		}
+
+		function updateEmailStatus() {
+			$.ajax({
+				type: "POST",
+				url: "auth/update-email-status.php",
+				dataType: "json"
+			}).done(function (data) {
+				//console.log(data);
+			}).fail(function(data) {
+				//console.log(data);
+			});
+		}
+
+		function fetchOTP() {
+			$.ajax({
+				type: "POST",
+				url: "auth/fetch-otp.php",
+				dataType: "json"
+			}).done(function (data) {
+				otpCode = data.otpCode;
+				//console.log(data);
+			}).fail(function(data) {
+				//console.log(data);
+			});
+		}
+
+		function sendOTP() {
+			var formData = {
+				mode: "verifyEmail"
+			};
+
+			$.ajax({
+				type: "POST",
+				url: "auth/send-otp.php",
+				data: formData,
+				dataType: "json"
+			}).done(function (data) {
+				//console.log(data);
+				hideLoader();
+				if (!data.success) {
+					enableInputs();
+					$("#resendCodeBtn").prop("disabled", false);
+					$("#forgotEmail").focus();
+					$("#errorMessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
+				} else {				
+					sessionStorage.setItem("timer", 60);
+					$("#resendCodeBtn").prop("disabled", true);
+					startTimer();
+					fetchOTP();
+					hideLoader();
+					enableInputs();
+				}
+				// console.log(data);
+			}).fail(function(data) {
+				// console.log(data);
+			});
+		}
+		
+		setInputFilter(document.getElementById("otpCode"), function(value) {
+			return /^-?\d*$/.test(value); }, "Number Only");		
+	});	
 </script>
 
 <?php 

@@ -8,20 +8,24 @@ $data = "";
 $aptId;
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
+    $secId = fetchSecretaryID();
     $aptId = $_POST['aptId'];
     
-    $stmt = $conn->prepare("SELECT tc.id AS TransactionID, ar.id AS AppointmentID, pr.name AS ProcedureName, pt.name AS PaymentType, tc.amount_paid AS AmountPaid, tc.payment_ref_no AS PaymentRef,
+    $stmt = $conn->prepare("SELECT ar.id AS AppointmentID, pr.name AS ProcedureName, pt.name AS PaymentType, tr.payment_ref_no AS PaymentRef,
         CONCAT(si.fname , CASE WHEN si.mname = 'None' THEN ' ' ELSE CONCAT(' ' , si.mname , ' ') END , si.lname, 
-        CASE WHEN si.suffix = 'None' THEN '' ELSE CONCAT(' ' , si.suffix) END ) AS SecretaryName,
+        CASE WHEN si.suffix = 'None' THEN '' ELSE CONCAT(' ' , si.suffix) END ) AS SecretaryName, si.id AS SecID,
         CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
-        CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS PatientName, tc.timestamp AS Timestamp
-        FROM transactions tc
-        LEFT OUTER JOIN payment_types pt ON pt.id = tc.payment_type_id
-        LEFT OUTER JOIN appointment_requests ar ON ar.id = tc.appointment_requests_id
-        LEFT OUTER JOIN procedures pr ON pr.id = tc.procedures_id
-        LEFT OUTER JOIN secretary_info si ON si.id = tc.secretary_id
-        LEFT OUTER JOIN patient_info pi ON pi.id = tc.patient_id
-        WHERE tc.appointment_requests_id  = ?;");
+        CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS PatientName, SUM(tr.amount_paid) AS AmountPaid,
+        tr.timestamp AS Timestamp, th.procedure_price AS TotalAmount, th.remaining_balance AS RemainingBalance, pr.id AS ProcedureID, th.patient_id AS PatientID
+        FROM treatment_history th
+        LEFT OUTER JOIN transactions tr ON tr.appointment_requests_id = th.appointment_requests_id AND tr.procedures_id = th.procedures_id
+        LEFT OUTER JOIN payment_types pt ON pt.id = tr.payment_type_id
+        LEFT OUTER JOIN appointment_requests ar ON ar.id = th.appointment_requests_id
+        LEFT OUTER JOIN procedures pr ON pr.id = th.procedures_id
+        LEFT OUTER JOIN secretary_info si ON si.id = tr.secretary_id
+        LEFT OUTER JOIN patient_info pi ON pi.id = th.patient_id
+        WHERE th.appointment_requests_id  = ?
+        GROUP BY ar.id, pr.name;");
 
     $stmt->bind_param("i", $aptId);
     $stmt->execute();
@@ -29,7 +33,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $stmt->close();
 
     $data = [
-        "TransactionID" => null,
         "AppointmentID" => null,
         "PaymentType" => null,
         "PaymentRef" => null,
@@ -39,21 +42,26 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         "Procedures" => []
     ];
 
+    $curdate = date("Y-m-d h:i A");
+
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            if (empty($data["TransactionID"])) {
-                $data["TransactionID"] = $row["TransactionID"];
+            if (empty($data["AppointmentID"])) {
                 $data["AppointmentID"] = $row["AppointmentID"];
-                $data["PaymentType"]   = $row["PaymentType"];
+                $data["PaymentType"]   = $row["PaymentType"] ?? "N/A";
                 $data["PaymentRef"]    = $row["PaymentRef"] ?? "N/A";
-                $data["SecretaryName"] = $row["SecretaryName"];
+                $data["SecretaryName"] = ($row["SecID"] ?? $secId) == $secId ? "Me" : $row["SecretaryName"];
+                $data["PatientID"]   = $row["PatientID"];
                 $data["PatientName"]   = $row["PatientName"];
-                $data["Timestamp"]     = $row["Timestamp"];
+                $data["Timestamp"]     = empty($row["Timestamp"]) ? $curdate : $row["Timestamp"];
             }
 
             $data["Procedures"][] = [
+                "ProcedureID" => $row["ProcedureID"],
                 "ProcedureName" => $row["ProcedureName"],
-                "AmountPaid"    => $row["AmountPaid"]
+                "AmountPaid"    => $row["AmountPaid"] ?? "0.00",
+                "TotalAmount"    => $row["TotalAmount"] ?? "0.00",
+                "RemainingBalance"    => $row["RemainingBalance"] ?? "0.00"
             ];
         }
     }

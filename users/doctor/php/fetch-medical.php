@@ -43,7 +43,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             '<div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-' . $row["id"] . '" aria-expanded="false" aria-controls="flush-collapse-' . $row["id"] . '">
-                        <span class="h6">' . $title . '</span>
+                        <span class="fw-semibold">' . $title . '</span>
                     </button>
                 </h2>
                 <div id="flush-collapse-' . $row["id"] . '" class="accordion-collapse collapse" data-bs-parent="#medicalHistoryLogsAcc">

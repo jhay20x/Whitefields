@@ -24,11 +24,24 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     if ($result->num_rows > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             $datetime = date("Y-m-d h:i A", strtotime($row['Timestamp']));
+            switch (($row['AppointStatus'])) {
+                case 'Completed':
+                    $color = "text-success";
+                    break;
+
+                case 'Partially Paid':
+                    $color = "text-danger";
+                    break;
+                
+                default:
+                    $color = "text-warning";
+                    break;
+            }
             //<td id="transactionTransID">' . $row['TransactionID'] . '</td>
             $data .= '
             <tr>
                 <td id="transactionAptID">' . $row['AppointmentID'] . '</td>
-                <td id="transactionAppointStatus" class="text-secondary fw-bold">' . $row['AppointStatus'] . '</td>
+                <td id="transactionAppointStatus" class="fw-bold ' . $color . '">' . $row['AppointStatus'] . '</td>
                 <td id="transactionTimestamp">' . $datetime . '</td>
                 <td class="transactionAction">
                     <button type="button" data-apt-id="' . $row['AppointmentID'] . '" class="btn btn-sm btn-outline-primary viewTransDetail" data-bs-toggle="modal" data-bs-target="#transactionDetailsModal">View</button>

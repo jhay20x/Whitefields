@@ -94,7 +94,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button" id="patientViewBtn" type="button" data-bs-toggle="collapse" data-bs-target="#patientInfo" aria-expanded="true" aria-controls="patientInfo">
-                                        <span class="h6">Personal Information</span>
+                                        <span class="fw-semibold">Personal Information</span>
                                     </button>
                                 </h2>
                                 <div id="patientInfo" class="accordion-collapse collapse show" data-bs-parent="#patientView">
@@ -120,7 +120,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dentalInfo" aria-expanded="false" aria-controls="dentalInfo">
-                                        <span class="h6">Dental History</span>
+                                        <span class="fw-semibold">Dental History</span>
                                     </button>
                                 </h2>
                                 <div id="dentalInfo" class="accordion-collapse collapse" data-bs-parent="#patientView">
@@ -142,7 +142,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#medicalInfo" aria-expanded="false" aria-controls="medicalInfo">
-                                        <span class="h6">Medical History</span>
+                                        <span class="fw-semibold">Medical History</span>
                                     </button>
                                 </h2>
                                 <div id="medicalInfo" class="accordion-collapse collapse" data-bs-parent="#patientView">
@@ -262,7 +262,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <div id="tratmentItem" class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#treatmentInfo" aria-expanded="false" aria-controls="treatmentInfo">
-                                        <span class="h6">Treatment History</span>
+                                        <span class="fw-semibold">Treatment History</span>
                                     </button>
                                 </h2>
                                 <div id="treatmentInfo" class="accordion-collapse collapse" data-bs-parent="#patientView">

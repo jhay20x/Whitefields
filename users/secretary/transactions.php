@@ -93,21 +93,17 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <h6 class="modal-title" id="appointListLabel">
                             <i class="bi bi-clock-history"></i> Current Pending and Completed Transactions
                         </h6>
-                        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="transactionViewClose" aria-label="Close"></button> -->
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" id="transactionViewClose" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
-                            <!-- <div class="ms-3">
-                                <h6 class="fw-normal">No Pending Transactions</h6>                                
-                            </div> -->
-                            
+                        <div class="row">                            
                             <table id="transactionsTable" class="table-group-divider table table-hover table-striped">
                                 <thead>
                                     <tr>
                                         <!-- <th class="col">Transaction ID</th> -->
                                         <th class="col">Appointment ID</th>
                                         <th class="col">Status</th>
-                                        <th class="col-3">Date & Time</th>
+                                        <th class="col-3">Appointment Date & Time</th>
                                         <th class="col">Action</th>
                                     </tr>
                                 </thead>
@@ -116,25 +112,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 </tbody>
                             </table>
                         </div>
-
-                        <!-- <div class="accordion mt-3" id="transactionView">                            
-                            <div id="transactionItem" class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" id="transactionViewBtn" type="button" data-bs-toggle="collapse" data-bs-target="#transactionInfo" aria-expanded="false" aria-controls="transactionInfo">
-                                        <span class="h6">Transaction History</span>
-                                    </button>
-                                </h2>
-                                <div id="transactionInfo" class="accordion-collapse collapse" data-bs-parent="#transactionView">
-                                    <div class="accordion-body">
-                                        <div class="col-12 col-sm">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
                     </div>
                     <div class="modal-footer">
-                        <!-- <button type="submit" class="btn btn-sm btn-outline-success" name="profileSubmitBtn">Submit</button> -->
                         <button class="btn btn-sm btn-outline-primary" id="transactionViewBackBtn" data-bs-dismiss="modal">Back</button>
                     </div>
                 </div>
@@ -147,9 +126,124 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center">
                         <h6 class="modal-title" id="appointListLabel">
-                            <i class="bi bi-clock-history"></i> Transactions
+                            <i class="bi bi-clock-history"></i> Payments and Transactions
                         </h6>
                         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="transactionDetailsClose" aria-label="Close"></button> -->
+                    </div>
+                    <form autocomplete="off" action="php/insert-transaction.php" method="POST" id="myForm">
+                        <div class="modal-body">
+                            <div class="container">
+                                <h5>Payment Details</h5>
+
+                                <div id="transactionMessage" class="" role="alert"></div>
+
+                                <div class="mt-3 row">
+                                    <div class="col-12 col-lg-6 align-items-center">
+                                        <h6 class="h6">Patient Name: <span id="transDetailPatientName" class="fw-normal"></span><input id="transactionDetailsPid" type="hidden" name="patient_id" value=""></h6>
+                                        <h6 class="h6">Appointment ID: <span id="transDetailAptID" class="fw-normal"></span><input id="transactionDetailsAptId" type="hidden" name="appointment_requests_id" value=""></h6>
+                                        <h6 class="h6">Processed By: <span id="transDetailProcessed" class="fw-normal"></span></h6>
+                                    </div>
+    
+                                    <div class="col-12 col-lg-6">
+                                        <!-- <h6 class="h6">Date & Time: <span id="transDetailDateTime" class="fw-normal"></span></h6> -->
+                                        
+                                        <div class="col-12 col-xl-8 mb-3">
+                                            <div class="input-group col">
+                                                <label class="input-group-text" for="paymentType">Payment Type</label>
+                                                <select required class="form-select" name="paymentType" id="paymentType">
+                                                    <option disabled selected value="">Select Payment Type...</option>
+                                                    <?php
+                                                        $stmt = $conn->prepare("SELECT * FROM `payment_types`;");
+                                                        $stmt->execute();
+                                                        $result = $stmt->get_result();
+                                                        $stmt->close();
+        
+                                                        if ($result->num_rows > 0) {
+                                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                                echo '
+                                                                    <option value="' . $row['id'] . '">' . $row['name'] . '</option>
+                                                                ';
+                                                            }
+                                                        }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>                                    
+        
+                                        <div id="paymentRefDiv" class="col-12 col-xl-8 d-none">
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="paymentRefNo">Payment Ref. No.</label>
+                                                <input autocomplete="off" disabled required type="text" name="paymentRefNo" placeholder="(If applicable)"  id="paymentRefNo" class="form-control onlyLetters">
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-12 mt-3 table-responsive">
+                                        <table class="table-group-divider table table-hover table-striped text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th class="col">Procedure</th>
+                                                    <th class="col">Total Amount</th>
+                                                    <th class="col">Amount Paid</th>
+                                                    <th class="col">Remaining Balance</th>
+                                                    <th class="col">Payment</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="transactionDetailsTableBody">
+                                            </tbody>
+                                        </table>
+                                    </div>
+    
+                                    <div class="col-12 mt-3">
+                                        <div id="transactionHistoryView" class="accordion">
+                                            <div id="transactionHistoryViewItem" class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button collapsed" id="transactionHistoryViewBtn" type="button" data-bs-toggle="collapse" data-bs-target="#transactionHistory" aria-expanded="false" aria-controls="transactionHistory">
+                                                        <span class="fw-semibold">Transaction History</span>
+                                                    </button>
+                                                </h2>
+                                                <div id="transactionHistory" class="accordion-collapse collapse" data-bs-parent="#transactionHistoryView">
+                                                    <div class="accordion-body">
+                                                        <table id="transactionHistoryTable" class="table-group-divider table table-hover table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>ID</th>
+                                                                    <th>Procedure</th>
+                                                                    <th>Amount Paid</th>
+                                                                    <th>Remaining Balance</th>
+                                                                    <th>Timestamp</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="transactionHistoryTableBody">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" id="transactionDetailsSaveBtn" class="btn btn-sm btn-outline-success">Save</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelTransactionModal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="transactionHistoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="transactionHistoryLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center">
+                        <h6 class="modal-title" id="appointListLabel">
+                            <i class="bi bi-clock-history"></i> Transactions History
+                        </h6>
+                        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="transactionHistoryClose" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body">
                         <div class="container">
@@ -157,39 +251,48 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             
                             <div class="mt-3 row">
                                 <div class="col-12 col-lg-6">
-                                    <h6 class="h6">Patient Name: <span id="transDetailPatientName" class="fw-normal"></span></h6>
-                                    <h6 class="h6">Transaction ID: <span id="transDetailTransID" class="fw-normal"></span></h6>
-                                    <h6 class="h6">Appointment ID: <span id="transDetailAptID" class="fw-normal"></span></h6>
-                                    <h6 class="h6">Processed By: <span id="transDetailProcessed" class="fw-normal"></span></h6>
+                                    <h6 class="h6">Patient Name: <span id="transHistoryName" class="fw-normal"></span></h6>
+                                    <h6 class="h6">Transaction ID: <span id="transHistoryTransId" class="fw-normal"></span></h6>
+                                    <h6 class="h6">Appointment ID: <span id="transHistoryAptId" class="fw-normal"></span></h6>
+                                    <h6 class="h6">Procedure: <span id="transHistoryProcedure" class="fw-normal"></span></h6>
+                                    <h6 class="h6">Amount Paid: <span id="transHistoryAmountPaid" class="fw-normal"></span></h6>
+                                    <h6 class="h6">Remaining Balance: <span id="transHistoryRemaining" class="fw-normal"></span></h6>
                                 </div>
-
+                                
                                 <div class="col-12 col-lg-6">
-                                    <h6 class="h6">Date & Time: <span id="transDetailDateTime" class="fw-normal"></span></h6>
-                                    <h6 class="h6">Payment Type: <span id="transDetailPaymentType" class="fw-normal"></span></h6>
-                                    <h6 class="h6">Payment Reference No: <span id="transDetailPaymentRef" class="fw-normal"></span></h6>
-                                </div>
-
-                                <div class="col mt-3 table-responsive">
-                                    <table class="table-group-divider table table-hover table-striped text-center">
-                                        <thead>
-                                            <tr>
-                                                <th class="col">Procedure</th>
-                                                <th class="col">Total Amount</th>
-                                                <th class="col">Amount Paid</th>
-                                                <th class="col">Remaining Balance</th>
-                                                <th class="col">Payment</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="transactionDetailsTableBody">
-                                        </tbody>
-                                    </table>
+                                    <h6 class="h6">Date & Time: <span id="transHistoryDatetime" class="fw-normal"></span></h6>
+                                    <h6 class="h6">Payment Type: <span id="transHistoryPaymentType" class="fw-normal"></span></h6>
+                                    <h6 class="h6">Payment Reference No: <span id="transHistoryPaymentRef" class="fw-normal"></span></h6>
+                                    <h6 class="h6">Processed By: <span id="transHistoryProcessed" class="fw-normal"></span></h6>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-outline-success">Save</button>
-                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#transactionViewModal">Back</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#transactionDetailsModal">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="cancelTransactionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cancelTransactionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center">
+                        <h6 class="modal-title" id="cancelTransactionLabel">
+                            <i class="bi bi-calendar3"></i> Update Appointment Form
+                        </h6>
+                        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelTransactionClose" aria-label="Close"></button> -->
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="text-center">
+                                <h6>Are you sure to cancel editing this form?</h6>
+                                <button type="button" value="" id="transactionCancelYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal"data-bs-target="#transactionViewModal">Yes</button>
+                                <button type="button" value="" id="transactionCancelNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#transactionDetailsModal">No</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -214,6 +317,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <h3>Payment and Transactions Lists</h3>
                             <span>View and manage all of the client's pending and completed transactions.</span>
                         </div>
+
+                        <div id="errorMessage" class="" role="alert"></div>
 
                         <table id="patientListTable" class="table-group-divider table table-hover table-striped">
                             <thead>
@@ -287,15 +392,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
         
-            var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0');
-            var yyyy = today.getFullYear();
+            // var today = new Date();
+            // var dd = String(today.getDate()).padStart(2, '0');
+            // var mm = String(today.getMonth() + 1).padStart(2, '0');
+            // var yyyy = today.getFullYear();
 
-            today = yyyy + '-' + mm + '-' + dd;
+            // today = yyyy + '-' + mm + '-' + dd;
 
             loadTable();
             loadTransactionTable();            
+            loadTransactionHistoryTable();
 
             $('body').on('click', '.viewAptDetail', function(){
                 let patient_id = $(this).attr("data-p-id")
@@ -305,7 +411,104 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $('body').on('click', '.viewTransDetail', function(){
                 let aptId = $(this).attr("data-apt-id");
                 loadTransactionDetails(aptId);
+                loadTransactionHistory(aptId);
             });
+
+            $('body').on('click', '.viewTransHistory', function(){
+                let transId = $(this).attr("data-transaction-id");
+                loadTransactionHistoryDetails(transId);
+            });
+
+            $('body').on('click', '#transactionCancelYesBtn', function(){
+                $("#paymentType, #paymentRefNo").val("");
+                resetAccordion();
+            });            
+
+            $('body').on('change', '#paymentType', function(){
+                let paymentRefDiv = $("#paymentRefDiv");
+
+                if ($(this).val() == 2) {
+                    paymentRefDiv.removeClass("d-none");
+                    paymentRefDiv.find("input").prop("disabled", false);
+                } else {
+                    paymentRefDiv.addClass("d-none");
+                    paymentRefDiv.find("input").prop("disabled", true);
+                }
+            });            
+
+            function resetAccordion() {
+                $('.accordion-collapse.show').each(function () {
+                    let collapseInstance = bootstrap.Collapse.getInstance(this) || new bootstrap.Collapse(this);
+                    collapseInstance.hide();
+                });
+            }
+
+            function loadTransactionHistoryDetails(transId) {
+                var formData = {
+                    transId: transId
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "php/fetch-transactions-history-details.php",
+                    data: formData,
+                    dataType: 'json'
+                }).done(function(data) {
+                    let transDetailFields = [
+                        "#transHistoryName", "#transHistoryTransId", "#transHistoryAptId",
+                        "#transHistoryProcedure", "#transHistoryAmountPaid", "#transHistoryRemaining",
+                        "#transHistoryDatetime", "#transHistoryPaymentType", "#transHistoryPaymentRef", "#transHistoryProcessed"
+                    ];
+
+                    let transDetailValues = [
+                        data.PatientName, data.TransactionID, data.AppointmentID, 
+                        data.ProcedureName, data.AmountPaid, data.RemainingBalance, 
+                        data.Timestamp, data.PaymentType, data.PaymentRef, data.SecretaryName
+                    ];
+                    
+                    for (let index = 0; index < transDetailValues.length; index++) {
+                        $(transDetailFields[index]).text(transDetailValues[index]);
+                    }                    
+                    console.log(data);
+                }).fail(function(data) {
+                    console.log(data);
+                });
+            } 
+
+            $("#myForm").submit(function(e){
+                showLoader();
+                e.preventDefault();
+                $("#errorMessage, #addProcedureMessage, #viewProcedureMessage").empty();
+
+                var url = $("#myForm").attr('action');
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: $("#myForm").serialize(),
+                    dataType: "json"
+                }).done(function (data) {
+                    if (!data.success) {
+                        hideLoader();
+                        $("#transactionMessage").append('<div class="mt-3 alert alert-danger">' + data.error +  '</div>');
+                        $("#").append('<div class="mt-3 alert alert-danger">' + data.error +  '</div>');
+                    } else {
+                        localStorage.setItem("errorMessage", data.message);
+                        location.reload();
+                    }
+                    console.log(data);
+                }).fail(function(data) {
+                    console.log(data);
+                });
+            }); 
+        
+            if (localStorage.getItem("errorMessage")){
+                let message = localStorage.getItem("errorMessage");
+
+                $("#errorMessage").append('<div class="mt-3 alert alert-success">' + message +  '</div>');
+
+                localStorage.removeItem("errorMessage")
+            };
 
             // $("#transactionViewBackBtn").on("click", function() {
             //     resetAccordion();
@@ -318,12 +521,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             //     });
             // }        
 
-            // $('#transactionItem').on('click', function () {
-            //     $('#transactionsTable').DataTable().columns.adjust();
-            // });    
+            $('#transactionHistoryViewItem').on('click', function () {
+                $('#transactionHistoryTable').DataTable().columns.adjust();
+            });    
 
             $('#transactionViewModal').on('shown.bs.modal', function () {
                 $('#transactionsTable').DataTable().columns.adjust();
+            });
+    
+            $('body').on("blur", ".onlyNumbersDots", function () {                
+                let val = parseFloat(this.value);
+                if (!isNaN(val)) {
+                    this.value = val.toFixed(2);
+                }
             });
 
             function loadTransactionDetails(aptId){
@@ -338,44 +548,55 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     dataType: 'json'
                 }).done(function(data) {
                     let transDetailFields = [
-                        "#transDetailPatientName", "#transDetailTransID", "#transDetailAptID",
+                        "#transDetailPatientName", "#transDetailTreatmentID", "#transDetailAptID",
                         "#transDetailProcedure", "#transDetailProcessed", "#transDetailDateTime",
                         "#transDetailPaymentType", "#transDetailPaymentRef", "#transDetailAmountPaid"
                     ];
 
                     let transDetailValues = [
-                        data.PatientName, data.TransactionID, data.AppointmentID, data.ProcedureName, 
+                        data.PatientName, data.TreatmentID, data.AppointmentID, data.ProcedureName, 
                         data.SecretaryName, data.Timestamp, data.PaymentType, data.PaymentRef, data.AmountPaid
                     ];
                     
                     for (let index = 0; index < transDetailValues.length; index++) {
                         $(transDetailFields[index]).text(transDetailValues[index]);
                     }
+
+                    $("#transactionDetailsPid").val(data.PatientID);
+                    $("#transactionDetailsAptId").val(data.AppointmentID);
                     
                     let tbodyHtml = "";
 
                     data.Procedures.forEach(proc => {
+                        let prop;
+
+                        if (proc.RemainingBalance == 0) {
+                            prop = "disabled";
+                        } else {
+                            prop = "";
+                        };
+
                         tbodyHtml += `
                             <tr>
-                            <td>${proc.ProcedureName}</td>
-                            <td>${proc.AmountPaid}</td>
-                            <td>${proc.AmountPaid}</td>
-                            <td>0.00</td>
-                            <td><input type="text" name="" id=""></td>
+                                <td>${proc.ProcedureName}<input ${prop} type="hidden" name="procedures_id[]" value="${proc.ProcedureID}"></td>
+                                <td>${proc.TotalAmount}</td>
+                                <td>${proc.AmountPaid}</td>
+                                <td>${proc.RemainingBalance}<input ${prop} type="hidden" name="remaining_balance[]" value="${proc.RemainingBalance}"></td>
+                                <td><input ${prop} required class="form-control text-center onlyNumbersDots" type="text" name="amount_paid[]"></td>
                             </tr>
                         `;
                     });
 
                     $('#transactionDetailsTableBody').html(tbodyHtml);
+                    inputFilters();
                     // console.log(data);
                 }).fail(function(data) {
                     // console.log(data);
                 });
-
             }
             
-            $('#transactionViewModal').modal('show');
-            loadTransactionList(7);
+            // $('#transactionViewModal').modal('show');
+            // loadTransactionList(7);
 
             function loadTransactionList(pid) {
                 var formData = {
@@ -394,6 +615,58 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     // console.log(data);
                 }).fail(function(data) {
                     // console.log(data);
+                });
+            }
+
+            function loadTransactionHistory(aptId) { 
+                var formData = {
+                    aptId: aptId
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: 'php/fetch-transaction-history.php',
+                    data: formData,
+                    dataType: 'json'
+                }).done(function (data) {
+                    $("#transactionHistoryTable").DataTable().destroy().clear();
+                    $('#transactionHistoryTableBody').html(data);
+                    loadTransactionHistoryTable();
+                    // console.log(data);
+                }).fail(function(data) {
+                    // console.log(data);
+                });
+            }
+
+            function loadTransactionHistoryTable() {                            
+                let table = new DataTable('#transactionHistoryTable', {
+                    select: false,
+                    lengthMenu: [
+                        [5, 10, 15, -1],
+                        [5, 10, 15, 'All'],
+                    ],
+                    layout: {
+                        top1: {
+                        },
+                        topStart: {
+    
+                        },
+                        bottomStart: {
+                            pageLength: true
+                        }
+                    },
+                    columnDefs: [
+                        {
+                            targets: [0,1,2,3,4,5],
+                            className: 'dt-body-center dt-head-center'
+                        }
+                    ],
+                    scrollY: '25vh',
+                    scrollX: true,
+                    scrollCollapse: true,
+                    paging: true,                
+                    autoWidth: false,
+                    order: [[0, "desc"]]
                 });
             }
 
