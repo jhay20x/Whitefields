@@ -141,6 +141,12 @@ if (is_int($id)) {
               </ul>
             </div>
           </li> -->
+          <li class="mb-1 ms-3">
+            <a href="reports.php" class="btn btn-dash d-inline-flex align-items-center rounded border-0 text-white">
+                <i class="bi bi-file-earmark-spreadsheet me-1"></i>
+                Reports
+            </a>
+          </li>
           <li class="mb-1">
             <button class="btn btn-toggle d-inline-flex align-items-center rounded text-white border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#management-collapse" aria-expanded="false">
                 <i class="bi bi-building-gear me-1"></i>

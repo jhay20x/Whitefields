@@ -239,7 +239,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 </div>
                 
                 <div class="d-flex row mx-3 my-2 justify-content-center">
-                    <div class="card h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-auto mx-xl-2 my-xl-2 col-xxl-auto mx-xxl-2 my-xxl-2">
+                    <div class="card h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-3 mx-xl-2 my-xl-2 col-xxl-3 mx-xxl-2 my-xxl-2">
                         <div class="card-body">
                             <div class="d-flex column card-icon align-items-center">
                                 <h1><i class="bi bi-calendar3"></i></h1>
@@ -249,7 +249,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </div>
                     </div>
 
-                    <div class="card rounded shadow h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-auto mx-xl-2 my-xl-2 col-xxl-auto mx-xxl-2 my-xxl-2">
+                    <div class="card rounded shadow h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-3 mx-xl-2 my-xl-2 col-xxl-3 mx-xxl-2 my-xxl-2">
                         <div class="card-body">
                             <div class="d-flex column card-icon align-items-center">
                                 <h1><i class="bi bi-calendar3"></i></h1>
@@ -258,8 +258,18 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <h1 class="card-title" id="AppointAll">0</h1>
                         </div>
                     </div>
+                    
+                    <div class="card h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-3 mx-xl-2 my-xl-2 col-xxl-3 mx-xxl-2 my-xxl-2">
+                        <div class="card-body">
+                            <div class="d-flex column card-icon align-items-center">
+                                <h1><i class="bi bi-cash"></i></h1>
+                                <h5 class="card-text ms-3">Income Today</h5>
+                            </div>
+                            <h1 class="card-title">₱ <span id="IncomeToday">0</span></h1>
+                        </div>
+                    </div>
 
-                    <div class="card rounded shadow h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-auto mx-xl-2 my-xl-2 col-xxl-auto mx-xxl-2 my-xxl-2">
+                    <div class="card rounded shadow h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-3 mx-xl-2 my-xl-2 col-xxl-3 mx-xxl-2 my-xxl-2">
                         <div class="card-body">                                
                             <div class="d-flex column card-icon align-items-center">
                                 <h1><i class="bi bi-person"></i></h1>
@@ -269,7 +279,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </div>
                     </div>
 
-                    <div class="card rounded shadow h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-auto mx-xl-2 my-xl-2 col-xxl-auto mx-xxl-2 my-xxl-2">
+                    <div class="card rounded shadow h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-3 mx-xl-2 my-xl-2 col-xxl-3 mx-xxl-2 my-xxl-2">
                         <div class="card-body">                                
                             <div class="d-flex column card-icon align-items-center">
                                 <h1><i class="bi bi-person-vcard"></i></h1>
@@ -411,22 +421,26 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $(document).ready(function () {
 
         var calendarEl = document.getElementById('calendar');
+        
+        function loadCalendar() {
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+            headerToolbar: {
+                left: 'prevYear,prev,next,nextYear today',
+                center: 'title',
+                right: 'dayGridMonth,dayGridWeek,dayGridDay'
+            },
+            navLinks: true, // can click day/week names to navigate views
+            editable: false,
+            dayMaxEvents: false, // allow "more" link when too many events
+            events: 'php/fetch-requests.php'
+            });            
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-        headerToolbar: {
-            left: 'prevYear,prev,next,nextYear today',
-            center: 'title',
-            right: 'dayGridMonth,dayGridWeek,dayGridDay'
-        },
-        navLinks: true, // can click day/week names to navigate views
-        editable: false,
-        dayMaxEvents: false, // allow "more" link when too many events
-        events: 'php/fetch-requests.php'
-        });
+            calendar.render();
+        }
 
-        calendar.render();	
         setInterval(updateDashboard, 15000);
         updateDashboard();
+        loadCalendar();
 
         function updateDashboard() {
             $.ajax({
@@ -436,7 +450,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $("#TotalDentist").text(data.TotalDentist);
                 $("#TotalPatient").text(data.TotalPatient);
                 $("#AppointAll").text(data.AppointAll);
-                $("#AppointToday").text(data.AppointToday);
+                $("#AppointToday").text(data.AppointToday);                
+                $("#IncomeToday").text(data.IncomeToday);                
+                loadCalendar();
                 // console.log(data);
             }).fail(function(data) {
                 // console.log(data);

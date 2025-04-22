@@ -48,10 +48,10 @@ function updateTreatmentRecord($conn, $pid, $dentist_id, $aptId, $patientToothNo
 
     $allSuccess = true;
 
-    $stmt = $conn->prepare("INSERT INTO `treatment_history`(`patient_id`, `dentist_id`, `appointment_requests_id`, `tooth_number`, `dentist_note`, `procedures_id`, `procedure_price`, `timestamp`) VALUES (?,?,?,?,?,?,?,?)");
+    $stmt = $conn->prepare("INSERT INTO `treatment_history`(`patient_id`, `dentist_id`, `appointment_requests_id`, `tooth_number`, `dentist_note`, `procedures_id`, `procedure_price`,  `remaining_balance`, `timestamp`) VALUES (?,?,?,?,?,?,?,?,?)");
     
     for ($i = 0; $i < count($proceduresList); $i++) {
-        $stmt->bind_param("iiisssss", $pid, $dentist_id, $aptId, $patientToothNo[$i], $dentistNote, $proceduresList[$i], $proceduresPrice[$i], $prevTimestamp);
+        $stmt->bind_param("iiissssss", $pid, $dentist_id, $aptId, $patientToothNo[$i], $dentistNote, $proceduresList[$i], $proceduresPrice[$i], $proceduresPrice[$i], $prevTimestamp);
         
         if (!$stmt->execute()) {
             $allSuccess = false;
@@ -83,10 +83,10 @@ function insertTreatmentRecord($conn, $pid, $dentist_id, $aptId, $patientToothNo
     $data = [];
     $allSuccess = true;
 
-    $stmt = $conn->prepare("INSERT INTO `treatment_history`(`patient_id`, `dentist_id`, `appointment_requests_id`, `tooth_number`, `dentist_note`, `procedures_id`, `procedure_price`, `timestamp`) VALUES (?,?,?,?,?,?,?,?)");
+    $stmt = $conn->prepare("INSERT INTO `treatment_history`(`patient_id`, `dentist_id`, `appointment_requests_id`, `tooth_number`, `dentist_note`, `procedures_id`, `procedure_price`, `remaining_balance`, `timestamp`) VALUES (?,?,?,?,?,?,?,?,?)");
     
     for ($i = 0; $i < count($proceduresList); $i++) {
-        $stmt->bind_param("iiisssss", $pid, $dentist_id, $aptId, $patientToothNo[$i], $dentistNote, $proceduresList[$i], $proceduresPrice[$i], $timestamp);
+        $stmt->bind_param("iiissssss", $pid, $dentist_id, $aptId, $patientToothNo[$i], $dentistNote, $proceduresList[$i], $proceduresPrice[$i], $proceduresPrice[$i], $timestamp);
         
         if (!$stmt->execute()) {
             $allSuccess = false;

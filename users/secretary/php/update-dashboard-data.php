@@ -22,7 +22,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         LEFT OUTER JOIN accounts ac
         ON di.accounts_id = ac.id
         WHERE ac.status != 0) TotalDentist,            
-        (SELECT COUNT(pi.id) FROM patient_info pi) TotalPatient
+        (SELECT COUNT(pi.id) FROM patient_info pi) TotalPatient,
+        (SELECT SUM(tr.amount_paid) FROM transactions tr WHERE DATE(tr.timestamp) = CURDATE()) IncomeToday
         FROM appointment_requests ar;");
 
     $stmt->execute();
@@ -36,6 +37,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $data['AppointAll'] = $row['AppointAll'];
         $data['TotalDentist'] = $row['TotalDentist'];
         $data['TotalPatient'] = $row['TotalPatient'];
+        $data['IncomeToday'] = $row['IncomeToday'];
     }
 }
 echo json_encode($data);

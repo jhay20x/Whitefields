@@ -596,7 +596,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 FROM appointment_requests ar
                                 LEFT OUTER JOIN patient_info pi ON pi.id = ar.patient_id
                                 LEFT OUTER JOIN appointment_status st ON st.id = ar.appoint_status_id
-                                WHERE (ar.appoint_status_id = 1 OR ar.appoint_status_id = 6) AND ar.dentist_info_id = ?
+                                WHERE (ar.appoint_status_id = 1 OR ar.appoint_status_id = 6 OR ar.appoint_status_id = 5) AND ar.dentist_info_id = ?
                                 ORDER BY Date DESC, Time ASC;");
                             $stmt->bind_param('i', $id);
                             $stmt->execute();
@@ -613,7 +613,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         $status = "text-success";
                                     } else if ($row['Status'] == "Denied" || $row['Status'] == "Cancelled") {
                                         $status = "text-danger";
-                                    } else if ($row['Status'] == "Evaluated") {
+                                    } else if ($row['Status'] == "Evaluated" || $row['Status'] == "Completed") {
                                         $status = "text-secondary";
                                     } else {
                                         $status = "text-warning";
@@ -1085,7 +1085,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 } else if (data.Status == "Denied" || data.Status == "Cancelled") {
                     $("#aptdtlsstatus").removeClass("text-success text-warning text-secondary");
                     $("#aptdtlsstatus").addClass("text-danger");
-                } else if (data.Status == "Evaluated") {
+                } else if (data.Status == "Evaluated" || data.Status == "Completed") {
                     $("#aptdtlsstatus").removeClass("text-success text-warning text-danger");
                     $("#aptdtlsstatus").addClass(" text-secondary");
                 } else {                        

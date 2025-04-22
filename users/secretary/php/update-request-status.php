@@ -52,7 +52,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $stmt->bind_param("isiisi", $setStatus, $approveddatetime, $user_id, $reason, $reasonOther, $id);
 
     if ($stmt->execute()) {
-        $user = fetchEmail();
+        $user = fetchEmail($conn, $pid);
 
         if ($setStatus == 1) {
             $message = 'Appointment request has been successfully approved.';
@@ -67,20 +67,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             }
         }
         
-        // sendEmail($user["emailAddress"], $content);
+        if ($user["emailAddress"] != "None") {
+            sendEmail($user["emailAddress"], $content);
+        }
     }
 }
 
-function fetchEmail()
+function fetchEmail($conn, $pid)
 {
-    global $conn;
-    global $pid;
-
     $stmt = $conn->prepare("SELECT DISTINCT ac.email_address, ac.username 
         FROM patient_info pi
         LEFT OUTER JOIN appointment_requests ar ON ar.patient_id = pi.id
         LEFT OUTER JOIN accounts ac ON pi.accounts_id = ac.id
-        WHERE ar.patient_id = ?;");
+        WHERE pi.id = ?;");
     $stmt->bind_param("i", $pid);
     $stmt->execute();
     $result = $stmt->get_result();
