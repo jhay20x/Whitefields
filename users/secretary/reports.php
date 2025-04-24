@@ -113,20 +113,27 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <tr>
                                     <th>ID</th>
                                     <th>Patient Name</th>
+                                    <th>Dentist Name</th>
                                     <th>Procedure</th>
                                     <th>Amount Paid</th>
+                                    <th>Payment Type</th>
                                     <th>Date</th>
                                     <!-- <th>Action</th> -->
                                 </tr>
                             </thead>
                             <tbody id="reportsListTableBody">
                             <?php
-                                $stmt = $conn->prepare("SELECT tr.*, pr.name,
+                                $stmt = $conn->prepare("SELECT DISTINCT tr.*, pr.name,
                                     CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
-                                    CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS PatientName
+                                    CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS PatientName,
+                                    CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
+                                    CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS DentistName, pt.name AS PaymentName
                                     FROM transactions tr 
+                                    LEFT OUTER JOIN treatment_history th ON th.appointment_requests_id = tr.appointment_requests_id
                                     LEFT OUTER JOIN procedures pr ON pr.id = tr.procedures_id
                                     LEFT OUTER JOIN patient_info pi ON pi.id = tr.patient_id
+                                    LEFT OUTER JOIN dentist_info di ON di.id = th.dentist_id
+                                    LEFT OUTER JOIN payment_types pt ON pt.id = tr.payment_type_id
                                     ORDER BY tr.id DESC;");
                                 $stmt->execute();
                                 $result = $stmt->get_result();
@@ -139,8 +146,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <tr>
                                             <td id="transactionHistoryAptID">' . $row['id'] . '</td>
                                             <td id="transactionHistoryAptName">' . $row['PatientName'] . '</td>
+                                            <td id="transactionHistoryDentistName">' . $row['DentistName'] . '</td>
                                             <td id="transactionHistoryProcedure">' . $row['name'] . '</td>
                                             <td id="transactionHistoryAmountPaid">' . $row['amount_paid'] . '</td>
+                                            <td id="transactionHistoryAmountPaid">' . $row['PaymentName'] . '</td>
                                             <td id="transactionHistoryTimestamp">' . $datetime . '</td>
                                         </tr>
                                         ';
@@ -229,7 +238,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     footer: true,
                                     customize: function (win) {
                                         let total = 0;
-                                        $('#reportsListTable').DataTable().column(3, { page: 'current' }).data().each(function (value) {
+                                        $('#reportsListTable').DataTable().column(4, { page: 'current' }).data().each(function (value) {
                                             total += parseFloat(value.toString().replace(/[^0-9.-]+/g, '')) || 0;
                                         });
 
@@ -257,13 +266,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             targets: []
                         },
                         {
-                            targets: [0,1,2,3,4],
+                            targets: [0,1,2,3,4,5,6],
                             className: 'dt-body-center dt-head-center'
                         }
                     ],
                     autoWidth: false,
                     paging: true,
                     scrollCollapse: true,
+                    scrollX: true,
                     scrollY: '50vh',
                     order: [[0, "desc"]],
 

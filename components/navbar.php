@@ -12,10 +12,10 @@
                 <a class="nav-link fw-bold <?php echo (basename($_SERVER['PHP_SELF']) == 'services.php') ? 'active' : ''; ?>" href="services.php">Services</a>
             </div>
             <div class="navbar-nav">
-                <a class="nav-link fw-bold <?php echo (basename($_SERVER['PHP_SELF']) == 'about-us.php') ? 'active' : ''; ?>" href="about-us.php">About Us</a>
+                <a class="nav-link fw-bold <?php echo (basename($_SERVER['PHP_SELF']) == 'aboutus.php') ? 'active' : ''; ?>" href="aboutus.php">About Us</a>
             </div>
             <div class="navbar-nav">                        
-                <a class="nav-link fw-bold <?php echo (basename($_SERVER['PHP_SELF']) == 'contact-us.php') ? 'active' : ''; ?>" href="contact-us.php">Contact Us</a>
+                <a class="nav-link fw-bold <?php echo (basename($_SERVER['PHP_SELF']) == 'contactus.php') ? 'active' : ''; ?>" href="contactus.php">Contact Us</a>
             </div>
         </div>
     </div>

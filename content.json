@@ -1,0 +1,132 @@
+{
+    "services": [
+        {
+            "title": "Treatment",
+            "description": "Comprehensive dental treatments tailored to meet your specific needs.",
+            "image": "treatment.png"
+        },
+        {
+            "title": "Oral Hygiene",
+            "description": "Professional cleaning and advice for maintaining optimal oral health.",
+            "image": "oral-hygiene.png"
+        },
+        {
+            "title": "Denture",
+            "description": "Custom-made dentures for a natural look and comfortable fit.",
+            "image": "dentures.png"
+        },
+        {
+            "title": "Cosmetic",
+            "description": "Enhance your smile with our range of cosmetic dental procedures.",
+            "image": "cosmetic-dentistry.png"
+        },
+        {
+            "title": "Periodontology",
+            "description": "Specialized treatment for gum diseases and conditions.",
+            "image": "periodontology.png"
+        },
+        {
+            "title": "Surgery",
+            "description": "Expert dental surgical procedures performed with precision and care.",
+            "image": "dental-surgery.png"
+        },
+        {
+            "title": "Orthodontics",
+            "description": "Correct misaligned teeth for a beautiful and functional smile.",
+            "image": "orthodontics.png"
+        },
+        {
+            "title": "Implant",
+            "description": "Permanent tooth replacement solution that looks and feels natural. weh",
+            "image": "implants.png"
+        }
+    ],
+    "about": {
+        "hero": {
+            "title": "About White Fields Dental Clinic pls",
+            "subtitle": "Where Dental Care Meets Comfort and Compassion"
+        },
+        "mission": "At White Fields Dental Clinic, our mission is to provide exceptional dental care in a comfortable, welcoming environment. We are committed to improving oral health through personalized treatment plans, preventive education, and compassionate service that puts patients' needs first. We strive to make quality dental care accessible to all while maintaining the highest standards of professionalism and integrity.",
+        "vision": "We envision being the leading dental care provider known for excellence, innovation, and patient satisfaction. We aim to transform lives through healthy smiles, continuously adopting advanced technologies and evidence-based practices. Our goal is to create a community where optimal oral health is valued and accessible, fostering long-term relationships with patients built on trust, respect, and outstanding dental outcomes.",
+        "values": [
+            {
+                "icon": "bi-heart-fill",
+                "title": "Compassion",
+                "description": "We treat each patient with empathy and understanding."
+            },
+            {
+                "icon": "bi-star-fill",
+                "title": "Excellence",
+                "description": "We strive for the highest standards in all aspects of our practice."
+            },
+            {
+                "icon": "bi-hand-thumbs-up-fill",
+                "title": "Integrity",
+                "description": "We practice with honesty and transparency in all our interactions."
+            },
+            {
+                "icon": "bi-book-fill",
+                "title": "Education",
+                "description": "We believe in empowering patients through knowledge."
+            }
+        ],
+        "team": [
+            {
+                "name": "Dr. Lorem Ipsum",
+                "role": "Lead Dentist",
+                "image": "placeholder1.jpg",
+                "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+            },
+            {
+                "name": "Dr. Morillyow",
+                "role": "Orthodontist",
+                "image": "1bg.png",
+                "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+            },
+            {
+                "name": "Lisa Martinez",
+                "role": "Dental Hygienist",
+                "image": "placeholder3.jpg",
+                "bio": "With her gentle touch and thorough approach, Lisa ensures our patients maintain optimal oral health through preventive care."
+            }
+        ],
+        "gallery": [
+            {
+                "image": "resources\/images\/recept.jpg",
+                "alt": "Reception Area"
+            },
+            {
+                "image": "resources\/images\/ope.jpg",
+                "alt": "Treatment Room"
+            },
+            {
+                "image": "resources\/images\/operating.jpg",
+                "alt": "Sterilization Area Yeah"
+            },
+            {
+                "image": "resources\/images\/waiting.jpg",
+                "alt": "Waiting Area"
+            }
+        ],
+        "cta": {
+            "text": "Ready to Experience Our Care?",
+            "subtext": "Schedule your first appointment today and take the first step toward your perfect smile.",
+            "button": {
+                "label": "Book An Appointment",
+                "link": "contactus.php"
+            }
+        }
+    },
+    "contact": {
+        "header": "Contact Us",
+        "fields": {
+            "name": "Name",
+            "email": "Email",
+            "subject": "Subject",
+            "message": "Message"
+        },
+        "button": "Submit Message",
+        "success": "Message Sent To E-Mail!",
+        "error": "Message Did Not Sent"
+    }
+}

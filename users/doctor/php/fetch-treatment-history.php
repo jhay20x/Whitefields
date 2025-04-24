@@ -30,7 +30,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     //$dentist_id = fetchDentistID() ?? "";
     $proceduresList = fetchProcedures($conn, $pid) ?? [];
 
-    $stmt = $conn->prepare("SELECT * FROM treatment_history
+    $stmt = $conn->prepare("SELECT th.appointment_requests_id, th.tooth_number, th.dentist_note, th.procedures_id, th.timestamp,
+	CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
+	CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS DentistName, th.procedure_price
+	FROM treatment_history th
+    LEFT OUTER JOIN dentist_info di ON di.id = th.dentist_id
     WHERE patient_id = ?
     ORDER BY appointment_requests_id DESC;");
     $stmt->bind_param('i', $pid);
@@ -59,8 +63,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $data .= '
                 <tr>
                     <td>' . $row['appointment_requests_id'] . '</td>
+                    <td>' . $row['DentistName'] . '</td>
                     <td>' . $row['tooth_number'] . '</td>
                     <td>' . $row['dentist_note'] . '</td>
+                    <td>' . $row['procedure_price'] . '</td>
                     <td>' . $procedureString . '</td>
                     <td>' . $timestamp . '</td>
                 </tr>

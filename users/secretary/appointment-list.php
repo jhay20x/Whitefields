@@ -474,9 +474,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                                 <table id="treatmentTable" class="table-group-divider table table-hover table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th>Appointment ID</th>
+                                                            <th>ID</th>
+                                                            <th>Dentist Name</th>
                                                             <th>Tooth No.</th>
                                                             <th>Dentist Note</th>
+                                                            <th>Procedure Price</th>
                                                             <th>Procedure</th>
                                                             <th>Timestamp</th>
                                                         </tr>
@@ -753,7 +755,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     },
                     columnDefs: [
                         {
-                            targets: [0,1,2,3,4],
+                            targets: [0,1,2,3,4,5,6],
                             className: 'dt-body-center dt-head-center align-middle'
                         }
                     ],
