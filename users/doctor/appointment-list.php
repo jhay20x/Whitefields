@@ -231,7 +231,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form-floating mb-3">
-                                            <textarea maxlength="255" style="height: 125px;" name="dentistNote" placeholder="Code" id="dentistNote" id="dentistNote" class="form-control onlyLettersNumbers"></textarea>
+                                            <textarea maxlength="255" style="height: 125px;" name="dentistNote" placeholder="Code" id="dentistNote" id="dentistNote" class="form-control"></textarea>
                                             <label for="dentistNote">Notes</label>
                                         </div>
                                     </div>
@@ -822,7 +822,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 return;
             } 
             
-            if (isNaN(priceSet) || priceSet === 0.00) {
+            if (isNaN(priceSet) || (priceSet === 0.00 && price_Min !== 0.00)) {
                 $input.addClass("is-invalid").removeClass("is-valid");
                 tooltipTarget.attr("title", "Price can't be zero.").tooltip('dispose').tooltip('show');
                 return;

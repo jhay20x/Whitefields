@@ -27,13 +27,13 @@ function fetchProcedures($conn, $pid) {
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
     $pid = $_POST['pid'];
-    $dentist_id = fetchDentistID() ?? "";
+    //$dentist_id = fetchDentistID() ?? "";
     $proceduresList = fetchProcedures($conn, $pid) ?? [];
 
     $stmt = $conn->prepare("SELECT * FROM treatment_history
-    WHERE patient_id = ? AND dentist_id = ?
+    WHERE patient_id = ?
     ORDER BY appointment_requests_id DESC;");
-    $stmt->bind_param('ii', $pid, $dentist_id);
+    $stmt->bind_param('i', $pid);
     $stmt->execute();
     $result = $stmt->get_result();
 	$stmt->close();

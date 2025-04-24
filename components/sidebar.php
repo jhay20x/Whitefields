@@ -54,7 +54,7 @@ if (is_int($id)) {
 </div>
     
 <div id="sidebar">
-  <div class="d-flex flex-column flex-shrink-0 p-3" style="width: 350px; height: 100vh; background-color: rgba(166,143,98,255);">
+  <div class="d-flex flex-column flex-shrink-0 p-3 overflow-y-auto" style="width: 350px; height: 100vh; background-color: rgba(166,143,98,255);">
     <a href="../../home.php" rel="nofollow" target="_blank" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
         <img src="../../resources/images/logo-icon-trans.webp" alt="Logo" width="50" height="50">
         <span class="fs-4">Whitefields Dental Clinic</span>
@@ -216,7 +216,7 @@ if (is_int($id)) {
     
     <hr>
   
-      <div class="dropdown">  
+      <div class="dropdown mb-5 mb-sm-0">  
         <ul class="list-unstyled ps-0 mb-auto">
           <li class="mb-1 ms-3">
             <a href="profile.php" class="btn btn-dash d-inline-flex border rounded border-0 text-white position-relative">

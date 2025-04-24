@@ -268,6 +268,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <h1 class="card-title">₱ <span id="IncomeToday">0.00</span></h1>
                         </div>
                     </div>
+                    
+                    <div class="card h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-3 mx-xl-2 my-xl-2 col-xxl-3 mx-xxl-2 my-xxl-2">
+                        <div class="card-body">
+                            <div class="d-flex column card-icon align-items-center">
+                                <h1><i class="bi bi-person"></i></h1>
+                                <h5 class="card-text ms-3">Patient Today</h5>
+                            </div>
+                            <h1 class="card-title" id="PatientToday">0</h1>
+                        </div>
+                    </div>
 
                     <div class="card rounded shadow h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-3 mx-xl-2 my-xl-2 col-xxl-3 mx-xxl-2 my-xxl-2">
                         <div class="card-body">                                
@@ -448,9 +458,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 dataType: 'json'
             }).done(function (data) {
                 $("#TotalDentist").text(data.TotalDentist);
+                $("#PatientToday").text(data.PatientToday);
                 $("#TotalPatient").text(data.TotalPatient);
                 $("#AppointAll").text(data.AppointAll);
-                $("#AppointToday").text(data.AppointToday);                
+                $("#AppointToday").text(data.AppointToday);                 
                 $("#IncomeToday").text(data.IncomeToday);                
                 loadCalendar();
                 // console.log(data);

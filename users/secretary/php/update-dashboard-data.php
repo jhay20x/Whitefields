@@ -16,7 +16,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $stmt = $conn->prepare("SELECT ar.id, 
         COUNT(CASE WHEN DATE(ar.start_datetime) = CURDATE() AND ar.appoint_status_id = 1
             THEN 1 
-            END) AppointToday, 
+            END) AppointToday,
         COUNT(CASE WHEN ar.appoint_status_id = 4
             THEN 1
                END) AppointAll,
@@ -25,6 +25,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         ON di.accounts_id = ac.id
         WHERE ac.status != 0) TotalDentist,            
         (SELECT COUNT(pi.id) FROM patient_info pi) TotalPatient,
+        (SELECT COUNT(DISTINCT ar.patient_id) FROM appointment_requests ar WHERE ar.appoint_status_id = 7 OR ar.appoint_status_id = 5) PatientToday,
         (SELECT SUM(tr.amount_paid) FROM transactions tr WHERE DATE(tr.timestamp) = ?) IncomeToday
         FROM appointment_requests ar;");
 
@@ -37,6 +38,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $row = $result->fetch_assoc();
 
         $data['AppointToday'] = $row['AppointToday'];
+        $data['PatientToday'] = $row['PatientToday'];
         $data['AppointAll'] = $row['AppointAll'];
         $data['TotalDentist'] = $row['TotalDentist'];
         $data['TotalPatient'] = $row['TotalPatient'];
