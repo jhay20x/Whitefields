@@ -11,6 +11,8 @@ $id;
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {    
     $id = fetchSecretaryID();
 
+    $curdate = date("Y-m-d");
+
     $stmt = $conn->prepare("SELECT ar.id, 
         COUNT(CASE WHEN DATE(ar.start_datetime) = CURDATE() AND ar.appoint_status_id = 1
             THEN 1 
@@ -23,9 +25,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         ON di.accounts_id = ac.id
         WHERE ac.status != 0) TotalDentist,            
         (SELECT COUNT(pi.id) FROM patient_info pi) TotalPatient,
-        (SELECT SUM(tr.amount_paid) FROM transactions tr WHERE DATE(tr.timestamp) = CURDATE()) IncomeToday
+        (SELECT SUM(tr.amount_paid) FROM transactions tr WHERE DATE(tr.timestamp) = ?) IncomeToday
         FROM appointment_requests ar;");
 
+    $stmt->bind_param("s", $curdate);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
@@ -37,7 +40,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $data['AppointAll'] = $row['AppointAll'];
         $data['TotalDentist'] = $row['TotalDentist'];
         $data['TotalPatient'] = $row['TotalPatient'];
-        $data['IncomeToday'] = $row['IncomeToday'];
+        $data['IncomeToday'] = $row['IncomeToday'] ?? "0.00";
     }
 }
 echo json_encode($data);

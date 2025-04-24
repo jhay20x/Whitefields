@@ -265,7 +265,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <h1><i class="bi bi-cash"></i></h1>
                                 <h5 class="card-text ms-3">Income Today</h5>
                             </div>
-                            <h1 class="card-title">₱ <span id="IncomeToday">0</span></h1>
+                            <h1 class="card-title">₱ <span id="IncomeToday">0.00</span></h1>
                         </div>
                     </div>
 
