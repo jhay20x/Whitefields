@@ -11,6 +11,11 @@ $pid;
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
     $pid = $_POST['pid'];
 
+    $res = $conn->query("SELECT CONNECTION_ID()");
+    $row = $res->fetch_row();
+    header("X-DB-Conn-ID-Update: " . $row[0]);
+    $res->close();
+
     $stmt = $conn->prepare("SELECT dl.*, dl.visit_date  FROM `dental_history_logs` dl
         LEFT OUTER JOIN dental_history dh
         ON dh.id = dl.dental_history_id

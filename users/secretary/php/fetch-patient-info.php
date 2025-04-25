@@ -20,7 +20,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $aptId = $_POST['aptId'];
 
     $_SESSION["pid"] = $pid;
-    $_SESSION["aptId"] = $aptId;
+    $_SESSION["aptId"] = $aptId;    
+
+    $res = $conn->query("SELECT CONNECTION_ID()");
+    $row = $res->fetch_row();
+    header("X-DB-Conn-ID-Update: " . $row[0]);
+    $res->close();
 
     $stmt = $conn->prepare("SELECT CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
     CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name,

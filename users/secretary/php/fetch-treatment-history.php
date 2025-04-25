@@ -30,6 +30,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $pid = $_POST['pid'];
     $proceduresList = fetchProcedures($conn, $pid) ?? [];
 
+    $res = $conn->query("SELECT CONNECTION_ID()");
+    $row = $res->fetch_row();
+    header("X-DB-Conn-ID-Update: " . $row[0]);
+    $res->close();
+
     $stmt = $conn->prepare("SELECT th.appointment_requests_id, th.tooth_number, th.dentist_note, th.procedures_id, th.timestamp,
 	CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
 	CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS DentistName, th.procedure_price
