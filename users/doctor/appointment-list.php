@@ -1204,7 +1204,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             });
         }
         
-        setInterval(refreshList, 30000);
+        setInterval(refreshList, 60000);
 
         function refreshDentalList(pid) {
             var formData = {

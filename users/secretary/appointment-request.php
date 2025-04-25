@@ -856,7 +856,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $('#patientViewBtn').removeClass("collapsed");
         }
 
-        setInterval(refreshList, 30000);
+        setInterval(refreshList, 60000);
 
         function fetchPatientDetails(pid, id) {
             var formData = {
