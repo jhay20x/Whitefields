@@ -37,7 +37,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
     $res = $conn->query("SELECT CONNECTION_ID()");
     $row = $res->fetch_row();
-    header("X-DB-Conn-ID: " . $row[0]);
+    header("X-DB-Conn-ID-Update: " . $row[0]);
     $res->close();
 
     if ($result->num_rows > 0) {
