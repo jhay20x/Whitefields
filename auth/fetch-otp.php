@@ -17,5 +17,5 @@ if (!empty($error)) {
     $data['otpCode'] = $otpCode;
 }
 
-$conn->close();
+
 echo json_encode($data);

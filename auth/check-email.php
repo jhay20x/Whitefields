@@ -52,5 +52,5 @@ if (!empty($error)) {
     $data['username'] = $user_username;
 }
 
-$conn->close();
+
 echo json_encode($data);

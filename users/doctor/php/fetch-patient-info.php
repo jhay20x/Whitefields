@@ -138,5 +138,5 @@ function fetchMedical($conn, $pid, $data) {
     }
 }
 
-$conn->close();
+
 echo json_encode($data);

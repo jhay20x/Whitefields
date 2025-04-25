@@ -46,5 +46,5 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $data['IncomeToday'] = $row['IncomeToday'] ?? "0.00";
     }
 }
-$conn->close();
+
 echo json_encode($data);

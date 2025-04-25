@@ -44,5 +44,5 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $data['TotalPatient'] =  0;
     }
 }
-$conn->close();
+
 echo json_encode($data);

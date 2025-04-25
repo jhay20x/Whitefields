@@ -59,5 +59,5 @@ if (!empty($error)) {
     $data['message'] = 'Email successfully verified.';
 }
 
-$conn->close();
+
 echo json_encode($data);

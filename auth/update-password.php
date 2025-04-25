@@ -36,5 +36,5 @@ if (!empty($error)) {
     $data['message'] = 'Password has been successfully updated.';
 }
 
-$conn->close();
+
 echo json_encode($data);

@@ -69,6 +69,6 @@ if (isset($_POST['signUpEmail']) && isset($_POST['password']) && isset($_POST['s
 		$data['message'] = 'An OTP Code is being sent to your email.';
 	}
 
-	$conn->close();
+	
 	echo json_encode($data);
 }

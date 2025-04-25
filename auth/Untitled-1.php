@@ -117,6 +117,6 @@ if (isset($_POST['loginUserEmail']) && isset($_POST['password'])) {
 		$data['emailVerification'] = $emailVerification;
 	}
 	
-	$conn->close();
+	
 	echo json_encode($data);
 }
