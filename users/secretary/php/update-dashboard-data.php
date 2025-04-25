@@ -35,6 +35,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $result = $stmt->get_result();
     $stmt->close();
 
+    $res = $conn->query("SELECT CONNECTION_ID()");
+    $row = $res->fetch_row();
+    header("X-DB-Conn-ID: " . $row[0]);
+    $stmt->close();
+
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
 

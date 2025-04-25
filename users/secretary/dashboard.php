@@ -449,7 +449,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             calendar.render();
         }
 
-        setInterval(updateDashboard, 15000);
+        setInterval(updateDashboard, 30000);
         updateDashboard();
         loadCalendar();
 
