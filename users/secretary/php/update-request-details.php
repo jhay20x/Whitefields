@@ -4,6 +4,7 @@ session_start();
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+global $conn;
 require_once '../../../database/config.php';
 require '../../../vendor/autoload.php';
 

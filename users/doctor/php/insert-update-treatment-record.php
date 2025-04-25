@@ -1,8 +1,9 @@
 <?php
 session_start();
 
-include '../../../database/config.php';
-include 'fetch-id.php';
+global $conn;
+require_once '../../../database/config.php';
+require_once 'fetch-id.php';
 
 $data = [];
 

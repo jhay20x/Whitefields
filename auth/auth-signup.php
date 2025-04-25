@@ -2,6 +2,7 @@
 // session_id("session-customer");
 session_start();
 
+global $conn;
 require_once '../database/config.php';
 
 $errors = [];

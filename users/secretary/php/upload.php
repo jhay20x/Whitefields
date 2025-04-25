@@ -2,7 +2,8 @@
 
 session_start();
 
-include '../../../database/config.php';
+global $conn;
+require_once '../../../database/config.php';
 
 $error;
 $data = [];

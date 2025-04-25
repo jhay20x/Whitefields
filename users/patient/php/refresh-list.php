@@ -1,8 +1,9 @@
 <?php
 session_start();
 
+global $conn;
 require_once '../../../database/config.php';
-include 'fetch-id.php';
+require_once 'fetch-id.php';
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
     $id = fetchPatientID();

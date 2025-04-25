@@ -11,7 +11,8 @@
         $database = $_ENV['DB_NAME'];
 
         // Establish a new MySQLi database connection
-        $conn = new mysqli($host, $username, $password, $database);
+        // $conn = new mysqli($host, $username, $password, $database);
+        $conn = new mysqli('p:' . $host, $username, $password, $database);
 
         // Check connection
         if ($conn->connect_error) {

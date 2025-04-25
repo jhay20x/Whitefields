@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+global $conn;
 require_once '../../../database/config.php';
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {

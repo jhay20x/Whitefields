@@ -1,8 +1,9 @@
 <?php
 session_start();
 
-include '../../database/config.php';
-include 'php/fetch-id.php';
+global $conn;
+require_once '../../database/config.php';
+require_once 'php/fetch-id.php';
 
 // echo $_SESSION["email_address"];
 // echo $_SESSION["passwordResetOTP"];

@@ -1,6 +1,7 @@
 <?php 
 session_start();
 
+global $conn;
 require_once '../database/config.php';
 
 $error;

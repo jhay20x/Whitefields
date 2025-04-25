@@ -8,7 +8,8 @@ session_start();
 // require '../resources/PHPMailer/src/Exception.php';
 // require '../resources/PHPMailer/src/PHPMailer.php';
 // require '../resources/PHPMailer/src/SMTP.php';
-include '../database/config.php';
+global $conn;
+require_once '../database/config.php';
 
 sleep(1);
 
