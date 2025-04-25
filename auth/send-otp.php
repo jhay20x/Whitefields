@@ -71,4 +71,5 @@ if (!empty($error)) {
     $data['otpSent'] = true;
 }
 
+$conn->close();
 echo json_encode($data);

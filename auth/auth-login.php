@@ -155,7 +155,8 @@ if (isset($_POST['loginUserEmail']) && isset($_POST['password'])) {
 		$data['username'] = $user_username;
 		$data['usertype'] = $user_type;
 	}
-	
+
+	$conn->close();
 	echo json_encode($data);
 }
 

@@ -34,4 +34,5 @@ if (!empty($error)) {
     $data['message'] = $message;
 }
 
+$conn->close();
 echo json_encode($data);

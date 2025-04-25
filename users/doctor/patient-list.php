@@ -693,7 +693,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 </html>
 
 <?php 
-
+    $conn->close();
     } else {
         header("Location: ../../login.php");
     }

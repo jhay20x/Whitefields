@@ -62,4 +62,5 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $data['Concern'] = $row['Concern'];
     }
 }
+$conn->close();
 echo json_encode($data);

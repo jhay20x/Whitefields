@@ -70,5 +70,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $data['dentist_id'] = $dentist_id;
     }
     
+    $conn->close();
     echo json_encode($data);
 }
