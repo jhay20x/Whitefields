@@ -165,7 +165,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="col col-sm-9">
                     <div class="row bg-white rounded shadow mt-3 p-3 d-flex justify-content-center row">
                         <div id="errorMessage" class="" role="alert">
-                            <?php echo $hasId ? '' : '<div class="alert alert-danger">Please complete your profile first.</div>' ?>
+                            <?php echo $hasId ? '' : '<div class="alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
                         </div>
 
                         <div class="row">
@@ -233,12 +233,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 dataType: 'json'                
 			}).done(function (data) {
                 if (!data.success) {
-                    $("#errorMessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
+                    $("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 } else {                    
                     $("#date, #concern").val("");
                     $("#ampmText").text("--");
                     $('#dentist, #timeHour, #timeMinute').prop('selectedIndex', 0);
-                    $("#errorMessage").append('<div class="alert alert-success">' + data.message +  '</div>');
+                    $("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 }
 				// console.log(formData);
 				//console.log(data);

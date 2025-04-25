@@ -87,9 +87,9 @@ if (isset($_SESSION['email_address'])) {
 				hideLoader();
 				if (!data.success) {
 					$("#otpCode").focus();
-					$("#errorMessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
+					$("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 				} else {
-					$("#errorMessage").append('<div class="alert alert-success">' + data.message +  '</div>');
+					$("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 					disableInputs();
 					setTimeout(showLoader, 2000);
 					setTimeout(redirectDashboard, 2000);

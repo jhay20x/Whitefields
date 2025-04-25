@@ -387,7 +387,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                             <div class="d-flex justify-content-start row">
                                 <div id="errorMessage" class="mt-3 col-12" role="alert">
-                                    <?php echo $hasId ? '' : '<div class="alert alert-danger">Please complete your profile first.</div>' ?>
+                                    <?php echo $hasId ? '' : '<div class="alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
                                 </div>
 
                                 <div class="row">
@@ -444,7 +444,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 dataType: 'json',
                 success: function(data) {
                     if (!data.success) {
-                        $("#uploadmessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
+                        $("#uploadmessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 				        hideLoader();
                     } else {
                         localStorage.setItem("uploadmessage", data.message);
@@ -521,13 +521,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         if (localStorage.getItem("uploadmessage")) {
             let message = localStorage.getItem("uploadmessage");
 
-            $("#uploadmessage").append('<div class="alert alert-success">' + message +  '</div>');
+            $("#uploadmessage").append('<div class="alert alert-success  alert-dismissible fade show">' + message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 
             localStorage.removeItem("uploadmessage")
         } else if (localStorage.getItem("errorMessage")){
             let message = localStorage.getItem("errorMessage");
 
-            $("#errorMessage").append('<div class="alert alert-success">' + message +  '</div>');
+            $("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 
             localStorage.removeItem("errorMessage")
         }

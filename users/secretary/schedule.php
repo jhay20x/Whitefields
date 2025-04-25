@@ -239,7 +239,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 }).done(function (data) {
                     if (!data.success) {
                         hideLoader();
-                        $("#addDentistMessage").append('<div class="mt-3 alert alert-danger">' + data.error +  '</div>');
+                        $("#addDentistMessage").append('<div class="mt-3 alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     } else {
                         localStorage.setItem("errorMessage", data.message);
                         location.reload();
@@ -253,7 +253,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             if (localStorage.getItem("errorMessage")){
                 let message = localStorage.getItem("errorMessage");
 
-                $("#errorMessage").append('<div class="mt-3 alert alert-success">' + message +  '</div>');
+                $("#errorMessage").append('<div class="mt-3 alert alert-success  alert-dismissible fade show">' + message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 
                 localStorage.removeItem("errorMessage")
             };

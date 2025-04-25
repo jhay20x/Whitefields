@@ -168,9 +168,9 @@ session_start();
 					hideLoader();
 					if (!data.success) {
 						$("#forgotEmail").focus();
-						$("#errorMessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
+						$("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 					} else {
-						$("#errorMessage").append('<div class="alert alert-success">' + data.message +  '</div>');
+						$("#errorMessage").append('<div class="alert alert-success alert-dismissible fade show alert-dismissible fade show">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 						disableInputs();
 						setTimeout(showLoader, 1000);
 						setTimeout(sendOTP, 2000);
@@ -203,9 +203,9 @@ session_start();
 					hideLoader();
 					if (!data.success) {
 						$("#otpCode").focus;
-						$("#errorMessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
+						$("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 					} else {
-						$("#errorMessage").append('<div class="alert alert-success">' + data.message +  '</div>');
+						$("#errorMessage").append('<div class="alert alert-success alert-dismissible fade show">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 						$.post("auth/session-end.php", function(data) {});
 						disableInputs();
 						setTimeout(showLoader, 2000);
@@ -254,21 +254,21 @@ session_start();
 
 		if (otpFromUser == "") {
 			hideLoader();
-			$("#errorMessage").append('<div class="alert alert-danger">OTP is required. Please try again.</div>');
+			$("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show">OTP is required. Please try again.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 			$("#otpCode").focus();
 			emailVerified = false;
 		}
 		else if (otpFromUser == otpCode) {
 			hideLoader();
 			disableInputs();
-			$("#errorMessage").append('<div class="alert alert-success">OTP successfully verified.</div>');
+			$("#errorMessage").append('<div class="alert alert-success alert-dismissible fade show">OTP successfully verified.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 			emailVerified = true;
 			otpSent = false;
 			setTimeout(showLoader, 1000);
 			setTimeout(showPasswordBox, 2000);
 		} else {
 			hideLoader();
-			$("#errorMessage").append('<div class="alert alert-danger">OTP code mismatch. Please try again.</div>');
+			$("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show">OTP code mismatch. Please try again.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 			$("#otpCode").focus();
 			emailVerified = false;
 		}
@@ -310,7 +310,7 @@ session_start();
 			hideLoader();
 			if (!data.success) {
 				$("#forgotEmail").focus();
-				$("#errorMessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
+				$("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 			} else {				
 				sessionStorage.setItem("timer", 60);
 				showOtpBox();

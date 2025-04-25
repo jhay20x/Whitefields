@@ -280,7 +280,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="col col-sm-9">
                     <div class="row rounded shadow bg-white mb-3 py-3 py-xl-3 row d-flex justify-content-center">
                         <div id="errorMessage" class="col-10" role="alert">
-                            <?php echo $hasId ? '' : '<div class="alert alert-danger">Please complete your profile first.</div>' ?>
+                            <?php echo $hasId ? '' : '<div class="alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
                         </div>
         
                         <div class="row justify-content-start">

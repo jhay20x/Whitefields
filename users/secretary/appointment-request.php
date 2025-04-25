@@ -770,13 +770,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                 if (reason == "" || reason == null) {
                     $("#errorMessage").empty();
-                    $("#errorMessage").append('<div class="alert alert-danger mt-3">Please select a reason first.</div>');
+                    $("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show mt-3">Please select a reason first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     return;
                 }
 
                 if (reason == 6 && reasonOther == "") {
                     $("#errorMessage").empty();
-                    $("#errorMessage").append('<div class="alert alert-danger mt-3">Please provide a valid reason for rejecting the appointment.</div>');
+                    $("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show mt-3">Please provide a valid reason for rejecting the appointment.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     return;
                 }
 
@@ -809,7 +809,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 dataType: 'json'
             }).done(function (data) {
 				hideLoader();
-                $("#errorMessage").append('<div class="alert alert-success mt-3">' + data.message +  '</div>');
+                $("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show mt-3">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 
                 if (setStatus == 1) {
                     $("#aptdtlsstatus").removeClass("text-danger text-warning");

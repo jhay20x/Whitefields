@@ -695,7 +695,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 refreshList();
                 $(".patientPrice").removeClass("is-valid is-invalid");
                 $(this).find("[data-bs-toggle='tooltip']").attr("title", "").tooltip('dispose');
-                $("#errorMessage").append('<div class="alert alert-success mt-3">' + data.message +  '</div>');
+                $("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show mt-3">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 
                 $("#myForm").find("input, select, textarea").prop("disabled", true);
                 $("#aptTreatPatientUpdateDiv").show();
@@ -719,7 +719,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $("#errorMessage").empty();
 
             if (procedureIndex == 20) {
-                $("#errorMessage").append('<div class="alert alert-danger">Max procedures reached.</div>');
+                $("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show">Max procedures reached.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 return;
             }
 
@@ -861,7 +861,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $("#errorMessage").empty();
                 
             if ($('#proceduresList .row').length <= 1) {
-                $("#errorMessage").append('<div class="alert alert-danger">At least one procedure is required.</div>');
+                $("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show">At least one procedure is required.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 return;
             }
 

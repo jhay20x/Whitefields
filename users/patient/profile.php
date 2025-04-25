@@ -515,7 +515,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div id="dentalErrorMessage" class="col-12" role="alert">
-                            <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger">Please complete your profile first.</div>' ?>
+                            <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
                         </div>
 
                         <form autocomplete="off" action="php/insert-dental-history.php" method="POST" class="text-center col" id="dentalHistory">
@@ -555,7 +555,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-body">
                     <div class="container-fluid">                        
                         <div id="medicalErrorMessage" class="col-12" role="alert">
-                            <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger">Please complete your profile first.</div>' ?>
+                            <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
                         </div>
 
                         <form autocomplete="off" action="php/insert-medical-history.php" method="POST" class="row" id="medicalHistory">
@@ -1388,7 +1388,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             
                             <div class="d-flex justify-content-start row">
                                 <div id="errorMessage" class="col-12" role="alert">
-                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger">Please complete your profile first.</div>' ?>
+                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
                                 </div>
 
                                 <div class="row">
@@ -1432,7 +1432,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                             <div class="d-flex justify-content-start row">
                                 <div id="dentalMessage" class="col-12" role="alert">
-                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger">Please complete your profile first.</div>' ?>
+                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
                                 </div>
                                 <div class="col-xl">
                                     <h5>Previous Dentist: <span class="fw-normal"><?php echo $dentalData['prevDentist']  ?? "Not Set";?></span></h5>
@@ -1462,7 +1462,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                             <div class="d-flex justify-content-start row">
                                 <div id="medicalMessage" class="col-12" role="alert">
-                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger">Please complete your profile first.</div>' ?>
+                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
                                 </div>
                                 <div class="col">
                                     <div class="row">
@@ -1643,14 +1643,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                 if (data.success) {
                     $('#emailAccountFormVerify').attr('id', 'emailAccountFormSubmit');
-                    $("#emailAccountMessage").append('<div class="alert alert-success">' + data.message + '</div>');
+                    $("#emailAccountMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + data.message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     $("#emailAccount").prop("disabled", true);
                     $("#otpCodeInput").removeClass("d-none");
                     $("#emailAccountVerifyBtn").prop("disabled", true).addClass("d-none");
                     $("#emailAccountSaveBtn").prop("disabled", false).removeClass("d-none");
                     $("#otpCodeInput input").prop("disabled", false).focus();
                 } else {
-                    $("#emailAccountMessage").append('<div class="alert alert-danger">' + data.error + '</div>');
+                    $("#emailAccountMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 }
                 // console.log(data);
             }).fail(function(data) {
@@ -1672,7 +1672,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 hideLoader();
 
                 if (data.success) {
-                    $("#emailAccountMessage").append('<div class="alert alert-success">' + data.message + '</div>');
+                    $("#emailAccountMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + data.message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     $("#emailAccountFormSubmit").find("input, button").prop("disabled", true);
                     setTimeout(() => {
                         showLoader;
@@ -1681,7 +1681,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         }, 1000);
                     }, 1000);
                 } else {
-                    $("#emailAccountMessage").append('<div class="alert alert-danger">' + data.error + '</div>');
+                    $("#emailAccountMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 }
                 // console.log(data);
             }).fail(function(data) {
@@ -1735,7 +1735,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 dataType: 'json',
                 success: function(data) {
                     if (!data.success) {
-                        $("#uploadmessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
+                        $("#uploadmessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 				        hideLoader();
                     } else {
                         localStorage.setItem("uploadmessage", data.message);
@@ -1909,7 +1909,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 dataType: "json"
             }).done(function (data) {
                 if (!data.success) {
-                    $("#medicalErrorMessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
+                    $("#medicalErrorMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     hideLoader();
                 } else {
                     localStorage.setItem("medicalMessage", data.message);
@@ -1936,7 +1936,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 dataType: "json"
 			}).done(function (data) {
                 if (!data.success) {
-                    $("#dentalErrorMessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
+                    $("#dentalErrorMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     hideLoader();
                 } else {
                     localStorage.setItem("dentalMessage", data.message);
@@ -1958,22 +1958,22 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         
         if (localStorage.getItem("uploadmessage")) {
             let message = localStorage.getItem("uploadmessage");
-            $("#uploadmessage").append('<div class="alert alert-success">' + message +  '</div>');
+            $("#uploadmessage").append('<div class="alert alert-success  alert-dismissible fade show">' + message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
             localStorage.removeItem("uploadmessage");
 
         } else if (localStorage.getItem("errorMessage")){
             let message = localStorage.getItem("errorMessage");
-            $("#errorMessage").append(`<div class="alert alert-success">${message}</div>`);
+            $("#errorMessage").append(`<div class="alert alert-success  alert-dismissible fade show">${message}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`);
             localStorage.removeItem("errorMessage");
 
         } else if (localStorage.getItem("dentalMessage")){
             let message = localStorage.getItem("dentalMessage");
-            $("#dentalMessage").append('<div class="alert alert-success">' + message +  '</div>');
+            $("#dentalMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
             localStorage.removeItem("dentalMessage");
             
         } else if (localStorage.getItem("medicalMessage")){
             let message = localStorage.getItem("medicalMessage");
-            $("#medicalMessage").append('<div class="alert alert-success">' + message +  '</div>');
+            $("#medicalMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
             localStorage.removeItem("medicalMessage");
         }
 

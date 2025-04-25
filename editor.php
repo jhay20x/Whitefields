@@ -157,7 +157,7 @@ function createImageInput(label, name, imagePath = '') {
 // Function to show error messages
 function showError(message) {
   const errorContainer = document.getElementById('errorContainer');
-  errorContainer.innerHTML = `<div class="alert alert-danger mb-3">${message}</div>`;
+  errorContainer.innerHTML = `<div class="alert alert-danger alert-dismissible fade show mb-3">${message}</div>`;
 }
 
 // Function to clear error messages

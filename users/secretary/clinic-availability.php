@@ -352,6 +352,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                                         <th class="col">ID</th>
                                                         <th class="col">Remarks</th>
                                                         <th class="col">Date</th>
+                                                        <th class="col">Action</th>
                                                     </tr>
                                                 </thead>
 
@@ -373,6 +374,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                                                 <td id="closedDateID">' . $row['id'] . '</td>
                                                                 <td id="closedDateRemarks">' . $row['Remarks'] . '</td>
                                                                 <td id="closedDate">' . $closedDate . '</td>
+                                                                <td class="closedDel">
+                                                                    <button type="button" value="' . $row['id'] . '" class="btn btn-sm btn-outline-danger deleteClosedDate"><i class="bi bi-x-lg"></i></button>
+                                                                </td>
                                                             </tr>
                                                         ';
                                                         }
@@ -442,7 +446,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     dataType: 'json'                
                 }).done(function (data) {
                     if (!data.success) {
-                        $("#closedDateMessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
+                        $("#closedDateMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     } else {
                         localStorage.setItem("closedDatediv", data.message);
                         location.reload();
@@ -482,7 +486,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     dataType: 'json'                
                 }).done(function (data) {
                     if (!data.success) {
-                        $("#errorMessageModal").append('<div class="alert alert-danger">' + data.error +  '</div>');
+                        $("#errorMessageModal").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     } else {
                         localStorage.setItem("errordiv", data.message);
                         location.reload();
@@ -508,24 +512,59 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 }
             });
             
+            $('body').on('click', '.deleteClosedDate', function(){
+                $("#errorMessageModal").empty();
+                let id = $(this).attr('value');
+                deleteClosedDate(id);
+            });   
+            
             $('body').on('click', '.availabilityBtn', function(){
                 $("#errorMessageModal").empty();
                 let id = $(this).attr('value');
                 loadDetails(id);
-            });   
+            }); 
         
             if (localStorage.getItem("errordiv")) {
                 let message = localStorage.getItem("errordiv");
 
-                $("#availabilityMessage").append('<div class="alert alert-success">' + message +  '</div>');
+                $("#availabilityMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 
                 localStorage.removeItem("errordiv");
             } else if (localStorage.getItem("closedDatediv")) {
                 let message = localStorage.getItem("closedDatediv");
 
-                $("#closedDateMessage").append('<div class="alert alert-success">' + message +  '</div>');
+                $("#closedDateMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 
                 localStorage.removeItem("closedDatediv");
+            } else if (localStorage.getItem("deleteClosedDate")) {
+                let message = localStorage.getItem("deleteClosedDate");
+
+                $("#closedDateMessage").append('<div class="alert alert-success  alert-dismissible fade show alert-dismissible fade show">' + message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+
+                localStorage.removeItem("deleteClosedDate");
+            }
+
+            function deleteClosedDate(id) {
+                var formData = {
+                    id: id
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "php/remove-closed-date.php",
+                    data: formData,
+                    dataType: 'json'
+                }).done(function(data) {
+                    if (!data.success) {
+                        $("#closedDateMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                    } else {
+                        localStorage.setItem("deleteClosedDate", data.message);
+                        location.reload();
+                    }
+                    console.log(data);
+                }).fail(function(data) {
+                    console.log(data);
+                });
             }
 
             function loadDetails(id) {
@@ -592,7 +631,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     },
                     columnDefs: [
                         {
-                            targets: [0,1,2],
+                            targets: [0,1,2,3],
                             className: 'dt-body-center dt-head-center align-middle'
                         }
                     ],

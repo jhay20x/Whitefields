@@ -464,13 +464,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     dataType: 'json'                
                 }).done(function (data) {
                     if (!data.success) {
-                        $("#errorMessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
+                        $("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     } else {
                         refreshList();
                         $("#date, #concern").val("");
                         $("#ampmText").text("--");
                         $('#dentist, #timeHour, #timeMinute').prop('selectedIndex', 0);
-                        $("#errorMessage").append('<div class="alert alert-success">' + data.message +  '</div>');
+                        $("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     }
                     // console.log(formData);
                     // console.log(data);
@@ -707,7 +707,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             if (localStorage.getItem("cancelMessage")){
                 let message = localStorage.getItem("cancelMessage");
 
-                $("#cancelMessage").append('<div class="alert alert-success">' + message +  '</div>');
+                $("#cancelMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 
                 localStorage.removeItem("cancelMessage")
             }

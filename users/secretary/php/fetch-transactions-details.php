@@ -12,7 +12,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $secId = fetchSecretaryID();
     $aptId = $_POST['aptId'];
     
-    $stmt = $conn->prepare("SELECT ar.id AS AppointmentID, pr.name AS ProcedureName, pt.name AS PaymentType, tr.payment_ref_no AS PaymentRef,
+    $stmt = $conn->prepare("SELECT ar.id AS AppointmentID, pr.name AS ProcedureName, pt.name AS PaymentType, tr.payment_ref_no AS PaymentRef, ar.appoint_status_id AS AppointStatus,
         CONCAT(si.fname , CASE WHEN si.mname = 'None' THEN ' ' ELSE CONCAT(' ' , si.mname , ' ') END , si.lname, 
         CASE WHEN si.suffix = 'None' THEN '' ELSE CONCAT(' ' , si.suffix) END ) AS SecretaryName, si.id AS SecID,
         CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
@@ -40,6 +40,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         "SecretaryName" => null,
         "PatientName" => null,
         "Timestamp" => null,
+        "AppointStatus" => null,
         "Procedures" => []
     ];
 
@@ -55,6 +56,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $data["PatientID"]   = $row["PatientID"];
                 $data["PatientName"]   = $row["PatientName"];
                 $data["Timestamp"]     = empty($row["Timestamp"]) ? $curdate : $row["Timestamp"];
+                $data["AppointStatus"]   = $row["AppointStatus"];
             }
 
             $data["Procedures"][] = [

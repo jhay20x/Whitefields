@@ -344,7 +344,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     dataType: 'json'                
                 }).done(function (data) {
                     if (!data.success) {
-                        $("#errorMessageModal").append('<div class="alert alert-danger">' + data.error +  '</div>');
+                        $("#errorMessageModal").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     } else {
                         localStorage.setItem("errordiv", data.message);
                         location.reload();
@@ -379,7 +379,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             if (localStorage.getItem("errordiv")) {
                 let message = localStorage.getItem("errordiv");
 
-                $("#errorMessage").append('<div class="alert alert-success">' + message +  '</div>');
+                $("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 
                 localStorage.removeItem("errordiv")
             }         

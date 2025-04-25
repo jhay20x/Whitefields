@@ -148,7 +148,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <div class="col-12 col-lg-6">
                                         <!-- <h6 class="h6">Date & Time: <span id="transDetailDateTime" class="fw-normal"></span></h6> -->
                                         
-                                        <div class="col-12 col-xl-8 mb-3">
+                                        <div id="paymentTypeDiv" class="col-12 col-xl-8 mb-3">
                                             <div class="input-group col">
                                                 <label class="input-group-text" for="paymentType">Payment Type</label>
                                                 <select required class="form-select" name="paymentType" id="paymentType">
@@ -229,7 +229,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </div>
                         <div class="modal-footer">
                             <button type="submit" id="transactionDetailsSaveBtn" class="btn btn-sm btn-outline-success">Save</button>
-                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelTransactionModal">Cancel</button>
+                            <button type="button" id="transactionDetailsCancelBtn" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelTransactionModal">Cancel</button>
+                            <button type="button" id="transactionDetailsBackBtn" class="btn btn-sm btn-outline-primary d-none" data-bs-toggle="modal" data-bs-target="#transactionViewModal">Back</button>
                         </div>
                     </form>
                 </div>
@@ -420,8 +421,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 loadTransactionHistoryDetails(transId);
             });
 
-            $('body').on('click', '#transactionCancelYesBtn', function(){
+            $('body').on('click', '#transactionCancelYesBtn, #transactionDetailsBackBtn', function(){
                 $("#paymentType, #paymentRefNo").val("");
+                $("#paymentRefDiv").addClass("d-none");
+                $("#paymentRefDiv input").prop("disabled", true);
                 resetAccordion();
             });            
 
@@ -491,8 +494,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 }).done(function (data) {
                     if (!data.success) {
                         hideLoader();
-                        $("#transactionMessage").append('<div class="mt-3 alert alert-danger">' + data.error +  '</div>');
-                        $("#").append('<div class="mt-3 alert alert-danger">' + data.error +  '</div>');
+                        $("#transactionMessage").append('<div class="mt-3 alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                        $("#").append('<div class="mt-3 alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     } else {
                         localStorage.setItem("errorMessage", data.message);
                         location.reload();
@@ -506,21 +509,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             if (localStorage.getItem("errorMessage")){
                 let message = localStorage.getItem("errorMessage");
 
-                $("#errorMessage").append('<div class="mt-3 alert alert-success">' + message +  '</div>');
+                $("#errorMessage").append('<div class="mt-3 alert alert-success  alert-dismissible fade show">' + message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 
                 localStorage.removeItem("errorMessage")
-            };
-
-            // $("#transactionViewBackBtn").on("click", function() {
-            //     resetAccordion();
-            // });   
-
-            // function resetAccordion() {
-            //     $('.accordion-collapse.show').each(function () {
-            //         let collapseInstance = bootstrap.Collapse.getInstance(this) || new bootstrap.Collapse(this);
-            //         collapseInstance.hide();
-            //     });
-            // }        
+            }; 
 
             $('#transactionHistoryViewItem').on('click', function () {
                 $('#transactionHistoryTable').DataTable().columns.adjust();
@@ -588,6 +580,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         `;
                     });
 
+                    if (data.AppointStatus == 5) {                        
+                        $("#paymentRefDiv, #paymentTypeDiv, #transactionDetailsSaveBtn, #transactionDetailsCancelBtn").addClass("d-none");
+                        $("#transactionDetailsBackBtn").removeClass("d-none");
+                        $("#paymentRefDiv, #paymentTypeDiv, #transactionDetailsSaveBtn").find("input").prop("disabled", true);
+                    } else {
+                        $("#paymentTypeDiv, #transactionDetailsSaveBtn, #transactionDetailsCancelBtn").removeClass("d-none");
+                        $("#transactionDetailsBackBtn").addClass("d-none");
+                        $("#paymentRefDiv, #paymentTypeDiv, #transactionDetailsSaveBtn").find("input").prop("disabled", false);
+                    }
+
                     $('#transactionDetailsTableBody').html(tbodyHtml);
                     inputFilters();
                     // console.log(data);
@@ -595,9 +597,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     // console.log(data);
                 });
             }
-            
-            // $('#transactionViewModal').modal('show');
-            // loadTransactionList(7);
 
             function loadTransactionList(pid) {
                 var formData = {
@@ -759,7 +758,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     scrollCollapse: true,
                     paging: true,                
                     autoWidth: false,
-                    order: [[0, "desc"]],
+                    order: [[1, "desc"],[0, "desc"]],
                 });
             }
         });

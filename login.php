@@ -180,9 +180,9 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 					$("#loginUserEmail").val(data.username);
 					$("#userPassword").val("");
 					grecaptcha.reset();
-					$("#errorMessage").append('<div class="alert alert-danger" style="width: 300px;" role="alert">' + data.error +  '</div>');
+					$("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show" style="width: 300px;" role="alert">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 				} else {
-					$("#errorMessage").append('<div class="alert alert-success" style="width: 300px;" role="alert">' + data.message +  '</div>');
+					$("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show" style="width: 300px;" role="alert">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 					disableInputs();
 					setTimeout(showLoader, 2000);
 					if (data.emailVerification) {
@@ -193,10 +193,10 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 						setTimeout(redirectVerifyEmail, 2000);
 					}
 				}
-				// $("#errorMessage").append('<div class="alert alert-danger" role="alert">' + data.responseText +  '</div>');
+				// $("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.responseText +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 				// console.log(data);
 			}).fail(function(data) {
-				// $("#errorMessage").append('<div class="alert alert-danger" role="alert">' + data.responseText +  '</div>');
+				// $("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.responseText +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 				// console.log(data);
 			});
 		});
@@ -220,9 +220,9 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 			hideLoader();
 			if (!data.success) {
 				$("#forgotEmail").focus();
-				$("#errorMessage").append('<div class="alert alert-danger" role="alert">' + data.error +  '</div>');
+				$("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 			} else {
-				$("#errorMessage").append('<div class="alert alert-success" role="alert">' + data.message +  '</div>');
+				$("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show" role="alert">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 			}
 		}).fail(function(data) {
 			//console.log(data);

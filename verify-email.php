@@ -138,7 +138,7 @@ if (isset($_SESSION['email_address'])) {
 
 			if (otpFromUser == "") {
 				hideLoader();
-				$("#errorMessage").append('<div class="alert alert-danger">OTP is required. Please try again.</div>');
+				$("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show">OTP is required. Please try again.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 				enableInputs();
 				$("#otpCode").focus();
 			}
@@ -147,14 +147,14 @@ if (isset($_SESSION['email_address'])) {
 				disableInputs();
 				sessionStorage.removeItem("timer");
 				clearInterval(timer);
-				$("#errorMessage").append('<div class="alert alert-success">Email is successfully verified.</div>');
+				$("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show">Email is successfully verified.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 				setTimeout(showLoader, 1000);
 				setTimeout(updateEmailStatus, 2000);
 				setTimeout(redirectDashboard, 2500);
 
 			} else {
 				hideLoader();
-				$("#errorMessage").append('<div class="alert alert-danger">OTP code mismatch. Please try again.</div>');
+				$("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show">OTP code mismatch. Please try again.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 				$("#otpCode").focus();
 			}
 		}
@@ -201,7 +201,7 @@ if (isset($_SESSION['email_address'])) {
 					enableInputs();
 					$("#resendCodeBtn").prop("disabled", false);
 					$("#forgotEmail").focus();
-					$("#errorMessage").append('<div class="alert alert-danger">' + data.error +  '</div>');
+					$("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 				} else {				
 					sessionStorage.setItem("timer", 60);
 					$("#resendCodeBtn").prop("disabled", true);
