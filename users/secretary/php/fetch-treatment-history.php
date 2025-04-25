@@ -32,7 +32,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
     $res = $conn->query("SELECT CONNECTION_ID()");
     $row = $res->fetch_row();
-    header("X-DB-Conn-ID-Update: " . $row[0]);
+    header("X-DB-Conn-ID-Treatment: " . $row[0]);
     $res->close();
 
     $stmt = $conn->prepare("SELECT th.appointment_requests_id, th.tooth_number, th.dentist_note, th.procedures_id, th.timestamp,

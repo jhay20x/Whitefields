@@ -13,7 +13,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
     $res = $conn->query("SELECT CONNECTION_ID()");
     $row = $res->fetch_row();
-    header("X-DB-Conn-ID-Update: " . $row[0]);
+    header("X-DB-Conn-ID-Dental: " . $row[0]);
     $res->close();
 
     $stmt = $conn->prepare("SELECT dl.*, dl.visit_date  FROM `dental_history_logs` dl
