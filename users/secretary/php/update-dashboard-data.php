@@ -26,7 +26,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         ON di.accounts_id = ac.id
         WHERE ac.status != 0) TotalDentist,            
         (SELECT COUNT(pi.id) FROM patient_info pi) TotalPatient,
-        (SELECT COUNT(DISTINCT ar.patient_id) FROM appointment_requests ar WHERE ar.appoint_status_id = 7 OR ar.appoint_status_id = 5) PatientToday,
+        (SELECT COUNT(DISTINCT ar.patient_id) FROM appointment_requests ar WHERE DATE(ar.start_datetime) = CURDATE() AND
+        (ar.appoint_status_id = 7 OR ar.appoint_status_id = 5)) PatientToday,
         (SELECT SUM(tr.amount_paid) FROM transactions tr WHERE DATE(tr.timestamp) = ?) IncomeToday
         FROM appointment_requests ar;");
 

@@ -19,7 +19,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $username = $_SESSION['user_username'] ?? "";
 
             if ($userOTP == $otpSent) {
-                $stmt = $conn->prepare("UPDATE Accounts SET email_address = ?, email_verified = 1 WHERE username = ?");
+                $stmt = $conn->prepare("UPDATE accounts SET email_address = ?, email_verified = 1 WHERE username = ?");
                 $stmt->bind_param("ss", $userEmail, $username);
 
                 if ($stmt->execute()) {
@@ -32,7 +32,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             } else {
                 $error = "OTP Code is invalid. Please try again.";
             }
+        } else {
+            $error = "OTP is Empty.";
         }
+    } else {
+        $error = "OTP is not set.";
     }
 
     if (!empty($error)) {

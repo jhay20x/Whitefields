@@ -563,7 +563,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     data.Procedures.forEach(proc => {
                         let prop;
 
-                        if (proc.RemainingBalance == 0) {
+                        if (proc.RemainingBalance == 0 && proc.TotalAmount == 0) {
+                            prop = "";
+                        } else if (proc.RemainingBalance == 0) {
                             prop = "disabled";
                         } else {
                             prop = "";
