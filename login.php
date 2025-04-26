@@ -72,7 +72,7 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 						</div>
 						
 						<div class="mb-3 form-floating">
-							<input type="email" maxlength="30" autocomplete="off" class="form-control clearInputs disableInputs" name="signUpEmail" id="signUpEmail" placeholder="Email">
+							<input type="email" maxlength="50" autocomplete="off" class="form-control clearInputs disableInputs" name="signUpEmail" id="signUpEmail" placeholder="Email">
 							<label for="signUpEmail">Email</label>
 						</div>	
 					</div>

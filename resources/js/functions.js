@@ -299,6 +299,12 @@ function inputFilters() {
         }, "Numbers and slashes only.");
     });
     
+    $('.onlyBloodType').each(function() {
+        setInputFilter(this, function(value) {
+            return /^[A-Za-z+-]*$/.test(value);
+        }, "Letters, + and - only.");
+    });
+    
     $("#contnumber").on("focusin keypress focusout", function() {
         if (!this.value.startsWith("09")) {
             this.value = "09";

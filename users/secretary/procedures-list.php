@@ -286,6 +286,29 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             </div>
         </div>
     </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="deleteProcedureConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteProcedureConfirmLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center">
+                    <h6 class="modal-title" id="deleteProcedureConfirmLabel">
+                        <i class="bi bi-journal-medical"></i> Delete Procedure
+                    </h6>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="text-center">
+                            <h6>Are you sure to delete this procedure?</h6>
+                            <button type="button" value="" id="deleteProcedureCancelYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-dismiss="modal" aria-label="Close">Yes</button>
+                            <button type="button" value="" id="deleteProcedureCancelNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-dismiss="modal" aria-label="Close">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container-fluid">
         <div class="row d-flex justify-content-center position-relative">
@@ -339,6 +362,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <td id="tableProcedurePriceMax">' . $row['price_max'] . '</td>
                                         <td class="appointID">
                                             <button type="button" data-procedure-id="' . $row['id'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#viewProcedureModal">View</button>
+                                            <button type="button" data-procedure-id="' . $row['id'] . '" class="btn btn-sm btn-outline-danger deleteProcedure mt-1 mt-lg-0" data-bs-toggle="modal" data-bs-target="#deleteProcedureConfirmModal"><i class="bi bi-x-lg"></i></button>
                                         </td>
                                     </tr>
                                 ';
@@ -399,6 +423,42 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $("#viewProcedureUpdateBtn, #viewProcedureBackBtn").addClass("d-none").prop("disabled", true);
             $("#viewProcedureSaveBtn, #viewProcedureCancelBtn").removeClass("d-none").prop("disabled", false);
             $("#viewProcedure").find("input, select").prop("disabled", false);
+        });
+
+        $('body').on("click", ".deleteProcedure", function () {
+            let procedure_id = $(this).data("procedure-id");
+            
+            $("#deleteProcedureCancelYesBtn").attr("value", procedure_id);
+        });
+
+        $('body').on("click", "#deleteProcedureCancelYesBtn", function () {
+            showLoader();
+            $("#errorMessage, #addProcedureMessage, #viewProcedureMessage").empty();
+            let procedure_id = $(this).val();
+
+            var formData = {
+					procedure_id: procedure_id
+				};
+
+			var url = "php/remove-procedure.php";
+
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: formData,
+                dataType: "json"
+			}).done(function (data) {
+                if (!data.success) {
+                    hideLoader();
+                    $("#errorMessage").append('<div class="mt-3 alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                } else {
+                    localStorage.setItem("errorMessage", data.message);
+                    location.reload();
+                }
+				// console.log(data);
+			}).fail(function(data) {
+				// console.log(data);
+			});
         });
 
         $('body').on("click", "#procedureCancelYesBtn", function () {
@@ -541,9 +601,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     localStorage.setItem("errorMessage", data.message);
                     location.reload();
                 }
-				console.log(data);
+				// console.log(data);
 			}).fail(function(data) {
-				console.log(data);
+				// console.log(data);
 			});
 		}); 
 

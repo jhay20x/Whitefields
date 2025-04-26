@@ -951,7 +951,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <div class="form-floating">
-                                                        <input type="text" maxlength="5" name="blood_type" placeholder="Blood Type"  id="blood_type" class="form-control onlyLetters">
+                                                        <input type="text" maxlength="5" name="blood_type" placeholder="Blood Type"  id="blood_type" class="form-control onlyBloodType">
                                                         <label for="blood_type">Blood Type</label>
                                                     </div>
                                                 </div>
