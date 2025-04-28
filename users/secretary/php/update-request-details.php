@@ -18,9 +18,14 @@ sleep(1);
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
     $id = $_POST['id'] ?? "";
-
-    $setStatus = $_POST['setStatus'] ?? "";
+    $pid = $_POST['pid'] ?? "";
     $dentist_id = $_POST['dentist_id'] ?? "";
+
+    $user_id = $_SESSION['user_id'];
+    $setStatus = $_POST['setStatus'];
+    $setStatusText = $_POST['setStatusText'];
+    $datetime = $_POST['datetime'];
+    $reasonText = $_POST['reasonText'];
 
     if ($setStatus == 2) {
         if (is_null($_POST['reason'])) {
@@ -57,15 +62,15 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
         if ($setStatus == 1) {
             $message = "Appointment request has been successfully approved.";
-            // $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been approved. Failing to attend on your appointed date and time will result to the cancellation of your appointment. Have a nice day.";
+            $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been approved. Failing to attend on your appointed date and time will result to the cancellation of your appointment. Have a nice day.";
         } else if ($setStatus == 2) {
             $message = "Appointment request has been successfully rejected.";
 
-            // if ($reason != 6){
-            //     $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been rejected due to the following reason: $reasonText.";                
-            // } else {
-            //     $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been rejected due to the following reason: $reasonText - $reasonOther.";                
-            // }
+            if ($reason != 6){
+                $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been unfortunately rejected due to the following reason: $reasonText.";                
+            } else {
+                $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been unfortunately rejected due to the following reason: $reasonText - $reasonOther.";                
+            }
         }
         
         if ($user["emailAddress"] != "None") {
@@ -104,7 +109,7 @@ function sendEmail($userEmail, $content)
 
     $username = $_SESSION['user_username'];
 
-    $subject = 'Whitefields Appointment Request';
+    $subject = 'Whitefields Appointment Request Update';
     $emailmessage = $content;
     $mail = new PHPMailer(true);
 

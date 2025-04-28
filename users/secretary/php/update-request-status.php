@@ -13,16 +13,12 @@ date_default_timezone_set('Asia/Manila');
 $error;
 $message;
 $data = [];
-$emailVerified;
-$id;
-$user_id;
-$pid;
 
 sleep(1);
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
-    $id = $_POST['id'];
-    $pid = $_POST['pid'];
+    $id = $_POST['id'] ?? "";
+    $pid = $_POST['pid'] ?? "";
 
     $user_id = $_SESSION['user_id'];
     $setStatus = $_POST['setStatus'];

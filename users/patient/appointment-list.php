@@ -173,36 +173,40 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <label for="date">Date</label>
                                 </div>
                                 
-                                <div class="my-3 d-flex align-items-center flex-row">
-                                    <div class="form-floating col">
-                                        <select required class="form-select" name="timeHour" id="timeHour">
-                                            <option disabled selected value="">--</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10</option>
-                                            <option value="11">11</option>
-                                            <option value="12">12</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                        </select>
-                                        <label for="timeHour">Hour</label>
+                                <div class="my-3 row align-items-center">
+                                    <div class="col">
+                                        <div class="form-floating col">
+                                            <select required class="form-select" name="timeHour" id="timeHour">
+                                                <option disabled selected value="">--</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                            </select>
+                                            <label for="timeHour">Hour</label>
+                                        </div>
                                     </div>
                                     
-                                    <h3 class="mx-3">:</h3>
+                                    <h3 class="col-auto">:</h3>
 
-                                    <div class="form-floating col">
-                                        <select required class="form-select" name="timeMinute" id="timeMinute">
-                                            <option disabled selected value="">--</option>
-                                            <option value="00">00</option>
-                                            <option value="30">30</option>
-                                        </select>
-                                        <label for="timeMinute">Minute</label>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select required class="form-select" name="timeMinute" id="timeMinute">
+                                                <option disabled selected value="">--</option>
+                                                <option value="00">00</option>
+                                                <option value="30">30</option>
+                                            </select>
+                                            <label for="timeMinute">Minute</label>
+                                        </div>
                                     </div>
 
-                                    <h6 id="ampmText" class="mx-3">--</h6>
+                                    <h6 id="ampmText" class="col-auto">--</h6>
                                 </div>
                                 
                                 <!-- <div class="input-group my-3">

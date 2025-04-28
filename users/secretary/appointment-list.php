@@ -24,6 +24,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         <link rel="shortcut icon" type="image/x-icon" href="../../resources/images/logo-icon-67459a47526b9.webp" />
         <title>Appointment List - Whitefields Dental Clinic</title>
         <link rel="stylesheet" href="../../resources/css/bootstrap.css">
+        <link rel="stylesheet" href="../../resources/css/bootstrap-select.min.css">
         <link rel="stylesheet" href="../../resources/css/sidebar.css">
         <link rel="stylesheet" href="../../resources/css/loader.css">
         <link rel="stylesheet" href="../../resources/css/jquery-ui.css">
@@ -47,19 +48,32 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             }
 
             /* .container-fluid {
-            padding: 0 !important;
-            width: 100%;
-        }
+                padding: 0 !important;
+                width: 100%;
+            }
 
-        #content {
-            width: 100%;
-        } */
+            #content {
+                width: 100%;
+            } */
 
             .title {
                 background-color: white;
                 margin-top: 20px;
                 padding: 5rem;
                 width: 100%;
+            }            
+
+            input[type="date"]::-webkit-calendar-picker-indicator {
+                background: transparent;
+                bottom: 0;
+                color: transparent;
+                cursor: pointer;
+                height: auto;
+                left: 0;
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: auto;
             }
 
             @media only screen and (max-width: 600px) {
@@ -555,6 +569,126 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 </div>
             </div>
         </div>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="manualAppointmentModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="manualAppointmentLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center">
+                        <h6 class="modal-title" id="manualAppointmentLabel">
+                            <i class="bi bi-calendar3"></i> Appointment Request Form
+                        </h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" id="manualAppointmentClose" aria-label="Close"></button>
+                    </div>
+                    <form autocomplete="off" action="php/request-appointment.php" method="POST" class="" id="myForm">
+                        <div class="modal-body">
+                            <div class="container-fluid">
+				                <div id="errorMessage" class="" role="alert"></div>
+                                
+                                <div class="form-floating col">
+                                    <input required type="date" name="date" placeholder="Date"  id="date" id="date" class="form-control">
+                                    <label for="date">Date</label>
+                                </div>
+
+                                <div class="row my-3">
+                                    <div class="col">
+                                        <label class="form-label" for="selectPatientId">Patient Name</label>
+                                        <select required class="selectpicker form-control show-tick" data-size="5" data-live-search="true" name="selectPatientId" id="selectPatientId">
+                                            <option disabled selected value="">Select a patient...</option>
+                                            <?php
+                                                $stmt = $conn->prepare("SELECT pi.id,
+                                                    CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
+                                                    CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name
+                                                    FROM patient_info pi;");
+                                                $stmt->execute();
+                                                $result = $stmt->get_result();
+    
+                                                if ($result->num_rows > 0) {
+                                                    while ($row = mysqli_fetch_assoc($result)) {
+                                                        echo '
+                                                            <option value="' . $row['id'] . '">' . $row['Name'] . '</option>
+                                                        ';
+                                                    }
+                                                }
+                                            ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col">
+                                        <input class="form-check-input" type="checkbox" id="isFollowUp">
+                                        <label class="form-label" for="isFollowUp">Follow-up Appointment?</label>
+                                        <select required disabled class="selectpicker form-control show-tick" data-size="5" data-live-search="true" name="followUpAppointId" id="followUpAppointId"></select>
+                                        <!-- <input required type="text" disabled name="followUpAppointId" placeholder="Appointment ID"  id="followUpAppointId" id="followUpAppointId" class="form-control onlyNumbers"> -->
+                                    </div>
+                                </div>
+                                
+                                <div class="my-3 row align-items-center">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select required class="form-select" name="timeHour" id="timeHour">
+                                                <option disabled selected value="">--</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                            </select>
+                                            <label for="timeHour">Hour</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <h3 class="col-auto">:</h3>
+
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select required class="form-select" name="timeMinute" id="timeMinute">
+                                                <option disabled selected value="">--</option>
+                                                <option value="00">00</option>
+                                                <option value="30">30</option>
+                                            </select>
+                                            <label for="timeMinute">Minute</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col col-lg-2">
+                                        <div class="form-floating">
+                                            <select required class="form-select" name="timeAMPM" id="timeAMPM">
+                                                <option disabled selected value="">--</option>
+                                                <option value="AM">AM</option>
+                                                <option value="PM">PM</option>
+                                            </select>
+                                            <label for="timeAMPM">AM/PM</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                
+                                <!-- <div class="input-group my-3">
+                                    <label class="input-group-text" for="dentist">Dentist</label>
+                                    <input maxlength="100" required disabled type="text" name="dentist" placeholder="Dentist"  id="dentist" class="form-control">
+                                </div> -->
+                                
+                                <div class="form-floating my-3">
+                                    <input maxlength="100" required type="text" name="concern" placeholder="Oral Concern (100 characters only)"  id="concern" class="form-control onlyLettersNumbers">
+                                    <label for="concern">Oral Concern (100 characters only)</label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-outline-primary btn-sm" value="Submit" name="addbtn" <?php echo $hasId ? '' : 'disabled'; ?>>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
         <div class="container-fluid">
             <div class="row d-flex justify-content-center position-relative">
@@ -659,6 +793,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
     <script src="../../resources/js/jquery-ui.js"></script>
     <script src="../../resources/js/bootstrap.bundle.min.js"></script>
+    <script src="../../resources/js/bootstrap-select.min.js"></script>
     <script src='../../resources/js/index.global.js'></script>
     <script src='../../resources/js/sidebar.js'></script>
     <script src="../../resources/js/dataTables.js"></script>
@@ -684,8 +819,17 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             inputFilters();
 
             $('#appointmentListTable thead th').eq(3).attr('width', '0%');
+            
+            
+            $('body').on('hide.bs.modal', function (e) {
+                $("#date, #concern, #dentist").val("");
+                $("#ampmText").text("--");
+                $('#timeHour, #timeMinute, #timeAMPM').prop('selectedIndex', 0);
+                $('.selectpicker').selectpicker('val', '');
+            })
 
             function loadTable() {
+                DataTable.Buttons.defaults.dom.button.className = 'btn btn-sm btn-outline-primary';
                 let table = new DataTable('#appointmentListTable', {
                     language: {
                         searchBuilder: {
@@ -706,8 +850,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     
                             },
                         },
-                        topStart: {
-    
+                        topEnd: {
+                            buttons: [
+                                {
+                                    text: 'Add Appointment',
+                                    action: function (e, dt, node, config) {
+                                        $("#errorMessage").empty();
+                                        $('#manualAppointmentModal').modal('show');
+                                    }
+                                }
+                            ]
+                        },
+                        topStart:{
+                            search: true
                         },
                         bottomStart: {
                             pageLength: true
@@ -784,20 +939,82 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 loadDetails(id);
             });
 
+            $('body').on('change', '#isFollowUp', function(){
+                let state = $(this).prop("checked");
+
+                if (state) {
+                    fetchAppointments();
+                } else {
+                    $("#followUpAppointId").prop('disabled', true).empty();
+                    $("#followUpAppointId").selectpicker('destroy');
+                    $("#followUpAppointId").selectpicker('refresh');
+                }
+            });
+
+            $('body').on('change', '#selectPatientId', function(){
+                let state = $("#isFollowUp").prop("checked");
+
+                if (state) {
+                    fetchAppointments();
+                }
+            });
+
+            function fetchAppointments() {                
+                showLoader();
+                let pid = $("#selectPatientId").val();
+
+                var formData = {
+                    pid: pid
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "php/fetch-patient-appointments.php",
+                    data: formData,
+                    dataType: 'json'
+                }).done(function (data) {
+                    hideLoader();
+
+                    let $select = $("#followUpAppointId");
+                    $select.prop('disabled', false).empty();
+                    $select.selectpicker('destroy');
+                    $select.selectpicker('refresh');
+                    
+                    $.each(data, function(index, value) {
+                        $select.append($('<option>', {
+                            value: value,
+                            text: "Appointment #" + value
+                        }));
+                    });
+
+                    $select.selectpicker('refresh');
+                    // console.log(data);
+                }).fail(function(data) {
+                    // console.log(data);
+                });
+            }
+
             $('#updateStatusSaveBtn').on('click', function () {
                 showLoader();
                 let id = $(this).attr('value');
-                let patiend_id = $(this).attr('data-p-id');
+                let pid = $(this).attr('data-p-id');
                 let dentist_id = $("#patientChangeDentist").val();
                 let setStatus = $("#patientUpdateStatus").val();
+                let setStatusText = $( "#patientUpdateStatus option:selected" ).text();
+                let datetime = $(".aptdtlsStartDate").first().text() + " at " + $(".aptdtlsStartTime").first().text();
                 let reason = $("#reason").val();
+                let reasonText = $( "#reason option:selected" ).text();
                 let reasonOther = $("#reasonOther").val();
 
                 var formData = {
                     id: id,
+                    pid: pid,
                     dentist_id: dentist_id,
                     setStatus: setStatus,
+                    setStatusText: setStatusText,
+                    datetime: datetime,
                     reason: reason,
+                    reasonText: reasonText,
                     reasonOther: reasonOther
                 };
 
