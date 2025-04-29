@@ -36,10 +36,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $error = "Please select a valid file format."; 
         }
         
-        $maxsize = 4 * 1024 * 1024; 
+        $maxsize = 6 * 1024 * 1024; 
         
         if ($file_size > $maxsize) { 
-            $error = "File size is larger than the allowed 4MB limit."; 
+            $error = "File size is larger than the allowed 6MB limit."; 
         }                     
 
         if (in_array($file_type, $allowed_ext)) { 
