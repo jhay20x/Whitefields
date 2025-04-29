@@ -287,6 +287,12 @@ function inputFilters() {
         }, "Letters, numbers, dots, hyphens, and spaces only.");
     });
     
+    $('.onlyLettersNumbersNoSpace').each(function() {
+        setInputFilter(this, function(value) {
+            return /^[a-zA-Z0-9.\-]*$/.test(value);
+        }, "Letters, numbers, dots, and hyphens only.");
+    });
+    
     $('.onlyAddress').each(function() {
         setInputFilter(this, function(value) {
             return /^[a-zA-Z0-9\s,.'-\/()#]*$/.test(value);

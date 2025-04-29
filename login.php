@@ -67,7 +67,7 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 		
 					<div style="display: none;" class="userSignUp">
 						<div class="mb-3 form-floating">
-							<input type="text" maxlength="30" autocomplete="off" class="form-control clearInputs disableInputs" name="signUpUsername" id="signUpUsername" placeholder="Username">
+							<input type="text" maxlength="30" autocomplete="off" class="form-control clearInputs disableInputs onlyLettersNumbersNoSpace" name="signUpUsername" id="signUpUsername" placeholder="Username">
 							<label for="signUpUsername">Username</label>
 						</div>
 						
@@ -146,6 +146,8 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 <script src="./resources/js/functions.js" defer></script>
 <script>	
 	$(document).ready(function () {
+		inputFilters();
+
 		let userEmail, username;
 
 		$("#passwordValidation").hide();
