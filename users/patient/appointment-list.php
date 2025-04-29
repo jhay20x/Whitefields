@@ -12,8 +12,15 @@ require_once 'php/fetch-id.php';
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
     if ($_SESSION['account_type'] == 2) {
-        $id = fetchPatientID();
+        $patient_id = fetchPatientID();
 
+        if (is_int($patient_id)) {
+            $hasId = true;
+        } else {
+            $hasId = false;
+        }
+
+        if ($hasId) {
 ?>
 
     <!DOCTYPE html>
@@ -41,9 +48,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 fill: currentColor;
             }
 
-            body {
-                /* background-color: lightgrey; */
-            }
+            /* body {
+                background-color: lightgrey;
+            } */
 
             /* .container-fluid {
             padding: 0 !important;
@@ -768,6 +775,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     </html>
 
 <?php 
+        } else {
+            header("Location: profile.php");            
+        }
     
     } else {
         header("Location: ../../login.php");
