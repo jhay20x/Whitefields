@@ -1388,7 +1388,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             
                             <div class="d-flex justify-content-start row">
                                 <div id="errorMessage" class="col-12" role="alert">
-                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
+                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.</div>' ?>
                                 </div>
 
                                 <div class="row">
@@ -1432,7 +1432,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                             <div class="d-flex justify-content-start row">
                                 <div id="dentalMessage" class="col-12" role="alert">
-                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
+                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.</div>' ?>
                                 </div>
                                 <div class="col-xl">
                                     <h5>Previous Dentist: <span class="fw-normal"><?php echo $dentalData['prevDentist']  ?? "Not Set";?></span></h5>
@@ -1462,7 +1462,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                             <div class="d-flex justify-content-start row">
                                 <div id="medicalMessage" class="col-12" role="alert">
-                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
+                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.</div>' ?>
                                 </div>
                                 <div class="col">
                                     <div class="row">

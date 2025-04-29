@@ -168,10 +168,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <?php echo $hasId ? '' : '<div class="alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
                         </div>
 
-                        <div class="row">
+                        <!-- <div class="row">
                             <h4 class="row">Announcements:</h4>
                             <span class="row">No new announcements.</span>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="row bg-white rounded shadow mt-3 p-3 d-flex justify-content-center row">

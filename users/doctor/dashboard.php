@@ -232,7 +232,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             </div>
 
             <div id="cards">
-                <div class="d-flex justify-content-center">
+                <!-- <div class="d-flex justify-content-center">
                     <div class="col col-sm-9">
                         <div class="row bg-white rounded shadow mt-3 p-3 d-flex justify-content-center row">
                             <div class="row">                                    
@@ -241,7 +241,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="d-flex row mx-3 my-2 justify-content-center">
                     <div class="card rounded shadow h-50 text-end col-12 mx-2 my-2 col-sm-5 mx-sm-2 my-sm-2 col-md-5 mx-md-2 my-md-2 col-lg-5 mx-lg-2 my-lg-2 col-xl-auto mx-xl-2 my-xl-2 col-xxl-auto mx-xxl-2 my-xxl-2">

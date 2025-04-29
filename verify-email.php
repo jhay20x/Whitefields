@@ -74,7 +74,7 @@ if (isset($_SESSION['email_address'])) {
 <script>
 	$(document).ready(function () {
 		let otpFromUser, otpCode;
-		const timer = '';
+		let timer = '';
 		// let user_id = <?php // echo isset($_SESSION['user_id']) ? "'" . $_SESSION['user_id'] . "'" : "''"; ?>;
 		let username = <?php echo isset($_SESSION['username']) ? "'" . $_SESSION['username'] . "'" : "''"; ?>;
 		let userEmail = <?php echo isset($_SESSION['email_address']) ? "'" . $_SESSION['email_address'] . "'" : "''"; ?>;
