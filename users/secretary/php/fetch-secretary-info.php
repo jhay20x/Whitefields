@@ -16,16 +16,16 @@ function calculateAge($birthdate) {
 }
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
-    $id = $_POST['id'];
+    $sid = $_POST['sid'];
 
-    $stmt = $conn->prepare("SELECT CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
-    CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS Name,
-    di.accounts_id, di.specialist, di.bdate, di.contactno, di.gender, di.address, di.about_me, di.religion, di.nationality, ac.email_address, ac.username, ac.status, ac.id as AccountID
-    FROM dentist_info di
+    $stmt = $conn->prepare("SELECT CONCAT(si.fname , CASE WHEN si.mname = 'None' THEN ' ' ELSE CONCAT(' ' , si.mname , ' ') END , si.lname, 
+    CASE WHEN si.suffix = 'None' THEN '' ELSE CONCAT(' ' , si.suffix) END ) AS Name,
+    si.accounts_id, si.bdate, si.contactno, si.gender, si.address, si.religion, si.nationality, ac.email_address, ac.username, ac.status, ac.id as AccountID
+    FROM secretary_info si
     LEFT OUTER JOIN accounts ac
-    ON ac.id = di.accounts_id
-    WHERE di.id = ?");
-    $stmt->bind_param('i',$id);
+    ON ac.id = si.accounts_id
+    WHERE si.id = ?");
+    $stmt->bind_param('i',$sid);
     $stmt->execute();
     $result = $stmt->get_result();  
 	$stmt->close();  
@@ -35,13 +35,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         
         $data['AccountID'] = $row['AccountID'];
         $data['Name'] = $row['Name'];
-        $data['specialist'] = $row['specialist'];
         $data['age'] = calculateAge($row['bdate']);
         $data['bdate'] = $row['bdate'];
         $data['contactno'] = $row['contactno'];
         $data['gender'] = $row['gender'];
         $data['address'] = $row['address'];
-        $data['about_me'] = $row['about_me'];
         $data['religion'] = $row['religion'];
         $data['nationality'] = $row['nationality'];
         $data['email_address'] = $row['email_address'];

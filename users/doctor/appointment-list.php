@@ -117,9 +117,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <h6>Request Time: <span id="aptdtlsrequesttime" class="fw-normal"></span></h6>
                             </div>
                             <div class="col-12 col-lg">
-                                <h6><span class="aptdtlsverdict" class="fw-normal"></span> Date: <span id="aptdtlsapproveddate" class="fw-normal"></span></h6>
-                                <h6><span class="aptdtlsverdict" class="fw-normal"></span> Time: <span id="aptdtlsapprovedtime" class="fw-normal"></span></h6>
-                                <h6><span class="aptdtlsverdict" class="fw-normal"></span> By: <span id="aptdtlsapprovedby" class="fw-normal"></span></h6>
+                                <h6>Appointment ID: <span id="" class="fw-normal aptId"></span></h6>
+                                <h6>Follow-up Appointment ID: <span id="" class="fw-normal pastAptId"></span></h6>
                             </div>
                         </div>
 
@@ -136,18 +135,23 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <h6>Appointment Date: <span id="aptdtlsstartdate" class="fw-normal"></span></h6>
                                 <h6>Appointment Time: <span id="aptdtlsstarttime" class="fw-normal"></span></h6>
                             </div>
+
+                            <div class="col-12 col-lg">
+                                <h6>Oral Concern: <span id="aptdtlsconcern" class="fw-normal"></span></h6>
+                            </div>
                         </div>
 
                         <hr>
-
+                        
                         <div class="col-12 col-lg">
-                            <h6>Oral Concern: <span id="aptdtlsconcern" class="fw-normal"></span></h6>
-                        </div>
-                            
-                        <div class="d-flex justify-content-end">
-                            <button type="button" value="" id="aptTreatmentRecord" class="btn btn-sm btn-outline-primary m-2 me-0" data-bs-toggle="modal" data-bs-target="#treatPatientModal">Treatment Record</button>
+                            <h6><span class="aptdtlsverdict" class="fw-normal"></span> Date: <span id="aptdtlsapproveddate" class="fw-normal"></span></h6>
+                            <h6><span class="aptdtlsverdict" class="fw-normal"></span> Time: <span id="aptdtlsapprovedtime" class="fw-normal"></span></h6>
+                            <h6 id="aptdtlsapprovedbytext"><span class="aptdtlsverdict" class="fw-normal"></span> By: <span id="aptdtlsapprovedby" class="fw-normal"></span></h6>
                         </div>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" value="" id="aptTreatmentRecord" class="btn btn-sm btn-outline-primary m-2 me-0" data-bs-toggle="modal" data-bs-target="#treatPatientModal">Treatment Record</button>                        
                 </div>
             </div>
         </div>
@@ -175,7 +179,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <h6>Gender: <span id="" class="fw-normal patientGender"></span></h6>
                                 </div>
                                 <div class="col-12 col-lg">
-                                    <h6></span> Appointment ID: <span id="aptId" class="fw-normal"></span></h6>
+                                    <h6></span> Appointment ID: <span id="" class="fw-normal aptId"></span></h6>
+                                    <h6></span> Past Appointment ID: <span id="" class="fw-normal pastAptId"></span></h6>
                                     <h6></span> Date: <span id="" class="fw-normal"><?php echo date(format: 'Y-m-d', timestamp: time()); ?></span></h6>
                                 </div>
                             </div>
@@ -497,7 +502,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#appointListModal">Back</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#appointListModal">Back</button>
                 </div>
             </div>
         </div>
@@ -530,7 +535,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
                 </div>
             </div>
         </div>
@@ -595,11 +600,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                             $stmt = $conn->prepare("SELECT DATE(ar.start_datetime) AS Date, TIME(ar.start_datetime) AS Time, st.status_name AS Status, 
                                 CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
-                                CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name, ar.id AS ID, ar.patient_id AS PID
+                                CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name, ar.id AS ID, ar.patient_id AS PID, ar.past_appoint_id AS PAID
                                 FROM appointment_requests ar
                                 LEFT OUTER JOIN patient_info pi ON pi.id = ar.patient_id
                                 LEFT OUTER JOIN appointment_status st ON st.id = ar.appoint_status_id
-                                WHERE (ar.appoint_status_id = 1 OR ar.appoint_status_id = 6 OR ar.appoint_status_id = 5) AND ar.dentist_info_id = ?
+                                WHERE (ar.appoint_status_id = 1 OR ar.appoint_status_id = 6 OR ar.appoint_status_id = 5 OR ar.appoint_status_id = 7) AND ar.dentist_info_id = ?
                                 ORDER BY Date DESC, Time ASC;");
                             $stmt->bind_param('i', $id);
                             $stmt->execute();
@@ -614,9 +619,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                                     if ($row['Status'] == "Approved") {
                                         $status = "text-success";
-                                    } else if ($row['Status'] == "Denied" || $row['Status'] == "Cancelled") {
+                                    } else if ($row['Status'] == "Denied" || $row['Status'] == "Cancelled" || $row['Status'] == "Partially Paid") {
                                         $status = "text-danger";
-                                    } else if ($row['Status'] == "Evaluated" || $row['Status'] == "Completed") {
+                                    } else if ($row['Status'] == "Completed") {
                                         $status = "text-secondary";
                                     } else {
                                         $status = "text-warning";
@@ -629,7 +634,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <td id="appointName">' . $row['Name'] . '</td>
                                         <td id="appointStatus" class="' . $status . ' fw-bold">' . $row['Status'] . '</td>
                                         <td class="appointID">
-                                            <button type="button" data-p-id="' . $row['PID'] . '" value="' . $row['ID'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#appointListModal">View
+                                            <button type="button" data-past-apt-id="' . ($row['PAID'] ?? 0) . '" data-p-id="' . $row['PID'] . '" value="' . $row['ID'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#appointListModal">View
                                             </button>
                                         </td>
                                     </tr>
@@ -671,7 +676,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
         var yyyy = today.getFullYear();
 
         today = yyyy + '-' + mm + '-' + dd;
@@ -691,6 +696,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 				data: $("#myForm").serialize(),
                 dataType: "json"
 			}).done(function (data) {
+                let status = $("#aptdtlsstatus").text();
                 hideLoader();
                 refreshList();
                 $(".patientPrice").removeClass("is-valid is-invalid");
@@ -700,10 +706,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $("#myForm").find("input, select, textarea").prop("disabled", true);
                 $("#aptTreatPatientUpdateDiv").show();
                 $("#aptTreatPatientSaveDiv").hide();
-                $("#aptdtlsstatus")
-                    .removeClass("text-success text-warning text-danger")
-                    .addClass("text-secondary")
-                    .text("Evaluated");
+
+                if (status == "Approved") {
+                    $("#aptdtlsstatus")
+                        .removeClass("text-success text-warning text-danger")
+                        .addClass("text-secondary")
+                        .text("Evaluated");
+                }
+
                 refreshTreatment(patient_id);
 				// console.log(data.responseText);
 			}).fail(function(data) {
@@ -1011,8 +1021,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
         $('body').on('click', '.viewAptDetail', function(){
             let id = $(this).attr('value');
-            patient_id = $(this).attr("data-p-id");
-            $('#aptTreatmentRecord').attr('data-aptId', id);
+            let patient_id = $(this).attr("data-p-id");
+            let past_appoint_id = $(this).attr("data-past-apt-id");
+            $('#aptTreatmentRecord').attr('data-aptId', id).attr('data-past-apt-id', past_appoint_id);
             resetAccordion();
             fetchPatientDetails(patient_id, id);
             refreshDentalList(patient_id);
@@ -1034,15 +1045,29 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
         $('body').on('click', '#aptTreatmentRecord', function(){
             let id = $(this).attr('data-aptId');
+            let pastAptId = $(this).attr("data-past-apt-id");
 
-            loadTreatmentRecord(id);
+            loadTreatmentRecord(id, pastAptId);
         });
 
         $('body').on('click', '#aptTreatPatientUpdateBtn', function(){
-            $("#myForm").find("input, select, textarea, button").prop("disabled", false);
+            let status = $("#aptdtlsstatus").text();
+            let pastAptId = $("#aptTreatmentRecord").attr("data-past-apt-id");
 
-            $("#aptTreatPatientSaveDiv").show();
-            $("#aptTreatPatientUpdateDiv").hide();
+            if (status == "Evaluated") {
+                $("#myForm").find("input, select, textarea, button").prop("disabled", false);
+                $("#myForm").find(".no-enable").prop("disabled", true);
+                
+                $("#aptTreatPatientSaveDiv").show();
+                $("#aptTreatPatientAddProcedureBtn").show();
+                $("#aptTreatPatientUpdateDiv").hide();
+            } else {
+                $("#myForm").find("textarea").prop("disabled", false);
+                
+                $("#aptTreatPatientSaveDiv").show();
+                $("#aptTreatPatientUpdateDiv").hide();
+                $("#aptTreatPatientAddProcedureBtn").hide();
+            }
         });
 
         function loadModal() {
@@ -1053,6 +1078,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
             let id = search_params.get('id');
             let pid = search_params.get('pid');
+            let paid = search_params.get('paid');
             $('#aptTreatmentRecord').attr('data-aptId', id);
             window.history.replaceState({}, document.title, window.location.pathname);
 
@@ -1062,7 +1088,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 refreshDentalList(pid);
                 refreshMedicalList(pid);
                 refreshTreatment(pid);
-                loadTreatmentRecord(id);
+                loadTreatmentRecord(id, paid);
                 loadDetails(id);
             }
         };
@@ -1083,12 +1109,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 dataType: 'json'
             }).done(function(data) {
                 if (data.Status == "Approved") {
-                    $("#aptdtlsstatus").removeClass("text-danger text-success text-secondary");
+                    $("#aptdtlsstatus").removeClass("text-danger text-warning text-secondary");
                     $("#aptdtlsstatus").addClass("text-success");
-                } else if (data.Status == "Denied" || data.Status == "Cancelled") {
+                } else if (data.Status == "Denied" || data.Status == "Cancelled" || data.Status == "Partially Paid") {
                     $("#aptdtlsstatus").removeClass("text-success text-warning text-secondary");
                     $("#aptdtlsstatus").addClass("text-danger");
-                } else if (data.Status == "Evaluated" || data.Status == "Completed") {
+                } else if (data.Status == "Completed") {
                     $("#aptdtlsstatus").removeClass("text-success text-warning text-danger");
                     $("#aptdtlsstatus").addClass(" text-secondary");
                 } else {                        
@@ -1096,11 +1122,59 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     $("#aptdtlsstatus").addClass("text-warning");
                 }
 
-                let details = [data.Status, data.Status, data.Dentist, data.Name, data.Start_Date, data.Start_Time, data.Request_Date, data.Request_Time, data.Approved_Date, data.Approved_Time, data.Approved_By, data.Concern];
-                let detailsId = ["#aptdtlsstatus", ".aptdtlsverdict", "#aptdtlsdentist", "#aptdtlsname", "#aptdtlsstartdate", "#aptdtlsstarttime", "#aptdtlsrequestdate", "#aptdtlsrequesttime", "#aptdtlsapproveddate", "#aptdtlsapprovedtime", "#aptdtlsapprovedby", "#aptdtlsconcern"];                
+                let details = [data.Status, data.Status, data.Dentist, data.Name, data.Start_Date, data.Start_Time, data.Request_Date, data.Request_Time, data.Approved_By, data.Concern, data.PastAptId, data.AptId];
+                let detailsId = ["#aptdtlsstatus", ".aptdtlsverdict", "#aptdtlsdentist", "#aptdtlsname", "#aptdtlsstartdate", "#aptdtlsstarttime", "#aptdtlsrequestdate", "#aptdtlsrequesttime", "#aptdtlsapprovedby", "#aptdtlsconcern", ".pastAptId", ".aptId"];                
 
                 for (let index = 0; index < details.length; index++) {
                     $(detailsId[index]).text(details[index]);
+                }
+                
+                switch (data.Status) {
+                    case "Cancelled":
+                        $("#aptdtlsReason").text(data.CancelReason);
+                        $("#aptdtlsReasonOther").text(data.CancelReasonOther);
+                        $("#aptdtlsapproveddate").text(data.Cancel_Date);
+                        $("#aptdtlsapprovedtime").text(data.Cancel_Time);
+                        $("#aptdtlsapprovedby").text("The Client");
+                        $("#aptdtlsapprovedbytext").show();
+                        break;
+
+                    case "Denied":
+                        $("#aptdtlsapproveddate").text(data.Approved_Date);
+                        $("#aptdtlsapprovedtime").text(data.Approved_Time);
+                        $("#aptdtlsReason").text(data.Reason);
+                        $("#aptdtlsReasonOther").text(data.ReasonOther);
+                        $("#aptdtlsapprovedbytext").show();
+                        break;
+
+                    case "Evaluated":
+                        $("#aptdtlsapproveddate").text(data.Examined_Date);
+                        $("#aptdtlsapprovedtime").text(data.Examined_Time);
+                        $("#aptdtlsapprovedby").text(data.Dentist);
+                        $("#aptdtlsapprovedbytext").show();
+                        break;
+
+                    case "Completed":
+                        $("#aptdtlsapproveddate").text(data.Completed_Date);
+                        $("#aptdtlsapprovedtime").text(data.Completed_Time);
+                        $("#aptdtlsapprovedby").text("");
+                        $("#aptdtlsapprovedbytext").hide();
+                        break;
+
+                    case "Partially Paid":
+                        $("#aptdtlsapproveddate").text(data.Partial_Date);
+                        $("#aptdtlsapprovedtime").text(data.Partial_Time);
+                        $("#aptdtlsapprovedby").text("");
+                        $("#aptdtlsapprovedbytext").hide();
+                        break;
+
+                    default:
+                        $("#aptdtlsapproveddate").text(data.Approved_Date);
+                        $("#aptdtlsapprovedtime").text(data.Approved_Time);
+                        $("#aptdtlsReason").text("");
+                        $("#aptdtlsReasonOther").text("");     
+                        $("#aptdtlsapprovedbytext").show();
+                        break;
                 }
                     
                 if (data.length != 0) {
@@ -1266,11 +1340,15 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
         let procedureOptions = $('#patientProcedure_0').html();
 
-        function loadTreatmentRecord(id) {
+        function loadTreatmentRecord(aptId, pastAptId) {
             $("#errorMessage").empty();
-            $("#aptId").text(id);
+            $("#aptId").text(aptId);
+            let status = $("#aptdtlsstatus").text();
+            $("#pastAptId").text(pastAptId == 0 ? "N/A" : pastAptId);
+
             var formData = {
-                aptId: id
+                aptId: aptId,
+                pastAptId: pastAptId
             };
 
             $.ajax({
@@ -1279,10 +1357,31 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 data: formData,
                 dataType: 'json'
             }).done(function (data) {
-                if (data.length != 0) {                    
+                if (data.length != 0) {
                     $('#proceduresList').empty();
+                    let state = "";
+
+                    if (pastAptId != 0 && status == "Approved") {
+                        $("#myForm").find("input, select, textarea").prop("disabled", false);
+                        $("#aptTreatPatientUpdateDiv").hide();
+                        $("#aptTreatPatientSaveDiv").show();
+                        $("#aptTreatPatientAddProcedureBtn").show();
+                    } else {
+                        $("#myForm").find("input, select, textarea").prop("disabled", true);
+                        $("#aptTreatPatientSaveDiv").hide();
+                        $("#aptTreatPatientUpdateDiv").show();
+                        $("#aptTreatPatientAddProcedureBtn").hide();
+                    }
     
                     data.forEach((item, index) => {
+                        if (pastAptId == item.appointment_requests_id) {
+                            state = "no-enable";
+                            $("#dentistNote").val("");
+                        } else {
+                            state = "";
+                            $("#dentistNote").val(item.dentist_note);
+                        }
+                        
                         const newRow = `
                             <div class="row flex-row align-items-center mb-3" id="procedureRow_${index}">
                                 <div class="col col-lg-1 mb-3 mb-lg-0 order-0 order-lg-0">
@@ -1290,13 +1389,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 </div>
                                 <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-2 order-lg-1">
                                     <div class="form-floating">
-                                        <input type="text" name="patientToothNo[]" placeholder="Tooth No./s" id="patientToothNo_${index}" class="form-control" value="${item.tooth_number}">
+                                        <input disabled type="text" name="patientToothNo[]" placeholder="Tooth No./s" id="patientToothNo_${index}" class="form-control ${state}" value="${item.tooth_number}">
                                         <label for="patientToothNo_${index}">Tooth No./s</label>
                                     </div>
                                 </div>
                                 <div class="col-12 col-lg-4 mb-3 mb-lg-0 order-3 order-lg-2">
                                     <div class="form-floating">
-                                        <select required class="form-control" name="patientProcedure[]" id="patientProcedure_${index}">
+                                        <select disabled required class="form-control ${state}" name="patientProcedure[]" id="patientProcedure_${index}">
                                             ${procedureOptions}
                                         </select>
                                         <label for="patientProcedure_${index}">Procedure</label>
@@ -1304,12 +1403,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 </div>
                                 <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-4 order-lg-3" data-bs-toggle="tooltip" data-bs-placement="top" title="">
                                     <div class="form-floating">
-                                        <input type="text" name="patientPrice[]" placeholder="Procedure Price" id="patientPrice_${index}" class="form-control patientPrice" value="${parseFloat(item.procedure_price).toFixed(2)}">
+                                        <input disabled type="text" name="patientPrice[]" placeholder="Procedure Price" id="patientPrice_${index}" class="form-control patientPrice ${state}" value="${parseFloat(item.procedure_price).toFixed(2)}">
                                         <label for="patientPrice_${index}">Procedure Price</label>
                                     </div>
                                 </div>
                                 <div class="col-auto col-lg-1 mb-3 mb-lg-0 order-1 order-lg-4">
-                                    <button disabled type="button" class="btn btn-outline-danger procedure-remove"><i class="bi bi-x-lg"></i></button>
+                                    <button disabled type="button" class="btn btn-outline-danger procedure-remove ${state}"><i class="bi bi-x-lg"></i></button>
                                 </div>
                             </div>
                         `;
@@ -1321,12 +1420,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
                         fetchPrice(1);
                     });
-
-                    $("#dentistNote").val(data[0].dentist_note);
-                    procedureIndex = data.length;
-                    $("#myForm").find("input, select, textarea").prop("disabled", true);
-                    $("#aptTreatPatientSaveDiv").hide();
-                    $("#aptTreatPatientUpdateDiv").show();
+                    
+                    procedureIndex = data.length;                 
                 } else {
                     $('#proceduresList').empty();
                     $("#dentistNote").val("");
@@ -1337,10 +1432,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     $("#myForm").find("input, select, textarea").prop("disabled", false);
                     $("#aptTreatPatientUpdateDiv").hide();
                     $("#aptTreatPatientSaveDiv").show();
+                    $("#aptTreatPatientAddProcedureBtn").show();
                 }
-                // console.log(data);
+                console.log(data);
             }).fail(function(data) {
-                // console.log(data);
+                console.log(data);
             });
         }
     });

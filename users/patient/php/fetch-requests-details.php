@@ -12,9 +12,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $id = $_POST['id'];
 
     $stmt = $conn->prepare("SELECT DATE(ar.request_datetime) AS Request_Date, TIME(ar.request_datetime) AS Request_Time,
+        ar.id AS AptId, ar.past_appoint_id AS PastAptId,
 		DATE(ar.start_datetime) AS Start_Date, TIME(ar.start_datetime) AS Start_Time,
         DATE(ar.cancel_datetime) AS Cancel_Date, TIME(ar.cancel_datetime) AS Cancel_Time,
         DATE(th.timestamp) AS Examined_Date, TIME(th.timestamp) AS Examined_Time,
+        DATE(ar.completed_datetime) AS Completed_Date, TIME(ar.completed_datetime) AS Completed_Time,
+        DATE(tr.timestamp) AS Partial_Date, TIME(tr.timestamp) AS Partial_Time,
         DATE(ar.approved_datetime) AS Approved_Date, TIME(ar.approved_datetime) AS Approved_Time, st.status_name AS Status,
         CONCAT(si.fname , CASE WHEN si.mname = 'None' THEN ' ' ELSE CONCAT(' ' , si.mname , ' ') END , si.lname, 
         CASE WHEN si.suffix = 'None' THEN '' ELSE CONCAT(' ' , si.suffix) END ) AS Approved_By, ar.approved_by AS Approved_ID,
@@ -31,6 +34,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         LEFT OUTER JOIN secretary_info si ON si.accounts_id = ar.approved_by
         LEFT OUTER JOIN rejected_reasons rr ON rr.id = ar.reason_id
         LEFT OUTER JOIN cancel_reasons cr ON cr.id = ar.cancel_reason_id
+        LEFT OUTER JOIN transactions tr ON tr.appointment_requests_id  = ar.id
         LEFT OUTER JOIN treatment_history th ON th.appointment_requests_id  = ar.id
         WHERE ar.id = ?;");
     $stmt->bind_param("i", $id);
@@ -42,10 +46,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $row = $result->fetch_assoc();
 
         $data['Name'] = $row['Name'];
+        $data['AptId'] = $row['AptId'];
+        $data['PastAptId'] = $row['PastAptId'] ?? "N/A";
         $data['Request_Time'] = date('h:i A', strtotime($row['Request_Time']));
         $data['Request_Date'] = $row['Request_Date'];
+        $data['Completed_Time'] = date('h:i A', strtotime($row['Completed_Time']));
+        $data['Completed_Date'] = $row['Completed_Date'];
         $data['Examined_Time'] = date('h:i A', strtotime($row['Examined_Time']));
         $data['Examined_Date'] = $row['Examined_Date'];
+        $data['Partial_Time'] = date('h:i A', strtotime($row['Partial_Time']));
+        $data['Partial_Date'] = $row['Partial_Date'];
         $data['Start_Time'] = date('h:i A', strtotime($row['Start_Time']));
         $data['Start_Date'] = $row['Start_Date'];
         $data['Approved_Time'] = date('h:i A', strtotime($row['Approved_Time']));

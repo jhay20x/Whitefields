@@ -14,8 +14,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
     function calculateAge($birthdate) {
         $birthDate = new DateTime($birthdate);
-        $today = new DateTime(); // Current date
-        $age = $today->diff($birthDate)->y; // Calculate age in years
+        $today = new DateTime();
+        $age = $today->diff($birthDate)->y;
         return $age;
     }
 
@@ -1354,7 +1354,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 </div>
                 
                 <div class="m-3 text-center">
-                    <form action="php/upload.php" enctype="multipart/form-data" name="uploadForm" method="POST" class="" id="uploadForm">
+                    <form action="php/upload.php" enctype="multipart/form-data" name="uploadForm" method="POST" id="uploadForm">
                         <div class="input-group">
                             <input type="file" class="form-control" name="fileToUpload" id="fileToUpload">
                             <input class="btn btn-outline-secondary" type="submit" name="uploadsubmitbtn" value="Upload Image" >
@@ -1369,7 +1369,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <div class="col-sm-9 rounded shadow bg-white m-3 mb-0 p-3 d-flex justify-content-center">
                         <div class="p-3 p-md-4 p-lg-4 col">
                             <div class="d-flex align-items-center flex-row">
-                                <h1 class="col">Personal Information</h1>
+                                <h1 id="Profile" class="col">Personal Information</h1>
                                 <div class="col-auto" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Email Account">
                                     <button id="emailEditBtn" class="btn btn-outline-secondary position-relative" data-bs-toggle="modal" data-bs-target="#emailAccountModal">
                                         <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
@@ -1393,19 +1393,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                                 <div class="row">
                                     <div class="col-xl-6">
-                                        <h5 class="">Name: <span class="fw-normal"><?php echo $profileData['fname'] ?? 'Not Set'; ?> <?php echo ($profileData['mname'] ?? '') === "None" || empty($profileData['mname']) ? '' : $profileData['mname']; ?> <?php echo $profileData['lname'] ?? ''; ?> <?php echo ($profileData['suffix'] ?? '') === "None" || empty($profileData['suffix']) ? '' : $profileData['suffix']; ?> </span></h5>
-                                        <h5 class="">Username: <span class="fw-normal"><?php echo $profileData['username'] ?? 'Not Set';?></span></h5>
-                                        <h5 class="">Age: <span class="fw-normal"><?php echo $profileData['age'] ?? 'Not Set';?></span></h5>
-                                        <h5 class="">Birth Date: <span class="fw-normal"><?php echo $profileData['bdate'] ?? 'Not Set';?></span></h5>
-                                        <h5 class="">Gender: <span class="fw-normal"><?php echo $profileData['gender'] ?? 'Not Set';?></span></h5>
-                                        <h5 class="">Occupation: <span class="fw-normal"><?php echo $profileData['occupation'] ?? 'Not Set';?></span></h5>
+                                        <h5>Name: <span class="fw-normal"><?php echo $profileData['fname'] ?? 'Not Set'; ?> <?php echo ($profileData['mname'] ?? '') === "None" || empty($profileData['mname']) ? '' : $profileData['mname']; ?> <?php echo $profileData['lname'] ?? ''; ?> <?php echo ($profileData['suffix'] ?? '') === "None" || empty($profileData['suffix']) ? '' : $profileData['suffix']; ?> </span></h5>
+                                        <h5>Username: <span class="fw-normal"><?php echo $profileData['username'] ?? 'Not Set';?></span></h5>
+                                        <h5>Age: <span class="fw-normal"><?php echo $profileData['age'] ?? 'Not Set';?></span></h5>
+                                        <h5>Birth Date: <span class="fw-normal"><?php echo $profileData['bdate'] ?? 'Not Set';?></span></h5>
+                                        <h5>Gender: <span class="fw-normal"><?php echo $profileData['gender'] ?? 'Not Set';?></span></h5>
+                                        <h5>Occupation: <span class="fw-normal"><?php echo $profileData['occupation'] ?? 'Not Set';?></span></h5>
                                     </div>
                                     <div class="col-xl">
-                                        <h5 class="">Contact Number: <span class="fw-normal"><?php echo $profileData['contnum'] ?? 'Not Set';?></span></h5>
-                                        <h5 class="">Email Address: <span class="fw-normal"><?php echo empty($profileData['email']) || $profileData['email'] == "None" ? 'Not Set' : $profileData['email'];?></span></h5>
-                                        <h5 class="">Religion: <span class="fw-normal"><?php echo $profileData['religion'] ?? 'Not Set';?></span></h5>
-                                        <h5 class="">Nationality: <span class="fw-normal"><?php echo $profileData['nationality'] ?? 'Not Set';?></span></h5>
-                                        <h5 class="">Address: <span class="fw-normal"><?php echo $profileData['address'] ?? 'Not Set';?></span></h5>
+                                        <h5>Contact Number: <span class="fw-normal"><?php echo $profileData['contnum'] ?? 'Not Set';?></span></h5>
+                                        <h5>Email Address: <span class="fw-normal"><?php echo empty($profileData['email']) || $profileData['email'] == "None" ? 'Not Set' : $profileData['email'];?></span></h5>
+                                        <h5>Religion: <span class="fw-normal"><?php echo $profileData['religion'] ?? 'Not Set';?></span></h5>
+                                        <h5>Nationality: <span class="fw-normal"><?php echo $profileData['nationality'] ?? 'Not Set';?></span></h5>
+                                        <h5>Address: <span class="fw-normal"><?php echo $profileData['address'] ?? 'Not Set';?></span></h5>
                                     </div>
                                 </div>
                             </div>
@@ -1432,7 +1432,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                             <div class="d-flex justify-content-start row">
                                 <div id="dentalMessage" class="col-12" role="alert">
-                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.</div>' ?>
+                                    <?php echo $hasDid ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.</div>' ?>
                                 </div>
                                 <div class="col-xl">
                                     <h5>Previous Dentist: <span class="fw-normal"><?php echo $dentalData['prevDentist']  ?? "Not Set";?></span></h5>
@@ -1445,7 +1445,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <div class="col-sm-9 rounded shadow bg-white m-3 p-3 d-flex justify-content-center">
                         <div class="p-3 p-md-4 p-lg-4 col">
                             <div class="d-flex align-items-center flex-row">
-                                <h1 class="col">Medical History</h1>
+                                <h1 id="Medical" class="col">Medical History</h1>
                                 <div class="col-auto" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View Records">
                                     <button id="" class="btn btn-outline-secondary position-relative" <?php echo ($medicalData['hasMedical'] ?? '') ? '' : 'disabled'; ?> data-bs-toggle="modal" data-bs-target="#medicalHistoryLogsModal">
                                         <i class="bi bi-file-earmark-text"></i>
@@ -1462,7 +1462,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                             <div class="d-flex justify-content-start row">
                                 <div id="medicalMessage" class="col-12" role="alert">
-                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.</div>' ?>
+                                    <?php echo $hasMid ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your medical record first.</div>' ?>
                                 </div>
                                 <div class="col">
                                     <div class="row">
@@ -1994,8 +1994,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 </html>
 
 <?php 
-
-    
     } else {
         header("Location: ../../login.php");
     }

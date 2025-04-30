@@ -13,6 +13,7 @@ require_once 'php/fetch-id.php';
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
     if ($_SESSION['account_type'] == 2) {
         $patient_id = fetchPatientID();
+        $mid = checkMedical($conn, $patient_id);
 
         if (is_int($patient_id)) {
             $hasId = true;
@@ -20,7 +21,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $hasId = false;
         }
 
-        if ($hasId) {
+        if (is_int($mid)) {
+          $hasMid = true;
+        } else {
+          $hasMid = false;
+        }
+
+        if ($hasId && $hasMid) {
 ?>
 
     <!DOCTYPE html>
@@ -118,6 +125,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <h6>Request Date: <span id="aptdtlsrequestdate" class="fw-normal"></span></h6>
                                     <h6>Request Time: <span id="aptdtlsrequesttime" class="fw-normal"></span></h6>
                                 </div>
+                                <div class="col-12 col-lg">
+                                    <h6>Appointment ID: <span id="aptId" class="fw-normal"></span></h6>
+                                    <h6>Follow-up Appointment ID: <span id="pastAptId" class="fw-normal"></span></h6>
+                                </div>
                             </div>
 
                             <hr>
@@ -139,7 +150,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="col-12 col-lg aptdtlsverdictdiv">
                                     <h6><span class="aptdtlsverdict"></span> Date: <span id="aptdtlsverdictdate" class="fw-normal"></span></h6>
                                     <h6><span class="aptdtlsverdict"></span> Time: <span id="aptdtlsverdicttime" class="fw-normal"></span></h6>
-                                    <h6><span class="aptdtlsverdict" class="fw-normal"></span> By: <span id="aptdtlsverdictby" class="fw-normal"></span></h6>
+                                    <h6 id="aptdtlsverdictbytext"><span class="aptdtlsverdict" class="fw-normal"></span> By: <span id="aptdtlsverdictby" class="fw-normal"></span></h6>
                                 </div>
 
                                 <div class="col-12 col-lg aptdtlsreasondiv">
@@ -373,7 +384,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                                         if ($row['Status'] == "Approved") {
                                             $status = "text-success";
-                                        } else if ($row['Status'] == "Denied" || $row['Status'] == "Cancelled") {
+                                        } else if ($row['Status'] == "Denied" || $row['Status'] == "Cancelled" || $row['Status'] == "Partially Paid") {
                                             $status = "text-danger";
                                         } else if ($row['Status'] == "Evaluated" || $row['Status'] == "Completed") {
                                             $status = "text-secondary";
@@ -466,7 +477,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     concern: $('#concern').val()
                 };
 
-                // console.log($("form").serialize());
+                // console.log($("#myForm").serialize());
 
                 $.ajax({
                     type: "POST",
@@ -516,10 +527,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         dentist_id = data.dentist_id;
                     }
                     // console.log(formData);
-                    // console.log(data.responseText);
+                    // console.log(data);
                 }).fail(function(data) {
                     // console.log(formData);
-                    // console.log(data.responseText);
+                    // console.log(data);
                 });
             });
 
@@ -595,6 +606,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     autoWidth: false,
                     paging: true,
                     scrollCollapse: true,
+                    scrollX: true,
                     scrollY: '50vh',
                     order: [
                         [0, "desc"]
@@ -642,6 +654,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 $(".aptdtlsverdictOther").hide();
                             }
                             break;
+                            
+                        case "Partially Paid":
+                            $(".aptdtlsverdictdiv").show();
+                            $(".aptdtlsreasondiv").hide();
+                            $("#aptCancelBtn").hide();
+                            $("#exclamationIcon").hide();
+                            $("#aptdtlsstatus").removeClass("text-success text-warning text-secondary").addClass("text-danger");
+                            break;
                         
                         case "Evaluated":
                         case "Completed":
@@ -661,8 +681,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             break;
                     }
                     
-                    let details = [data.Status, data.Status, data.Dentist, data.Start_Date, data.Start_Time, data.Request_Date, data.Request_Time, data.Approved_Date, data.Approved_Time, data.Approved_By, data.Concern];
-                    let detailsId = ["#aptdtlsstatus", ".aptdtlsverdict", "#aptdtlsdentist", "#aptdtlsstartdate", "#aptdtlsstarttime", "#aptdtlsrequestdate", "#aptdtlsrequesttime", "#aptdtlsverdictdate", "#aptdtlsverdicttime", "#aptdtlsverdictby", "#aptdtlsconcern"];
+                    let details = [data.Status, data.Status, data.Dentist, data.Start_Date, data.Start_Time, data.Request_Date, data.Request_Time, data.Approved_By, data.Concern, data.PastAptId, data.AptId];
+                    let detailsId = ["#aptdtlsstatus", ".aptdtlsverdict", "#aptdtlsdentist", "#aptdtlsstartdate", "#aptdtlsstarttime", "#aptdtlsrequestdate", "#aptdtlsrequesttime", "#aptdtlsverdictby", "#aptdtlsconcern", "#pastAptId", "#aptId"];
 
                     for (let index = 0; index < details.length; index++) {
                         $(detailsId[index]).text(details[index]);
@@ -675,19 +695,44 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             $("#aptdtlsverdictdate").text(data.Cancel_Date);
                             $("#aptdtlsverdicttime").text(data.Cancel_Time);
                             $("#aptdtlsverdictby").text("Me");
+                            $("#aptdtlsverdictbytext").show();
                             break;
+
+                        case "Denied":
+                            $("#aptdtlsverdictdate").text(data.Approved_Date);
+                            $("#aptdtlsverdicttime").text(data.Approved_Time);
+                            $("#aptdtlsreason").text(data.Reason);
+                            $("#aptdtlsreasonOther").text(data.ReasonOther);
+                            $("#aptdtlsverdictbytext").show();
+                            break;
+
                         case "Evaluated":
                             $("#aptdtlsverdictdate").text(data.Examined_Date);
                             $("#aptdtlsverdicttime").text(data.Examined_Time);
-                            $("#aptdtlsverdictby").text("Me");
+                            $("#aptdtlsverdictby").text(data.Dentist);
+                            $("#aptdtlsverdictbytext").show();
                             break;
-                        case "Denied":
-                            $("#aptdtlsreason").text(data.Reason);
-                            $("#aptdtlsreasonOther").text(data.ReasonOther);
+
+                        case "Completed":
+                            $("#aptdtlsverdictdate").text(data.Completed_Date);
+                            $("#aptdtlsverdicttime").text(data.Completed_Time);
+                            $("#aptdtlsverdictby").text("");
+                            $("#aptdtlsverdictbytext").hide();
                             break;
-                        default:                            
+
+                        case "Partially Paid":
+                            $("#aptdtlsverdictdate").text(data.Partial_Date);
+                            $("#aptdtlsverdicttime").text(data.Partial_Time);
+                            $("#aptdtlsverdictby").text("");
+                            $("#aptdtlsverdictbytext").hide();
+                            break;
+
+                        default:
+                            $("#aptdtlsverdictdate").text(data.Approved_Date);
+                            $("#aptdtlsverdicttime").text(data.Approved_Time);
                             $("#aptdtlsreason").text("");
-                            $("#aptdtlsreasonOther").text("");     
+                            $("#aptdtlsreasonOther").text("");
+                            $("#aptdtlsverdictbytext").show();  
                             break;
                     }
 
@@ -776,9 +821,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
 <?php 
         } else {
-            header("Location: profile.php");            
+            if (!$hasId) {
+                header("Location: profile.php#Profile");            
+            } else if (!$hasMid) {
+                header("Location: profile.php#Medical");                            
+            }
         }
-    
     } else {
         header("Location: ../../login.php");
     }

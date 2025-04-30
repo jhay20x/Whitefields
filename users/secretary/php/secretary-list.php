@@ -22,7 +22,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" type="image/x-icon" href="../../resources/images/logo-icon-67459a47526b9.webp"/>
-    <title>Patients - Whitefields Dental Clinic</title>
+    <title>Secretary Accounts - Whitefields Dental Clinic</title>
     <link rel="stylesheet" href="../../resources/css/bootstrap.css">
     <link rel="stylesheet" href="../../resources/css/sidebar.css">
     <link rel="stylesheet" href="../../resources/css/loader.css">
@@ -106,25 +106,25 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="patientViewModal" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-labelledby="patientViewLabel" aria-hidden="true">
+    <div class="modal fade" id="secretaryViewModal" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-labelledby="secretaryViewLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="appointListLabel">
                         <i class="bi bi-file-medical"></i> Medical Information
                     </h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" id="patientViewClose" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" id="secretaryViewClose" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
-                        <div class="accordion" id="patientView">
+                        <div class="accordion" id="secretaryView">
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
-                                    <button class="accordion-button" id="patientViewBtn" type="button" data-bs-toggle="collapse" data-bs-target="#patientInfo" aria-expanded="true" aria-controls="patientInfo">
+                                    <button class="accordion-button" id="secretaryViewBtn" type="button" data-bs-toggle="collapse" data-bs-target="#patientInfo" aria-expanded="true" aria-controls="patientInfo">
                                         <span class="fw-semibold">Personal Information</span>
                                     </button>
                                 </h2>
-                                <div id="patientInfo" class="accordion-collapse collapse show" data-bs-parent="#patientView">
+                                <div id="patientInfo" class="accordion-collapse collapse show" data-bs-parent="#secretaryView">
                                     <div class="accordion-body">
                                         <div class="col-12 col-sm">
                                             <h6>Name: <span id="" class="fw-normal patientName"></span></h6>
@@ -150,7 +150,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <span class="fw-semibold">Dental History</span>
                                     </button>
                                 </h2>
-                                <div id="dentalInfo" class="accordion-collapse collapse" data-bs-parent="#patientView">
+                                <div id="dentalInfo" class="accordion-collapse collapse" data-bs-parent="#secretaryView">
                                     <div class="accordion-body">
                                         <div class="d-flex justify-content-end float-end">
                                             <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View Records">
@@ -172,7 +172,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <span class="fw-semibold">Medical History</span>
                                     </button>
                                 </h2>
-                                <div id="medicalInfo" class="accordion-collapse collapse" data-bs-parent="#patientView">
+                                <div id="medicalInfo" class="accordion-collapse collapse" data-bs-parent="#secretaryView">
                                     <div class="accordion-body">
                                         <div class="row justify-content-end">
                                             <div class="col-auto" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View Records">
@@ -292,7 +292,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <span class="fw-semibold">Treatment History</span>
                                     </button>
                                 </h2>
-                                <div id="treatmentInfo" class="accordion-collapse collapse" data-bs-parent="#patientView">
+                                <div id="treatmentInfo" class="accordion-collapse collapse" data-bs-parent="#secretaryView">
                                     <div class="accordion-body">
                                         <div class="col-12 col-sm">
                                             <table id="treatmentTable" class="table-group-divider table table-hover table-striped">
@@ -326,73 +326,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="dentalHistoryLogsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="dentalHistoryLogsLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header d-flex align-items-center">
-                    <h6 class="modal-title" id="dentalHistoryLogsLabel">
-                        <i class="bi bi-person-vcard"></i> Dental History Records
-                    </h6>
-                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="dentalHistoryLogsClose" aria-label="Close"></button> -->
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive" style="max-height: 50vh;">
-                        <table id="dentalTable" class="table">
-                            <thead>
-                                <tr>
-                                    <th class="col">Remarks</th>
-                                    <th class="col">Visit Date</th>
-                                    <th class="col">Edit Timestamp</th>
-                                </tr>
-                            </thead>
-
-                            <tbody id="dentalTableBody">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="medicalHistoryLogsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="medicalHistoryLogsLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header d-flex align-items-center">
-                    <h6 class="modal-title" id="medicalHistoryLogsLabel">
-                        <i class="bi bi-file-medical"></i> Medical History Records
-                    </h6>
-                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="medicalHistoryLogsClose" aria-label="Close"></button> -->
-                </div>
-                <div class="table-responsive" style="max-height: 50vh;">
-                    <div class="accordion accordion-flush" id="medicalHistoryLogsAcc">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="addPatientModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addPatientLabel" aria-hidden="true">
+    <div class="modal fade" id="addSecretaryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addSecretaryLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="appointListLabel">
-                        <i class="bi bi-person"></i> Add New Patient
+                        <i class="bi bi-person"></i> Add New Secretary Account
                     </h6>
-                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="addPatientClose" aria-label="Close"></button> -->
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="addSecretaryClose" aria-label="Close"></button> -->
                 </div>
-                <form autocomplete="off" action="php/add-patient.php" method="POST" class="col" id="myForm">
+                <form autocomplete="off" action="php/add-secretary.php" method="POST" class="col" id="myForm">
                     <div class="modal-body">
                         <div class="container-fluid">
-                            <div id="addPatientMessage" class="col-12" role="alert"></div>
+                            <div id="addSecretaryMessage" class="col-12" role="alert"></div>
 
                             <div class="col-lg-12">
                                 <h5>Login Details</h5>
@@ -402,7 +348,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <div class="row">
                                 <div class="col-lg">
                                     <div class="form-floating mb-3">
-                                        <input maxlength="35" autocomplete="off" required name="username" placeholder="Username"  id="username" class="form-control onlyLettersNumbersNoSpace">
+                                        <input maxlength="35" autocomplete="off" required name="username" placeholder="Username"  id="username" class="form-control onlyLettersNoSpace">
                                         <label for="username">Username</label>
                                     </div>
                                 </div>
@@ -573,8 +519,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm btn-outline-success" name="profileSubmitBtn">Submit</button>
-                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"data-bs-target="#cancelAddPatientConfirmModal">Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-outline-success" name="secretarySubmitBtn">Submit</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"data-bs-target="#cancelAddSecretaryConfirmModal">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -582,11 +528,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     </div>
     
     <!-- Modal -->
-    <div class="modal fade" id="cancelAddPatientConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cancelAddPatientConfirmLabel" aria-hidden="true">
+    <div class="modal fade" id="cancelAddSecretaryConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cancelAddSecretaryConfirmLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
-                    <h6 class="modal-title" id="cancelAddPatientConfirmLabel">
+                    <h6 class="modal-title" id="cancelAddSecretaryConfirmLabel">
                         <i class="bi bi-person"></i> Add Patient Form
                     </h6>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
@@ -596,7 +542,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <div class="text-center">
                             <h6>Are you sure to cancel editing this form?</h6>
                             <button type="button" value="" id="aptCancelYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-dismiss="modal" aria-label="Close">Yes</button>
-                            <button type="button" value="" id="aptCancelNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addPatientModal">No</button>
+                            <button type="button" value="" id="aptCancelNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addSecretaryModal">No</button>
                         </div>
                     </div>
                 </div>
@@ -617,9 +563,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="text-center">
-                            <h6>Checking this box will allow the system to create a patient account without an email. Moreover, password recovery via email will not be possible until the patient registers an email themselves. Do you want to proceed?</h6>
-                            <button type="button" id="addPatientYesBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addPatientModal">Yes</button>
-                            <button type="button" id="addPatientNoBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#addPatientModal">No</button>
+                            <h6>Checking this box will allow the system to create a secretary account without an email. Moreover, password recovery via email will not be possible until the secretary registers an email themselves. Do you want to proceed?</h6>
+                            <button type="button" id="addSecretaryYesBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addSecretaryModal">Yes</button>
+                            <button type="button" id="addSecretaryNoBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#addSecretaryModal">No</button>
                         </div>
                     </div>
                 </div>
@@ -634,8 +580,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
                     <i class="bi bi-list"></i>
                 </button>
-                <h1><i class="bi bi-person"></i></h1>
-                <h1 class="col ms-3">Patients</h1>
+                <h1><i class="bi bi-person-gear"></i></h1>
+                <h1 class="col ms-3">Secretary Accounts</h1>
 
                 <?php include "../../components/notification.php" ?>
             </div>
@@ -643,8 +589,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             <div class="col-md-9 my-3 rounded shadow bg-white row">
                 <div class="my-3">
                     <div class="col">
-                        <h3>Patients Lists</h3>                        
-                        <span>View all related information about the clinic's patients.</span>
+                        <h3>Secretary Lists</h3>                        
+                        <span>View all related information about the clinic's secretaries.</span>
                     </div>
 
                     <div id="errorMessage" class="col-12" role="alert"></div>
@@ -652,23 +598,22 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <table id="myTable" class="table-group-divider table table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="col">Patient ID</th>
+                                <th class="col">Secretary ID</th>
                                 <th class="col">Full Name</th>
                                 <th class="col">Contact Number</th>
-                                <th class="col">Birth Date</th>
+                                <th class="col">Status</th>
                                 <th class="col">Action</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <?php
-                            $stmt = $conn->prepare("SELECT CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
-                                CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name, 
-                                pi.id AS ID, pi.contactno AS Contact, pi.bdate AS Bdate, ar.id AS AppointmentID
-                                FROM patient_info pi
-                                LEFT OUTER JOIN appointment_requests ar
-                                ON pi.id = ar.patient_id
-                                GROUP BY pi.id, pi.fname, pi.mname, pi.lname, pi.contactno, pi.bdate;");
+                            $stmt = $conn->prepare("SELECT CONCAT(si.fname , CASE WHEN si.mname = 'None' THEN ' ' ELSE CONCAT(' ' , si.mname , ' ') END , si.lname, 
+                                CASE WHEN si.suffix = 'None' THEN '' ELSE CONCAT(' ' , si.suffix) END ) AS Name, 
+                                si.id AS ID, si.contactno AS Contact, si.bdate AS Bdate, ac.status as Status
+                                FROM secretary_info si
+                                LEFT OUTER JOIN accounts ac
+                                ON si.accounts_id = ac.id;");
                             $stmt->execute();
                             $result = $stmt->get_result();
                             $stmt->close();
@@ -677,12 +622,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo '
                                     <tr>
-                                        <td id="patientID">' . $row['ID'] . '</td>
-                                        <td id="patientName">' . $row['Name'] . '</td>
-                                        <td id="patientContact">' .  $row['Contact'] . '</td>
-                                        <td id="patientAge">' . $row['Bdate'] . '</td>
+                                        <td id="secretaryID">' . $row['ID'] . '</td>
+                                        <td id="secretaryName">' . $row['Name'] . '</td>
+                                        <td id="secretaryContact">' .  $row['Contact'] . '</td>
+                                        <td class="fw-bold ' . ($row['Status'] === 1 ? "text-success" : "text-danger") . '">' . ($row['Status'] === 1 ? "Active" : "Inactive") . '</td>
                                         <td class="appointID">
-                                        <button type="button" data-p-id="' . $row['ID'] . '" value="' . $row['AppointmentID'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#patientViewModal">View
+                                        <button type="button" data-p-id="' . $row['ID'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#secretaryViewModal">View
                                         </button>
                                         </td>
                                     </tr>
@@ -747,10 +692,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 topEnd: {
                     buttons: [
                         {
-                            text: 'Add Patient',
+                            text: 'Add Secretary',
                             action: function (e, dt, node, config) {
                                 $("#errorMessage").empty();
-                                $('#addPatientModal').modal('show');
+                                $('#addSecretaryModal').modal('show');
                             }
                         }
                     ]
@@ -785,7 +730,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             ]
         });
 
-        // $('#patientViewModal').modal('show');    
+        // $('#secretaryViewModal').modal('show');    
 
         function loadTable (){
             let treatmentTable = new DataTable('#treatmentTable', {
@@ -822,7 +767,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
 		$("#myForm").submit(function(e){
             showLoader();
-            $("#errorMessage, #addPatientMessage").empty();
+            $("#errorMessage, #addSecretaryMessage").empty();
 			e.preventDefault();
 
 			var url = $("#myForm").attr('action');
@@ -835,14 +780,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 			}).done(function (data) {
                 if (!data.success) {
                     hideLoader();
-                    $("#addPatientMessage").append('<div class="mt-3 alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                    $("#addSecretaryMessage").append('<div class="mt-3 alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 } else {
                     localStorage.setItem("errorMessage", data.message);
                     location.reload();
                 }
-				// console.log(data);
+				console.log(data);
 			}).fail(function(data) {
-				// console.log(data);
+				console.log(data);
 			});
 		});
 
@@ -875,7 +820,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             });
 
             $('#patientInfo').addClass("show").attr("aria-expanded", true);            
-            $('#patientViewBtn').removeClass("collapsed");
+            $('#secretaryViewBtn').removeClass("collapsed");
         }
 
         function fetchPatientDetails(pid, id) {
@@ -1035,7 +980,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $("#userPasswordCheck, #confirmUserPasswordCheck").removeClass("is-invalid");
         });
 
-        $("#addPatientNoBtn").on("click", function() {
+        $("#addSecretaryNoBtn").on("click", function() {
             $("#noemail").attr("data-bs-toggle", "modal");
             $("#noemail").attr("data-bs-target", "#noEmailConfirmModal");
             $("#noemail").prop("checked", false);
@@ -1043,7 +988,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $("#email").val("");
         });
 
-        $("#addPatientYesBtn").on("click", function() {
+        $("#addSecretaryYesBtn").on("click", function() {
             $("#noemail").removeAttr("data-bs-toggle data-bs-target");
             $("#noemail").removeAttr("data-bs-target");
         });

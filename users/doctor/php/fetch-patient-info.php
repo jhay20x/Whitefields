@@ -10,8 +10,8 @@ $pid;
 
 function calculateAge($birthdate) {
     $birthDate = new DateTime($birthdate);
-    $today = new DateTime(); // Current date
-    $age = $today->diff($birthDate)->y; // Calculate age in years
+    $today = new DateTime();
+    $age = $today->diff($birthDate)->y;
     return $age;
 }
 

@@ -11,49 +11,49 @@ require_once 'php/fetch-id.php';
 // echo $_SESSION['user_id'];
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
-    if ($_SESSION['account_type'] == 3) {
-        $id = fetchDentistID();      
+    function calculateAge($birthdate) {
+        $birthDate = new DateTime($birthdate);
+        $today = new DateTime();
+        $age = $today->diff($birthDate)->y;
+        return $age;
+    }
+
+    function fetchProfileDetails($conn, $id) {
+        $stmt = $conn->prepare("SELECT di.lname, di.fname, di.mname, di.suffix, di.contactno AS contnum, di.bdate, di.gender, 
+            di.religion, di.nationality, di.specialist, di.address, di.about_me, ac.email_address AS email, ac.username
+            FROM `dentist_info` di
+            LEFT OUTER JOIN accounts ac
+            ON ac.id = di.accounts_id
+            WHERE di.id = ?;");
+        $stmt->bind_param('i',$id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
         
-        
-        function calculateAge($birthdate) {
-            $birthDate = new DateTime($birthdate);
-            $today = new DateTime();
-            $age = $today->diff($birthDate)->y;
-            return $age;
+        $fields = ["fname", "lname", "mname", "suffix", "gender", "religion", "nationality", "contnum", "address", "specialist", "about_me", "email", "username",];
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $data = [];
+            
+            foreach ($fields as $value) {
+                $data[$value] = $row[$value] ?? null;
+            }
+
+            $data["age"] = calculateAge($row["bdate"]);
+            $data["bdate"] = date("F d, Y", strtotime($row["bdate"]));
+
+            return $data;
         }
+    }
+
+    if ($_SESSION['account_type'] == 3) {
+        $id = fetchDentistID();
         
-        $fname = $lname = $mname = $email = $username = $specialist = $bdate = $gender = $religion = $nationality = $contnum = $address = $aboutme = "";
+        $profileData = [];
 
         if (is_int($id)) {
-            $stmt = $conn->prepare("SELECT di.lname, di.fname, di.mname, di.suffix, di.specialist, di.bdate, di.contactno, di.gender, di.address, di.about_me, di.religion, di.nationality, ac.username, ac.email_address
-                FROM dentist_info di
-                LEFT OUTER JOIN accounts ac
-                ON ac.id = di.accounts_id
-                WHERE di.id = ?;");
-            $stmt->bind_param('i',$id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $stmt->close();            
-    
-            if ($result->num_rows == 1) {
-                $row = $result->fetch_assoc();
-                
-                $fname = $row['fname'];
-                $lname = $row['lname'];
-                $mname = $row['mname'];
-                $suffix = $row['suffix'];
-                $specialist = $row['specialist'];
-                $age = calculateAge($row['bdate']);
-                $bdate = date("F d, Y", strtotime($row['bdate']));
-                $gender = $row['gender'];
-                $religion = $row['religion'];
-                $nationality = $row['nationality'];
-                $contnum = $row['contactno'];
-                $address = $row['address'];
-                $aboutme = $row['about_me'];
-                $email = $row['email_address'];
-                $username = $row['username'];
-            }
+            $profileData = fetchProfileDetails($conn, $id);
         }
 ?>
 
@@ -356,6 +356,71 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="emailAccountModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="emailAccountLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center">
+                    <h6 class="modal-title" id="emailAccountLabel">
+                        <i class="bi bi-envelope-at"></i> Email Account
+                    </h6>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="emailAccountClose" aria-label="Close"></button> -->
+                </div>
+                <form autocomplete="off" action="" method="POST" class="col" id="emailAccountFormVerify">
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div id="emailAccountMessage" role="alert"></div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="email" required disabled data-email-add="<?= empty($profileData['email']) || $profileData['email'] == "None" ? 'Not Set' : $profileData['email'];?>" value="<?= empty($profileData['email']) || $profileData['email'] == "None" ? 'Not Set' : $profileData['email'];?>" name="emailAccount" placeholder="Email Address"  id="emailAccount" class="form-control">
+                                        <label for="emailAccount">Email Address</label>
+                                    </div>
+                                </div>
+                                <div id="otpCodeInput" class="col-12 mt-3 d-none">
+                                    <div class="form-floating">
+                                        <input type="text" maxlength="6" required disabled name="emailAccountOTP" placeholder="OTP Codea"  id="emailAccountOTP" class="form-control onlyNumbers">
+                                        <label for="emailAccountOTP">OTP Code</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="emailAccountUpdateBtn">Update</button>
+                        <button type="submit" class="btn btn-sm btn-outline-success d-none" id="emailAccountVerifyBtn">Verify</button>
+                        <button type="submit" class="btn btn-sm btn-outline-success d-none" disabled id="emailAccountSaveBtn">Save</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" id="emailAccountCancelBtn" data-bs-toggle="modal" data-bs-target="#cancelEmailChangeModal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+        
+    <!-- Modal -->
+    <div class="modal fade" id="cancelEmailChangeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cancelEmailChangeLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center">
+                    <h6 class="modal-title" id="cancelEmailChangeLabel">
+                        <i class="bi bi-envelope-at"></i> Email Account Form
+                    </h6>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelEmailChangeClose" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="text-center">
+                            <h6>Are you sure to cancel editing this form?</h6>
+                            <button type="button" value="" id="emailChangeCancelYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-dismiss="modal" aria-label="Close">Yes</button>
+                            <button type="button" value="" id="emailChangeCancelNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#emailAccountModal">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container-fluid">
         <div class="row d-flex justify-content-center position-relative">
             <div class="title position-sticky top-0 start-0 z-3 bg-white d-flex flex-row shadow align-items-center p-3">
@@ -377,7 +442,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 </div>
                 
                 <div class="m-3 text-center">
-                    <form action="php/upload.php" enctype="multipart/form-data" name="uploadForm" method="POST" class="" id="uploadForm">
+                    <form action="php/upload.php" enctype="multipart/form-data" name="uploadForm" method="POST" id="uploadForm">
                         <div class="input-group">
                             <input type="file" class="form-control" name="fileToUpload" id="fileToUpload">
                             <input class="btn btn-outline-secondary" type="submit" name="uploadsubmitbtn" value="Upload Image" >
@@ -396,7 +461,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <div class="p-3 p-md-4 p-lg-4 col">
                             <div class="d-flex align-items-center flex-row">
                                 <h1 class="col">Personal Information</h1>
-                                <div class="col-auto" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Profile Information">
+                                <div class="col-auto" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Email Account">
+                                    <button id="emailEditBtn" class="btn btn-outline-secondary position-relative" data-bs-toggle="modal" data-bs-target="#emailAccountModal">
+                                        <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                                        <i class="bi bi-envelope-at"></i>
+                                    </button>                                
+                                </div>
+                                <div class="col-auto ms-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Profile Information">
                                     <button id="profileEditBtn" class="btn btn-outline-secondary position-relative" data-bs-toggle="modal" data-bs-target="#profileModal">
                                         <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
                                         <i class="bi bi-pencil-square"></i>
@@ -404,27 +475,29 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 </div>
                             </div>
 
+                            <hr>
+
                             <div class="d-flex justify-content-start row">
-                                <div id="errorMessage" class="mt-3 col-12" role="alert">
-                                    <?php echo $hasId ? '' : '<div class="alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
+                                <div id="errorMessage" class="col-12" role="alert">
+                                    <?php echo $hasId ? '' : '<div class="mt-3 alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-xl-6">
-                                        <h5>Name: <span class="fw-normal"><?php echo $fname ?? ''; ?> <?php echo $mname == "None" ? '' : $mname; ?> <?php echo $lname ?? ''; ?> <?php echo $suffix == "None" ? '' : $suffix; ?></span></h5>
-                                        <h5>Username: <span class="fw-normal"><?php echo $username ?? '';?></span></h5>
-                                        <h5>Specialist: <span class="fw-normal"><?php echo $specialist ?? '';?></span></h5>
-                                        <h5>Age: <span class="fw-normal"><?php echo $age ?? '';?></span></h5>
-                                        <h5>Birth Date: <span class="fw-normal"><?php echo $bdate ?? '';?></span></h5>
-                                        <h5>Gender: <span class="fw-normal"><?php echo $gender ?? '';?></span></h5>
+                                        <h5>Name: <span class="fw-normal"><?php echo $profileData['fname'] ?? 'Not Set'; ?> <?php echo ($profileData['mname'] ?? '') === "None" || empty($profileData['mname']) ? '' : $profileData['mname']; ?> <?php echo $profileData['lname'] ?? ''; ?> <?php echo ($profileData['suffix'] ?? '') === "None" || empty($profileData['suffix']) ? '' : $profileData['suffix']; ?> </span></h5>
+                                        <h5>Username: <span class="fw-normal"><?php echo $profileData['username'] ?? 'Not Set';?></span></h5>
+                                        <h5>Specialist: <span class="fw-normal"><?php echo $profileData['specialist'] ?? 'Not Set';?></span></h5>
+                                        <h5>Age: <span class="fw-normal"><?php echo $profileData['age'] ?? 'Not Set';?></span></h5>
+                                        <h5>Birth Date: <span class="fw-normal"><?php echo $profileData['bdate'] ?? 'Not Set';?></span></h5>
+                                        <h5>Gender: <span class="fw-normal"><?php echo $profileData['gender'] ?? 'Not Set';?></span></h5>
                                     </div>
                                     <div class="col-xl">
-                                        <h5>Contact Number: <span class="fw-normal"><?php echo $contnum ?? '';?></span></h5>
-                                        <h5>Email Address: <span class="fw-normal"><?php echo $email ?? '';?></span></h5>
-                                        <h5>Religion: <span class="fw-normal"><?php echo $religion ?? '';?></span></h5>
-                                        <h5>Nationality: <span class="fw-normal"><?php echo $nationality ?? '';?></span></h5>
-                                        <h5>Address: <span class="fw-normal"><?php echo $address ?? '';?></span></h5>
-                                        <h5>About Me: <span class="fw-normal"><?php echo $aboutme ?? '';?></span></h5>
+                                        <h5>Contact Number: <span class="fw-normal"><?php echo $profileData['contnum'] ?? 'Not Set';?></span></h5>
+                                        <h5>Email Address: <span class="fw-normal"><?php echo empty($profileData['email']) || $profileData['email'] == "None" ? 'Not Set' : $profileData['email'];?></span></h5>
+                                        <h5>Religion: <span class="fw-normal"><?php echo $profileData['religion'] ?? 'Not Set';?></span></h5>
+                                        <h5>Nationality: <span class="fw-normal"><?php echo $profileData['nationality'] ?? 'Not Set';?></span></h5>
+                                        <h5>Address: <span class="fw-normal"><?php echo $profileData['address'] ?? 'Not Set';?></span></h5>
+                                        <h5>About Me: <span class="fw-normal"><?php echo $profileData['about_me'] ?? 'Not Set';?></span></h5>
                                     </div>
                                 </div>
                             </div>
@@ -447,6 +520,89 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
         
         inputFilters();
+        
+        $("#emailAccountUpdateBtn").on("click", function() {
+            if ($("#emailAccount").val() == "Not Set") {
+                $("#emailAccount").prop("disabled", false).val("").focus();
+            } else {
+                $("#emailAccount").prop("disabled", false).focus();
+            }
+            $(this).prop("disabled", true).addClass("d-none");
+            $("#emailAccountVerifyBtn").prop("disabled", false).removeClass("d-none");
+        }); 
+
+        $("#emailChangeCancelYesBtn").on("click", function() {
+            $("#emailAccountMessage").empty();
+            let email = $("#emailAccount").data("email-add");
+
+            $("#emailAccount").prop("disabled", true).val(email);
+            $("#emailAccountUpdateBtn").prop("disabled", false).removeClass("d-none");
+            $("#emailAccountSaveBtn").prop("disabled", true).addClass("d-none");
+            $("#emailAccountVerifyBtn").prop("disabled", true).addClass("d-none");
+            $("#otpCodeInput").addClass("d-none");
+            $("#otpCodeInput input").prop("disabled", true);
+        });
+
+        $("body").on("submit", "#emailAccountFormVerify", function(e) {
+            showLoader();
+            $("#emailAccountMessage").empty();
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "php/send-otp.php",
+                data: $(this).serialize(),
+                dataType: 'json'
+            }).done(function(data) {
+                hideLoader();
+
+                if (data.success) {
+                    $('#emailAccountFormVerify').attr('id', 'emailAccountFormSubmit');
+                    $("#emailAccountMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + data.message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                    $("#emailAccount").prop("disabled", true);
+                    $("#otpCodeInput").removeClass("d-none");
+                    $("#emailAccountVerifyBtn").prop("disabled", true).addClass("d-none");
+                    $("#emailAccountSaveBtn").prop("disabled", false).removeClass("d-none");
+                    $("#otpCodeInput input").prop("disabled", false).focus();
+                } else {
+                    $("#emailAccountMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                }
+                // console.log(data);
+            }).fail(function(data) {
+                // console.log(data);
+            });
+        });
+
+        $("body").on("submit", "#emailAccountFormSubmit", function(e) {
+            showLoader();
+            e.preventDefault();
+            $("#emailAccountMessage").empty();
+            let emailAccount = $("#emailAccount").val();
+            $.ajax({
+                type: "POST",
+                url: "php/verify-otp.php",
+                data: $(this).serialize() + '&emailAccount=' + encodeURIComponent(emailAccount),
+                dataType: 'json'
+            }).done(function(data) {
+                hideLoader();
+
+                if (data.success) {
+                    $("#emailAccountMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + data.message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                    $("#emailAccountFormSubmit").find("input, button").prop("disabled", true);
+                    setTimeout(() => {
+                        showLoader;
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    }, 1000);
+                } else {
+                    $("#emailAccountMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                }
+                // console.log(data);
+            }).fail(function(data) {
+                // console.log(data);
+            });
+        });
 
         $("#uploadForm").on('submit',(function(e) {
             showLoader();

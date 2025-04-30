@@ -22,7 +22,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" type="image/x-icon" href="../../resources/images/logo-icon-67459a47526b9.webp"/>
-    <title>Dentists - Whitefields Dental Clinic</title>
+    <title>Secretary Accounts - Whitefields Dental Clinic</title>
     <link rel="stylesheet" href="../../resources/css/bootstrap.css">
     <link rel="stylesheet" href="../../resources/css/sidebar.css">
     <link rel="stylesheet" href="../../resources/css/loader.css">
@@ -73,6 +73,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             top: 0;
             width: auto;
         }
+        
+        .invalidPassword {
+            color: red;
+        }  
+        
+        .validPassword {
+            color: green;
+        }
 
         @media only screen and (max-width: 600px) {
 
@@ -88,14 +96,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 font-size: 0.8rem;
             }
         }
-
-        .invalidPassword {
-            color: red;
-        }  
-        
-        .validPassword {
-            color: green;
-        }
     </style>
 </head>
 <body class="bg-body-secondary">
@@ -106,22 +106,22 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="dentistViewModal" data-bs-backdrop="static" data-bs-keyboard="false"  tabindex="-1" aria-labelledby="dentistViewLabel" aria-hidden="true">
+    <div class="modal fade" id="secretaryViewModal" data-bs-backdrop="static" data-bs-keyboard="false"  tabindex="-1" aria-labelledby="secretaryViewLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h6 class="modal-title" id="appointListLabel">
-                        <i class="bi bi-person-vcard"></i> Dentist Information
+                        <i class="bi bi-person-gear"></i> Secretary Information
                     </h6>
-                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="dentistViewClose" aria-label="Close"></button> -->
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="secretaryViewClose" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">                        
                         <div class="row">
                             <div class="row">
-                                <h5 class="col-auto my-auto">Account Status: <span id="dentistStatusText"></span></h5>
-                                <div class="col-3" id="dentistStatusDiv" style="display: none;">                                    
-                                    <select disabled required class="form-select" id="dentistStatus" name="dentistStatus">
+                                <h5 class="col-auto my-auto">Account Status: <span id="secretaryStatusText"></span></h5>
+                                <div class="col-3" id="secretaryStatusDiv" style="display: none;">                                    
+                                    <select disabled required class="form-select" id="secretaryStatus" name="secretaryStatus">
                                         <option class="text-success h6" value="1">Active</option>
                                         <option class="text-danger h6" value="0">Inactive</option>
                                     </select>
@@ -129,7 +129,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             </div>
                             <div class="mt-2 col-12 col-sm">
                                 <h6>Name: <span id="dentistName" class="fw-normal"></span></h6>
-                                <h6>Specialist: <span id="dentistSpecialist" class="fw-normal"></h6>
                                 <h6>Birth Date: <span id="dentistBdate" class="fw-normal"></span></h6>
                                 <h6>Age: <span id="dentistAge" class="fw-normal"></span></h6>
                                 <h6>Gender: <span id="dentistGender" class="fw-normal"></span></h6>
@@ -141,7 +140,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <h6>Contact Number: <span id="dentistContact" class="fw-normal"></span></h6>
                                 <h6>Nationality: <span id="dentistNationality" class="fw-normal"></span></h6>
                                 <h6>Address: <span id="dentistAddress" class="fw-normal"></span></h6>
-                                <h6>About Me: <span id="dentistAboutMe" class="fw-normal"></span></h6>
                             </div>
                         </div>
                     </div>
@@ -155,44 +153,21 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             </div>
         </div>
     </div>
-    
-    <!-- Modal -->
-    <div class="modal fade" id="changeStatusCancelConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changeStatusCancelConfirmLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header d-flex align-items-center">
-                    <h6 class="modal-title" id="changeStatusCancelConfirmLabel">
-                        <i class="bi bi-person"></i> Change Status Form
-                    </h6>
-                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="text-center">
-                            <h6>Are you sure to cancel editing this form?</h6>
-                            <button type="button" id="changeStatusConfirmYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#dentistViewModal">Yes</button>
-                            <button type="button" id="changeStatusConfirmNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#dentistViewModal">No</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="addDentistModal" data-bs-backdrop="static" data-bs-keyboard="false"  tabindex="-1" aria-labelledby="addDentistLabel" aria-hidden="true">
+    <div class="modal fade" id="addSecretaryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addSecretaryLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
-                    <h6 class="modal-title" id="addDentistLabel">
-                        <i class="bi bi-person-vcard"></i> Profile Information
+                    <h6 class="modal-title" id="appointListLabel">
+                        <i class="bi bi-person"></i> Add New Secretary Account
                     </h6>
-                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="addDentistClose" aria-label="Close"></button> -->
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="addSecretaryClose" aria-label="Close"></button> -->
                 </div>
-                <form autocomplete="off" action="php/add-dentist.php" method="POST" class="col" id="myForm">
+                <form autocomplete="off" action="php/add-secretary.php" method="POST" class="col" id="myForm">
                     <div class="modal-body">
                         <div class="container-fluid">
-                            <div id="addDentistMessage" class="col-12" role="alert"></div>
+                            <div id="addSecretaryMessage" class="col-12" role="alert"></div>
 
                             <div class="col-lg-12">
                                 <h5>Login Details</h5>
@@ -310,27 +285,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input maxlength="25" type="text" required name="specialist" placeholder="Age"  id="specialist" class="form-control onlyLetters">
-                                            <label for="specialist">Specialist</label>
-                                        </div>
-                                    </div>
-    
-                                    <div class="col-lg">
-                                        <div class="form-floating mb-3">
                                             <input type="date" required name="bdate" placeholder="Birth Date"  id="bdate" class="form-control">
                                             <label for="bdate">Birth Date</label>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-lg">    
-                                    <div class="col-lg">
-                                        <div class="form-floating mb-3">
-                                            <input maxlength="100" type="text" required name="address" placeholder="Address"  id="address" class="form-control onlyAddress">
-                                            <label for="address">Address</label>
-                                        </div>                                             
-                                    </div>
-
+                                <div class="col-lg">
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
                                             <select required class="form-select" name="gender" id="gender">
@@ -362,21 +323,20 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <input maxlength="11" type="text" required name="contnumber" placeholder="Contact Number" value="09" id="contnumber" class="form-control onlyNumbers">
                                             <label for="contnumber">Contact No.</label>
                                         </div>
-                                    </div>
-    
+                                    </div>    
                                     <div class="col-lg">
                                         <div class="form-floating mb-3">
-                                            <input type="text" required maxlength="100" name="aboutme" placeholder="Occupation" id="aboutme" class="form-control onlyLettersNumbers">
-                                            <label for="aboutme">About Me</label>
-                                        </div>                                            
+                                            <input maxlength="100" type="text" required name="address" placeholder="Address"  id="address" class="form-control onlyAddress">
+                                            <label for="address">Address</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>               
+                    </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm btn-outline-success" id="addDentistSubmitBtn" name="addDentistSubmitBtn">Submit</button>
-                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"data-bs-target="#cancelAddDentistConfirmModal">Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-outline-success" name="secretarySubmitBtn">Submit</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"data-bs-target="#cancelAddSecretaryConfirmModal">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -384,12 +344,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     </div>
     
     <!-- Modal -->
-    <div class="modal fade" id="cancelAddDentistConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cancelAddDentistConfirmLabel" aria-hidden="true">
+    <div class="modal fade" id="cancelAddSecretaryConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cancelAddSecretaryConfirmLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
-                    <h6 class="modal-title" id="cancelAddDentistConfirmLabel">
-                        <i class="bi bi-person"></i> Add Dentist Form
+                    <h6 class="modal-title" id="cancelAddSecretaryConfirmLabel">
+                        <i class="bi bi-person"></i> Add Patient Form
                     </h6>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
                 </div>
@@ -397,8 +357,31 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <div class="container-fluid">
                         <div class="text-center">
                             <h6>Are you sure to cancel editing this form?</h6>
-                            <button type="button" id="aptCancelYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-dismiss="modal" aria-label="Close">Yes</button>
-                            <button type="button" id="aptCancelNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addDentistModal">No</button>
+                            <button type="button" value="" id="aptCancelYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-dismiss="modal" aria-label="Close">Yes</button>
+                            <button type="button" value="" id="aptCancelNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addSecretaryModal">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="changeStatusCancelConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changeStatusCancelConfirmLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center">
+                    <h6 class="modal-title" id="changeStatusCancelConfirmLabel">
+                        <i class="bi bi-person"></i> Change Status Form
+                    </h6>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="text-center">
+                            <h6>Are you sure to cancel editing this form?</h6>
+                            <button type="button" id="changeStatusConfirmYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#secretaryViewModal">Yes</button>
+                            <button type="button" id="changeStatusConfirmNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#secretaryViewModal">No</button>
                         </div>
                     </div>
                 </div>
@@ -419,9 +402,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="text-center">
-                            <h6>Checking this box will allow the system to create a dentist account without an email. Moreover, password recovery via email will not be possible until the dentist registers an email themselves. Do you want to proceed?</h6>
-                            <button type="button" id="addDentistYesBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addDentistModal">Yes</button>
-                            <button type="button" id="addDentistNoBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#addDentistModal">No</button>
+                            <h6>Checking this box will allow the system to create a secretary account without an email. Moreover, password recovery via email will not be possible until the secretary registers an email themselves. Do you want to proceed?</h6>
+                            <button type="button" id="addSecretaryYesBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#addSecretaryModal">Yes</button>
+                            <button type="button" id="addSecretaryNoBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-toggle="modal" data-bs-target="#addSecretaryModal">No</button>
                         </div>
                     </div>
                 </div>
@@ -436,28 +419,27 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <span class="position-absolute <?php echo $hasId ? 'visually-hidden' : ''; ?> top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
                     <i class="bi bi-list"></i>
                 </button>
-                <h1><i class="bi bi-person-vcard"></i></h1>
-                <h1 class="col ms-3">Dentist</h1>
+                <h1><i class="bi bi-person-gear"></i></h1>
+                <h1 class="col ms-3">Secretary Accounts</h1>
 
                 <?php include "../../components/notification.php" ?>
             </div>
 
-            <div class="col-md-9 my-3 rounded shadow bg-white row">                
+            <div class="col-md-9 my-3 rounded shadow bg-white row">
                 <div class="my-3">
                     <div class="col">
-                        <h3>Dentist Lists</h3>                        
-                        <span>View all related information about the clinic's dentists.</span>
+                        <h3>Secretary Lists</h3>                        
+                        <span>View all related information about the clinic's secretaries.</span>
                     </div>
-                    
+
                     <div id="errorMessage" class="col-12" role="alert"></div>
 
                     <table id="myTable" class="table-group-divider table table-hover table-striped">
                         <thead>
                             <tr>
-                                <th class="col">Dentist ID</th>
+                                <th class="col">Secretary ID</th>
                                 <th class="col">Full Name</th>
                                 <th class="col">Contact Number</th>
-                                <th class="col">Specialist</th>
                                 <th class="col">Status</th>
                                 <th class="col">Action</th>
                             </tr>
@@ -465,12 +447,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                         <tbody>
                             <?php
-                            $stmt = $conn->prepare("SELECT CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
-                                CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS Name, 
-                                di.id AS ID, di.contactno AS Contact, di.specialist AS Specialist, ac.status as Status
-                                FROM dentist_info di
+                            $uid = $_SESSION['user_id'];
+
+                            $stmt = $conn->prepare("SELECT CONCAT(si.fname , CASE WHEN si.mname = 'None' THEN ' ' ELSE CONCAT(' ' , si.mname , ' ') END , si.lname, 
+                                CASE WHEN si.suffix = 'None' THEN '' ELSE CONCAT(' ' , si.suffix) END ) AS Name, 
+                                si.id AS ID, si.contactno AS Contact, si.bdate AS Bdate, ac.status as Status
+                                FROM secretary_info si
                                 LEFT OUTER JOIN accounts ac
-                                ON di.accounts_id = ac.id;");
+                                ON si.accounts_id = ac.id
+                                WHERE si.accounts_id != ?;");
+                            $stmt->bind_param("i", $uid);
                             $stmt->execute();
                             $result = $stmt->get_result();
                             $stmt->close();
@@ -479,13 +465,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo '
                                     <tr>
-                                        <td>' . $row['ID'] . '</td>
-                                        <td>' . $row['Name'] . '</td>
-                                        <td>' .  $row['Contact'] . '</td>
-                                        <td>' . $row['Specialist'] . '</td>
+                                        <td id="secretaryID">' . $row['ID'] . '</td>
+                                        <td id="secretaryName">' . $row['Name'] . '</td>
+                                        <td id="secretaryContact">' .  $row['Contact'] . '</td>
                                         <td class="fw-bold ' . ($row['Status'] === 1 ? "text-success" : "text-danger") . '">' . ($row['Status'] === 1 ? "Active" : "Inactive") . '</td>
                                         <td class="appointID">
-                                        <button type="button" value="' . $row['ID'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#dentistViewModal">View
+                                        <button type="button" data-s-id="' . $row['ID'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#secretaryViewModal">View
                                         </button>
                                         </td>
                                     </tr>
@@ -524,10 +509,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $(document).ready(function () {
         inputFilters();
 
-        $('#myTable thead th').eq(3).attr('width', '0%');
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
         
         DataTable.Buttons.defaults.dom.button.className = 'btn btn-sm btn-outline-primary';
-
+        
         let table = new DataTable('#myTable', {
             language: {
                 searchBuilder: {            
@@ -539,9 +525,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             },
             select: false,
             lengthMenu: [
-            [15, 25, 50, -1],
-            [15, 25, 50, 'All'],
-            ],
+                [15, 25, 50, -1],
+                [15, 25, 50, 'All'],
+                ],
             layout: {
                 topStart:{
                     search: true
@@ -549,18 +535,15 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 topEnd: {
                     buttons: [
                         {
-                            text: 'Add Dentist',
+                            text: 'Add Secretary',
                             action: function (e, dt, node, config) {
                                 $("#errorMessage").empty();
-                                $('#addDentistModal').modal('show');
+                                $('#addSecretaryModal').modal('show');
                             }
                         }
                     ]
                 },
                 top1: {
-                    // searchPanes: {
-                    //     initCollapsed: true,
-                    // },
                     searchBuilder: {
                         
                     },
@@ -577,24 +560,58 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     targets: []
                 },
                 {
-                    targets: [0,1,2,3,4,5],
+                    targets: [0,1,2,3,4],
                     className: 'dt-body-center dt-head-center'
                 }
             ],
             autoWidth: false,
             paging: true,
             scrollCollapse: true,
+            scrollX: true,
             scrollY: '50vh',
             order: [
                 [0, "asc"]
             ]
         });
 
-        // $('#dentistViewModal').modal('show'); 
+        // $('#secretaryViewModal').modal('show');    
+
+        function loadTable (){
+            let treatmentTable = new DataTable('#treatmentTable', {
+                select: false,
+                lengthMenu: [
+                    [5, 10, 15, -1],
+                    [5, 10, 15, 'All'],
+                ],
+                layout: {
+                    topStart:{
+                    },
+                    topEnd: {
+                        search: true,
+                    },
+                    top1: {
+                    },
+                    bottomStart: {
+                        pageLength: true
+                    }
+                },
+                columnDefs: [
+                    {
+                        targets: [0,1,2,3,4,5,6],
+                        className: 'dt-body-center dt-head-center align-middle'
+                    }
+                ],
+                autoWidth: false,
+                paging: true,
+                scrollX: true,
+                order: [[0, "asc"]],
+                columns: [null, { width: '15%' }, null, { width: '25%' }, null]
+            });
+        }
 
 		$("#myForm").submit(function(e){
             showLoader();
-            $("#errorMessage").empty();
+            $("#errorMessage, #addSecretaryMessage").empty();
 			e.preventDefault();
 
 			var url = $("#myForm").attr('action');
@@ -607,7 +624,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 			}).done(function (data) {
                 if (!data.success) {
                     hideLoader();
-                    $("#addDentistMessage").append('<div class="mt-3 alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                    $("#addSecretaryMessage").append('<div class="mt-3 alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 } else {
                     localStorage.setItem("errorMessage", data.message);
                     location.reload();
@@ -620,23 +637,23 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
 		$("#changeStatusSaveBtn").click(function(e){
             showLoader();
-            $("#errorMessage, #addDentistMessage").empty();
+            $("#errorMessage, #addSecretaryMessage").empty();
 			e.preventDefault();
 
             var formData = {
-                status: $("#dentistStatus").val(),
+                status: $("#secretaryStatus").val(),
                 id: $(this).attr("value")
             };
 
 			$.ajax({
 				type: "POST",
-				url: "php/update-dentist-status.php",
+				url: "php/update-secretary-status.php",
 				data: formData,
                 dataType: "json"
 			}).done(function (data) {
                 if (!data.success) {
                     hideLoader();
-                    $("#addDentistMessage").append('<div class="mt-3 alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                    $("#addSecretaryMessage").append('<div class="mt-3 alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 } else {
                     localStorage.setItem("errorMessage", data.message);
                     location.reload();
@@ -647,21 +664,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 			});
 		});
 
-        $("#dentistStatus").on("change", function() {
-            if ($("#dentistStatus").val() == 1) {
-                $("#dentistStatus").removeClass("text-danger");
-                $("#dentistStatus").addClass("text-success");
-            }else {
-                $("#dentistStatus").removeClass("text-success");                
-                $("#dentistStatus").addClass("text-danger");
-            }
-        });
-
         $("#changeStatusBtn").on("click", function() {
             $(this).hide();
-            $("#changeStatusBackBtn, #dentistStatusText").hide();
-            $("#changeStatusSaveBtn, #changeStatusCancelBtn, #dentistStatusDiv").show()
-            $("#dentistStatusDiv select").prop("disabled", false);
+            $("#changeStatusBackBtn, #secretaryStatusText").hide();
+            $("#changeStatusSaveBtn, #changeStatusCancelBtn, #secretaryStatusDiv").show()
+            $("#secretaryStatusDiv select").prop("disabled", false);
         });
 
         $("#aptCancelYesBtn").on("click", function() {
@@ -672,14 +679,109 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $("#changeStatusConfirmYesBtn").on("click", function() {
             let id = $(this).val();
 
-            $("#changeStatusBtn, #changeStatusBackBtn, #dentistStatusText").show();
-            $("#changeStatusSaveBtn, #changeStatusCancelBtn, #dentistStatusDiv").hide();
-            $("#dentistStatusDiv select").prop("disabled", true);
-            $("#dentistStatus").val(id);
+            $("#changeStatusBtn, #changeStatusBackBtn, #secretaryStatusText").show();
+            $("#changeStatusSaveBtn, #changeStatusCancelBtn, #secretaryStatusDiv").hide();
+            $("#secretaryStatusDiv select").prop("disabled", true);
+            $("#secretaryStatus").val(id);
             styleStatus(id);
         });
 
-        $("#addDentistNoBtn").on("click", function() {
+        $("#secretaryStatus").on("change", function() {
+            if ($("#secretaryStatus").val() == 1) {
+                $("#secretaryStatus").removeClass("text-danger");
+                $("#secretaryStatus").addClass("text-success");
+            }else {
+                $("#secretaryStatus").removeClass("text-success");                
+                $("#secretaryStatus").addClass("text-danger");
+            }
+        });
+
+        $('body').on('click', '.viewAptDetail', function(){
+            let sid = $(this).attr("data-s-id");
+            fetchSecretaryDetails(sid)
+        });
+
+        $('#treatmentItem').on('click', function () {
+            $('#treatmentTable').DataTable().columns.adjust();
+        });
+        
+        if (localStorage.getItem("errorMessage")){
+            let message = localStorage.getItem("errorMessage");
+
+            $("#errorMessage").append('<div class="mt-3 alert alert-success  alert-dismissible fade show">' + message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+
+            localStorage.removeItem("errorMessage");
+        };
+
+        function styleStatus(status) {
+            if (status == 1) {
+                $("#secretaryStatusText, #secretaryStatus").addClass("text-success");
+                $("#secretaryStatusText, #secretaryStatus").removeClass("text-danger");
+            } else {
+                $("#secretaryStatusText, #secretaryStatus").addClass("text-danger");
+                $("#secretaryStatusText, #secretaryStatus").removeClass("text-success");                    
+            }
+        }
+
+        function fetchSecretaryDetails(sid) {
+            var formData = {
+                sid: sid
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "php/fetch-secretary-info.php",
+                data: formData,
+                dataType: 'json'
+            }).done(function (data) {
+                let status = data.status == 1 ? "Active" : "Inactive";
+                let statusStyle;
+                
+                styleStatus(data.status);
+
+                $("#changeStatusSaveBtn").val(data.AccountID);
+                $("#secretaryStatus").val(data.status);
+                $("#changeStatusConfirmYesBtn").val(data.status);
+
+                let detailsId = [
+                    "#secretaryStatusText", "#dentistName", "#dentistUsername",
+                    "#dentistBdate", "#dentistAge", "#dentistContact", "#dentistGender", "#dentistAddress",
+                    "#dentistAboutMe", "#dentistReligion", "#dentistNationality", "#dentistEmail", "#dentistSpecialist"
+                ];
+
+                let details = [
+                    status, data.Name, data.username, 
+                    data.bdate, data.age, data.contactno, data.gender, data.address, 
+                    data.about_me, data.religion, data.nationality, data.email_address, data.specialist
+                ];
+
+                for (let index = 0; index < details.length; index++) {
+                    $(detailsId[index]).text(details[index]);
+                }
+                // console.log(data);
+            }).fail(function(data) {
+                // console.log(data);
+            });
+        }
+		
+        $("#nomname, #nosuffix").click(function() {
+            let id =  "#" + $(this).attr('id').substring(2);
+
+            if ($(this).is(":checked")) {
+                $(id).prop("readonly", true);
+                $(id).val("None");
+            } else {                
+                $(id).prop("readonly", false);
+                $(id).val("");
+            }
+        });
+
+        $("#aptCancelYesBtn").on("click", function() {
+            $("#myForm")[0].reset();
+            $("#userPasswordCheck, #confirmUserPasswordCheck").removeClass("is-invalid");
+        });
+
+        $("#addSecretaryNoBtn").on("click", function() {
             $("#noemail").attr("data-bs-toggle", "modal");
             $("#noemail").attr("data-bs-target", "#noEmailConfirmModal");
             $("#noemail").prop("checked", false);
@@ -687,7 +789,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $("#email").val("");
         });
 
-        $("#addDentistYesBtn").on("click", function() {
+        $("#addSecretaryYesBtn").on("click", function() {
             $("#noemail").removeAttr("data-bs-toggle data-bs-target");
             $("#noemail").removeAttr("data-bs-target");
         });
@@ -713,83 +815,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 this.value = "09";
             }
         });
-        
-        if (localStorage.getItem("errorMessage")){
-            let message = localStorage.getItem("errorMessage");
-
-            $("#errorMessage").append('<div class="mt-3 alert alert-success  alert-dismissible fade show">' + message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
-
-            localStorage.removeItem("errorMessage")
-        };
-
-        $('body').on('click', '.viewAptDetail', function(){
-            let id = $(this).attr('value');
-            fetchDentistDetails(id);
-        });
-
-        function styleStatus(status) {
-            if (status == 1) {
-                $("#dentistStatusText, #dentistStatus").addClass("text-success");
-                $("#dentistStatusText, #dentistStatus").removeClass("text-danger");
-            } else {
-                $("#dentistStatusText, #dentistStatus").addClass("text-danger");
-                $("#dentistStatusText, #dentistStatus").removeClass("text-success");                    
-            }
-        }
-
-        function fetchDentistDetails(id) {            
-            var formData = {
-                id: id
-            };
-
-            $.ajax({
-                type: "POST",
-                url: "php/fetch-dentist-info.php",
-                data: formData,
-                dataType: 'json'
-            }).done(function (data) {
-                let status = data.status == 1 ? "Active" : "Inactive";
-                let statusStyle;
-                
-                styleStatus(data.status);
-
-                $("#changeStatusSaveBtn").val(data.AccountID);
-                $("#dentistStatus").val(data.status);
-                $("#changeStatusConfirmYesBtn").val(data.status);
-
-                let detailsId = [
-                    "#dentistStatusText", "#dentistName", "#dentistUsername",
-                    "#dentistBdate", "#dentistAge", "#dentistContact", "#dentistGender", "#dentistAddress",
-                    "#dentistAboutMe", "#dentistReligion", "#dentistNationality", "#dentistEmail", "#dentistSpecialist"
-                ];
-
-                let details = [
-                    status, data.Name, data.username, 
-                    data.bdate, data.age, data.contactno, data.gender, data.address, 
-                    data.about_me, data.religion, data.nationality, data.email_address, data.specialist
-                ];
-
-                for (let index = 0; index < details.length; index++) {
-                    $(detailsId[index]).text(details[index]);
-                }
-
-                //console.log(data.responseText);
-            }).fail(function(data) {
-                //console.log(data.responseText);
-            });
-        }
-
-        $("#nomname, #nosuffix").click(function() {
-            let id =  "#" + $(this).attr('id').substring(2);
-
-            if ($(this).is(":checked")) {
-                $(id).prop("readonly", true);
-                $(id).val("None");
-            } else {                
-                $(id).prop("readonly", false);
-                $(id).val("");
-            }
-        });
 
         $("#togglePassword, #toggleConfirmPassword").on("click", function() {
             let passwordInput = this.id == "togglePassword" ? "#userPasswordCheck" : "#confirmUserPasswordCheck";
@@ -813,7 +838,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $("#" + this.id + "Feedback").hide();
         });
 	});
-
 </script>
 </html>
 

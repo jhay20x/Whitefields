@@ -11,7 +11,7 @@ $pid;
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
     $pid = $_POST['pid'];
     
-    $stmt = $conn->prepare("SELECT ar.id as AppointmentID, st.status_name AS AppointStatus, ar.start_datetime AS Timestamp
+    $stmt = $conn->prepare("SELECT ar.id as AppointmentID, ar.past_appoint_id as PastAppointmentID, st.status_name AS AppointStatus, ar.start_datetime AS Timestamp
         FROM appointment_requests ar
         LEFT OUTER JOIN appointment_status st ON st.id = ar.appoint_status_id
         WHERE ar.patient_id = ? AND (ar.appoint_status_id = 6 OR ar.appoint_status_id = 5  OR ar.appoint_status_id = 7)
@@ -45,7 +45,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 <td id="transactionAppointStatus" class="fw-bold ' . $color . '">' . $row['AppointStatus'] . '</td>
                 <td id="transactionTimestamp">' . $datetime . '</td>
                 <td class="transactionAction">
-                    <button type="button" data-apt-id="' . $row['AppointmentID'] . '" class="btn btn-sm btn-outline-primary viewTransDetail" data-bs-toggle="modal" data-bs-target="#transactionDetailsModal">View</button>
+                    <button type="button" data-past-apt-id="' . $row['PastAppointmentID'] . '" data-apt-id="' . $row['AppointmentID'] . '" class="btn btn-sm btn-outline-primary viewTransDetail" data-bs-toggle="modal" data-bs-target="#transactionDetailsModal">View</button>
                 </td>
             </tr>
         ';

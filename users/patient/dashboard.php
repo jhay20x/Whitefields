@@ -65,14 +65,21 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
     if ($_SESSION['account_type'] == 2) {        
         $patient_id = fetchPatientID();
+        $mid = checkMedical($conn, $patient_id);
 
         if (is_int($patient_id)) {
             $hasId = true;
         } else {
             $hasId = false;
         }
+
+        if (is_int($mid)) {
+          $hasMid = true;
+        } else {
+          $hasMid = false;
+        }
         
-        if ($hasId) {
+        if ($hasId && $hasMid) {
             $lastVisit = lastVisit($conn, $patient_id);
             $nextVisit = nextVisit($conn, $patient_id);
 ?>
@@ -163,32 +170,34 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
             <div id="appointmentForm" class="d-flex justify-content-center">
                 <div class="col col-sm-9">
-                    <div class="row bg-white rounded shadow mt-3 p-3 d-flex justify-content-center row">
+                    <div class="row mt-3 justify-content-center">
                         <div id="errorMessage" class="" role="alert">
                             <?php echo $hasId ? '' : '<div class="alert alert-danger alert-dismissible fade show">Please complete your profile first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>' ?>
                         </div>
-
-                        <!-- <div class="row">
-                            <h4 class="row">Announcements:</h4>
-                            <span class="row">No new announcements.</span>
-                        </div> -->
                     </div>
 
-                    <div class="row bg-white rounded shadow mt-3 p-3 d-flex justify-content-center row">
+                    <!-- <div class="row bg-white rounded shadow p-3 d-flex justify-content-center">
+                        <div class="row">
+                            <h4 class="row">Announcements:</h4>
+                            <span class="row">No new announcements.</span>
+                        </div>
+                    </div> -->
+
+                    <div class="row bg-white rounded shadow p-3 d-flex justify-content-center">
                         <div class="row">                                    
                             <h4 class="row">Upcoming Appointments:</h4>
                             <span class="row"><?= $nextVisit ?></span>
                         </div>
                     </div>
 
-                    <!-- <div class="row bg-white rounded shadow mt-3 p-3 d-flex justify-content-center row">
+                    <!-- <div class="row bg-white rounded shadow mt-3 p-3 d-flex justify-content-center">
                         <div class="row">                                    
                             <h4 class="row">Ongoing Procedures:</h4>
                             <span class="row">No ongoing procedures.</span>
                         </div>
                     </div> -->
 
-                    <div class="row bg-white rounded shadow mt-3 p-3 d-flex justify-content-center row">
+                    <div class="row bg-white rounded shadow mt-3 p-3 d-flex justify-content-center">
                         <div class="row">                                    
                             <h4 class="row">Last Clinic Visit:</h4>
                             <span class="row"><?= $lastVisit ?></span>
@@ -267,7 +276,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
 <?php 
         } else {
-            header("Location: profile.php");            
+            if (!$hasId) {
+                header("Location: profile.php#Profile");            
+            } else if (!$hasMid) {
+                header("Location: profile.php#Medical");                            
+            }
         }
     
     } else {

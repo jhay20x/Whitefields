@@ -6,18 +6,20 @@ $stmt = $conn->prepare("SELECT * FROM `accounts` WHERE `username` = ?");
 $stmt->bind_param("s", $_SESSION['user_username']);
 $stmt->execute();
 $result = $stmt->get_result();
-$stmt->close();
+$stmt->close(); 
 
 if ($result->num_rows == 1) {
-    $user = $result->fetch_assoc();
+  $user = $result->fetch_assoc();
 
-    $profilePath = $user['profile_path'];
+  $profilePath = $user['profile_path'];
 }
 
 $id = "";
 
 if ($_SESSION['account_type'] == 2) {
   $id = fetchPatientID();
+  $mid = checkMedical($conn, $id);
+  $did = checkDental($conn, $id);
 } else if ($_SESSION['account_type'] == 3) {
   $id = fetchDentistID();  
 } else {
@@ -25,9 +27,21 @@ if ($_SESSION['account_type'] == 2) {
 }
 
 if (is_int($id)) {
-    $hasId = true;
+  $hasId = true;
 } else {
-    $hasId = false;
+  $hasId = false;
+}
+
+if (is_int($mid)) {
+  $hasMid = true;
+} else {
+  $hasMid = false;
+}
+
+if (is_int($did)) {
+  $hasDid = true;
+} else {
+  $hasDid = false;
 }
 
 ?>
@@ -156,6 +170,7 @@ if (is_int($id)) {
               <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <li><a href="clinic-availability.php" class="d-inline-flex text-decoration-none rounded text-white">Clinic Availabilty</a></li>
                 <li><a href="procedures-list.php" class="d-inline-flex text-decoration-none rounded text-white">Procedures</a></li>
+                <li><a href="secretary-list.php" class="d-inline-flex text-decoration-none rounded text-white">Secretary Accounts</a></li>
               </ul>
             </div>
           </li>

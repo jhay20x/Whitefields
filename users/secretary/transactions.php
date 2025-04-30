@@ -115,7 +115,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-outline-primary" id="transactionViewBackBtn" data-bs-dismiss="modal">Back</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="transactionViewBackBtn" data-bs-dismiss="modal">Back</button>
                     </div>
                 </div>
             </div>
@@ -141,7 +141,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="mt-3 row">
                                     <div class="col-12 col-lg-6 align-items-center">
                                         <h6 class="h6">Patient Name: <span id="transDetailPatientName" class="fw-normal"></span><input id="transactionDetailsPid" type="hidden" name="patient_id" value=""></h6>
-                                        <h6 class="h6">Appointment ID: <span id="transDetailAptID" class="fw-normal"></span><input id="transactionDetailsAptId" type="hidden" name="appointment_requests_id" value=""></h6>
+                                        <h6 class="h6">Appointment ID: <span id="transDetailAptID" class="fw-normal"></span></h6>
+                                        <h6 class="h6">Past Appointment ID: <span id="transDetailPastAptID" class="fw-normal"></span></h6>
                                         <h6 class="h6">Processed By: <span id="transDetailProcessed" class="fw-normal"></span></h6>
                                     </div>
     
@@ -412,8 +413,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
             $('body').on('click', '.viewTransDetail', function(){
                 let aptId = $(this).attr("data-apt-id");
-                loadTransactionDetails(aptId);
-                loadTransactionHistory(aptId);
+                let pastAptId = $(this).attr("data-past-apt-id");
+                loadTransactionDetails(aptId, pastAptId);
+                loadTransactionHistory(aptId, pastAptId);
             });
 
             $('body').on('click', '.viewTransHistory', function(){
@@ -473,9 +475,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     for (let index = 0; index < transDetailValues.length; index++) {
                         $(transDetailFields[index]).text(transDetailValues[index]);
                     }                    
-                    console.log(data);
+                    // console.log(data);
                 }).fail(function(data) {
-                    console.log(data);
+                    // console.log(data);
                 });
             } 
 
@@ -500,9 +502,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         localStorage.setItem("errorMessage", data.message);
                         location.reload();
                     }
-                    console.log(data);
+                    // console.log(data);
                 }).fail(function(data) {
-                    console.log(data);
+                    // console.log(data);
                 });
             }); 
         
@@ -529,9 +531,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 }
             });
 
-            function loadTransactionDetails(aptId){
+            function loadTransactionDetails(aptId, pastAptId){
                 var formData = {
-                    aptId: aptId
+                    aptId: aptId,
+                    pastAptId: pastAptId
                 };
 
                 $.ajax({
@@ -541,13 +544,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     dataType: 'json'
                 }).done(function(data) {
                     let transDetailFields = [
-                        "#transDetailPatientName", "#transDetailTreatmentID", "#transDetailAptID",
+                        "#transDetailPatientName", "#transDetailTreatmentID", "#transDetailAptID", "#transDetailPastAptID",
                         "#transDetailProcedure", "#transDetailProcessed", "#transDetailDateTime",
                         "#transDetailPaymentType", "#transDetailPaymentRef", "#transDetailAmountPaid"
                     ];
 
                     let transDetailValues = [
-                        data.PatientName, data.TreatmentID, data.AppointmentID, data.ProcedureName, 
+                        data.PatientName, data.TreatmentID, data.AppointmentID, data.PastAppointmentID, data.ProcedureName, 
                         data.SecretaryName, data.Timestamp, data.PaymentType, data.PaymentRef, data.AmountPaid
                     ];
                     
@@ -577,7 +580,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <td>${proc.TotalAmount}</td>
                                 <td>${proc.AmountPaid}</td>
                                 <td>${proc.RemainingBalance}<input ${prop} type="hidden" name="remaining_balance[]" value="${proc.RemainingBalance}"></td>
-                                <td><input ${prop} required class="form-control text-center onlyNumbersDots" type="text" name="amount_paid[]"></td>
+                                <td>
+                                    <input ${prop} required class="form-control text-center onlyNumbersDots" type="text" name="amount_paid[]">
+                                    <input ${prop} type="hidden" name="appointment_requests_id[]" value="${proc.AppointmentID}">
+                                </td>
                             </tr>
                         `;
                     });
@@ -620,9 +626,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 });
             }
 
-            function loadTransactionHistory(aptId) { 
+            function loadTransactionHistory(aptId, pastAptId) { 
                 var formData = {
-                    aptId: aptId
+                    aptId: aptId,
+                    pastAptId: pastAptId
                 };
 
                 $.ajax({

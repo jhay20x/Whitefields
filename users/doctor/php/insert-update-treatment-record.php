@@ -73,6 +73,31 @@ function updateTreatmentRecord($conn, $pid, $dentist_id, $aptId, $patientToothNo
     return $data;
 }
 
+function updateTreatmentRecordDentistNote($conn, $aptId, $dentistNote) {
+    $data = [];
+
+    $stmt = $conn->prepare("UPDATE treatment_history SET dentist_note = ? WHERE appointment_requests_id = ?");
+    $stmt->bind_param("si", $dentistNote, $aptId);
+    
+    if (!$stmt->execute()) {
+        $allSuccess = false;
+        $data['error'] = $stmt->error;
+    } else {
+        $allSuccess = true;
+    }
+    
+    $stmt->close();
+
+    if ($allSuccess) {
+        $data['success'] = true;
+        $data['message'] = "Treatment record has been successfully updated.";
+    } else {
+        $data['success'] = false;
+        $data['error'] = $stmt->error;
+    }
+    return $data;
+}
+
 function updateAppointmentStatus($conn, $aptId) {
     $stmt = $conn->prepare("UPDATE `appointment_requests` SET `appoint_status_id` = 6 WHERE `id` = ?");
     $stmt->bind_param("i", $aptId);
@@ -122,7 +147,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $prevTimestamp = fetchTimestamp($conn, $aptId);
 
     if (checkTreatmentRecord($conn, $aptId)) {
-        $data = updateTreatmentRecord($conn, $pid, $dentist_id, $aptId, $patientToothNo, $dentistNote, $proceduresList, $proceduresPrice, $prevTimestamp);
+        if (empty($proceduresList) && empty($proceduresPrice)) {
+            $data = updateTreatmentRecordDentistNote($conn, $aptId, $dentistNote);
+        } else {
+            $data = updateTreatmentRecord($conn, $pid, $dentist_id, $aptId, $patientToothNo, $dentistNote, $proceduresList, $proceduresPrice, $prevTimestamp);
+        }
     } else {
         $data = insertTreatmentRecord($conn, $pid, $dentist_id, $aptId, $patientToothNo, $dentistNote, $proceduresList, $proceduresPrice, $timestamp);
     }

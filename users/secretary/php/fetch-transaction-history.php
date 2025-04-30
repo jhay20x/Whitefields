@@ -10,6 +10,7 @@ $aptId;
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
     $aptId = $_POST['aptId'];
+    $pastAptId = $_POST['pastAptId'];
     
     // $stmt = $conn->prepare("SELECT tr.*, pr.name, pt.name AS PaymentType,
     //     CONCAT(si.fname , CASE WHEN si.mname = 'None' THEN ' ' ELSE CONCAT(' ' , si.mname , ' ') END , si.lname, 
@@ -23,8 +24,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $stmt = $conn->prepare("SELECT tr.*, pr.name
         FROM transactions tr 
         LEFT OUTER JOIN procedures pr ON pr.id = tr.procedures_id
-        WHERE appointment_requests_id = ?;");
-    $stmt->bind_param("i", $aptId);
+        WHERE appointment_requests_id IN (?,?);");
+
+    $stmt->bind_param("ii", $aptId, $pastAptId);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();

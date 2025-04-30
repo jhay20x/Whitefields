@@ -11,7 +11,7 @@ $error;
 sleep(1);
 
 function checkNameDOB($conn, $fname, $lname, $bdate) {    
-    $stmt = $conn->prepare("SELECT pi.fname, pi.lname, pi.bdate FROM patient_info pi WHERE pi.fname LIKE ? AND pi.lname LIKE ? AND pi.bdate = ?;");
+    $stmt = $conn->prepare("SELECT si.fname, si.lname, si.bdate FROM secretary_info si WHERE si.fname LIKE ? AND si.lname LIKE ? AND si.bdate = ?;");
     $fname = "%$fname%";
     $lname = "%$lname%";
     $stmt->bind_param("sss",  $fname, $lname, $bdate);
@@ -40,15 +40,15 @@ function checkEmail($conn, $email) {
     }
 }
 
-function insertInfo($conn, $insertId, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $occupation, $address) {
-    $stmt = $conn->prepare("INSERT INTO `patient_info`(`accounts_id`, `lname`, `fname`, `mname`, `suffix`, `contactno`, `bdate`, `gender`, `religion`, `nationality`, `occupation`, `address`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
-    $stmt->bind_param("ssssssssssss", $insertId, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $occupation, $address);
+function insertInfo($conn, $insertId, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $address) {
+    $stmt = $conn->prepare("INSERT INTO `secretary_info`(`accounts_id`, `lname`, `fname`, `mname`, `suffix`, `contactno`, `bdate`, `gender`, `religion`, `nationality`, `address`) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+    $stmt->bind_param("sssssssssss", $insertId, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $address);
     $stmt->execute();
 	$stmt->close();
 }
 
 function insertAccount($conn, $email, $username, $hash, $emailVerified) {
-    $stmt = $conn->prepare("INSERT INTO `accounts`(`account_type_id`, `email_address`, `username`, `password`, `status`, `email_verified`) VALUES (2,?,?,?,1,?)");
+    $stmt = $conn->prepare("INSERT INTO `accounts`(`account_type_id`, `email_address`, `username`, `password`, `status`, `email_verified`) VALUES (3,?,?,?,1,?)");
     $stmt->bind_param("sssi", $email, $username, $hash, $emailVerified);
     $stmt->execute();
     $insertId = $conn->insert_id;
@@ -86,7 +86,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $nationality = $_POST['nationality'] ?? "";
     $contnumber = $_POST['contnumber'] ?? "";
     $address = $_POST['address'] ?? "";
-    $occupation = $_POST['occupation'] ?? "";
     $emailVerified = $email === "None" ? 1 : 0;
 
     if ($userPasswordCheck !== $confirmUserPasswordCheck) {
@@ -114,14 +113,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
     if (checkNameDOB($conn, $fname, $lname, $bdate)) {
         $data['success'] = false;
-        $data['error'] = "A patient with the same name and birthdate is already registered.";
+        $data['error'] = "A secretary account with the same name and birthdate is already registered.";
         echo json_encode($data);
         return;
     }
     
     $insertId = insertAccount($conn, $email, $username, $hash, $emailVerified);
-    insertInfo($conn, $insertId, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $occupation, $address);
-    $message = "A new patient has been successfully added.";
+    insertInfo($conn, $insertId, $lname, $fname, $mname, $suffix, $contnumber, $bdate, $gender, $religion, $nationality, $address);
+    $message = "A new secretary account has been successfully added.";
 }
 
 if (!empty($error)) {

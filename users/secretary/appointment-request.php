@@ -198,7 +198,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" value="" id="aptApplyBtn" disabled class="btn btn-sm btn-outline-primary">Apply</button>
+                    <button type="button" type="button" value="" id="aptApplyBtn" disabled class="btn btn-sm btn-outline-primary">Apply</button>
                 </div>
             </div>
         </div>
@@ -418,7 +418,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#appointRequestModal">Back</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#appointRequestModal">Back</button>
                 </div>
             </div>
         </div>
@@ -451,7 +451,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
                 </div>
             </div>
         </div>
@@ -472,7 +472,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#patientViewModal">Back</button>
                 </div>
             </div>
         </div>
