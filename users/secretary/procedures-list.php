@@ -41,9 +41,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             fill: currentColor;
         }
 
-        body {
-            /* background-color: lightgrey; */
-        }
+        /* body {
+            background-color: lightgrey;
+        } */
 
         /* .container-fluid {
             padding: 0 !important;
@@ -135,13 +135,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     </div>
                                 </div>
                                 
-                                <div class="col-lg-12">
-                                    <div class="input-group-text mb-3">
-                                        <input type="checkbox" name="procedureInstallment" id="procedureInstallment" class="form-check">
-                                        <label for="procedureInstallment" class="ms-3">Allow Installment?</label>
-                                    </div>
-                                </div>
-                                
                                 <div class="col-lg-6">
                                     <div class="form-floating mb-3">
                                         <input maxlength="9" autocomplete="off" required name="procedurePriceMin" placeholder="Price (Min)"  id="procedurePriceMin" class="form-control onlyNumbersDots">
@@ -202,15 +195,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                                 <div class="col-lg-12">
                                     <div class="form-floating mb-3">
-                                        <input disabled maxlength="255" autocomplete="off" required name="viewProcedureDesc" placeholder="Description"  id="viewProcedureDesc" class="form-control onlyLetters">
+                                        <input disabled maxlength="255" autocomplete="off" name="viewProcedureDesc" placeholder="Description"  id="viewProcedureDesc" class="form-control onlyLetters">
                                         <label for="viewProcedureDesc">Description</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-lg-12">
-                                    <div class="input-group-text mb-3">
-                                        <input disabled type="checkbox" value="1" name="viewProcedureInstallment" id="viewProcedureInstallment" class="form-check">
-                                        <label for="viewProcedureInstallment" class="ms-3">Allow Installment?</label>
                                     </div>
                                 </div>
                                 
@@ -234,7 +220,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <button type="button" class="btn btn-sm btn-outline-primary" id="viewProcedureUpdateBtn">Update</button>
                         <button type="button" class="btn btn-sm btn-outline-primary" id="viewProcedureBackBtn" data-bs-dismiss="modal" aria-label="Close">Back</button>
                         <button type="submit" class="btn btn-sm btn-outline-success d-none" disabled id="viewProcedureSaveBtn">Save</button>
-                        <button type="button" class="btn btn-sm btn-outline-danger d-none" disabled id="viewProcedureCancelBtn" data-bs-toggle="modal"data-bs-target="#cancelUpdatePatientConfirmModal">Cancel</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger d-none" disabled id="viewProcedureCancelBtn" data-bs-toggle="modal"data-bs-target="#cancelUpdateProcedureConfirmModal">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -242,11 +228,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     </div>
     
     <!-- Modal -->
-    <div class="modal fade" id="cancelUpdatePatientConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cancelUpdatePatientConfirmLabel" aria-hidden="true">
+    <div class="modal fade" id="cancelUpdateProcedureConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cancelUpdateProcedureConfirmLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
-                    <h6 class="modal-title" id="cancelUpdatePatientConfirmLabel">
+                    <h6 class="modal-title" id="cancelUpdateProcedureConfirmLabel">
                         <i class="bi bi-journal-medical"></i> Add New Procedure
                     </h6>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
@@ -337,7 +323,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <tr>
                                 <th class="col">ID</th>
                                 <th class="col">Procedure Name</th>
-                                <th class="col">Installment</th>
+                                <th class="col">Status</th>
                                 <th class="col">Price (Low)</th>
                                 <th class="col">Price (High)</th>
                                 <th class="col">Action</th>
@@ -346,28 +332,28 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                         <tbody>
                             <?php
-                            $stmt = $conn->prepare("SELECT * FROM procedures");
-                            $stmt->execute();
-                            $result = $stmt->get_result();
-                            $stmt->close();
+                                $stmt = $conn->prepare("SELECT * FROM procedures");
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $stmt->close();
 
-                            if ($result->num_rows > 0) {
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo '
-                                    <tr>
-                                        <td id="tableProcedureID">' . $row['id'] . '</td>
-                                        <td id="tableProcedureName">' . $row['name'] . '</td>
-                                        <td id="tableProcedureInstallment">' . ($row['allow_installment'] == 0 ? "No" : "Yes") . '</td>
-                                        <td id="tableProcedurePriceMin">' . $row['price_min'] . '</td>
-                                        <td id="tableProcedurePriceMax">' . $row['price_max'] . '</td>
-                                        <td class="appointID">
-                                            <button type="button" data-procedure-id="' . $row['id'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#viewProcedureModal">View</button>
-                                            <button type="button" data-procedure-id="' . $row['id'] . '" class="btn btn-sm btn-outline-danger deleteProcedure mt-1 mt-lg-0" data-bs-toggle="modal" data-bs-target="#deleteProcedureConfirmModal"><i class="bi bi-x-lg"></i></button>
-                                        </td>
-                                    </tr>
-                                ';
+                                if ($result->num_rows > 0) {
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        echo '
+                                        <tr>
+                                            <td id="tableProcedureID">' . $row['id'] . '</td>
+                                            <td id="tableProcedureName">' . $row['name'] . '</td>
+                                            <td class="fw-bold ' . ($row['status'] != 0 ? "text-success" : "text-danger") . '" id="tableProcedureStatus">' . ($row['status'] != 0 ? "Active" : "Inactive") . '</td>
+                                            <td id="tableProcedurePriceMin">' . $row['price_min'] . '</td>
+                                            <td id="tableProcedurePriceMax">' . $row['price_max'] . '</td>
+                                            <td class="appointID">
+                                                <button type="button" data-procedure-id="' . $row['id'] . '" class="btn btn-sm btn-outline-primary viewAptDetail" data-bs-toggle="modal" data-bs-target="#viewProcedureModal">View</button>
+                                                <button type="button" data-procedure-id="' . $row['id'] . '" class="btn btn-sm btn-outline-danger deleteProcedure mt-1 mt-lg-0" data-bs-toggle="modal" data-bs-target="#deleteProcedureConfirmModal"><i class="bi bi-x-lg"></i></button>
+                                            </td>
+                                        </tr>
+                                    ';
+                                    }
                                 }
-                            }
                             ?>
                         </tbody>
                     </table>
@@ -492,12 +478,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 
                 for (let index = 0; index < fieldsValues.length; index++) {
                     $(fields[index]).val(fieldsValues[index]).prop("disabled", true);
-                }
-
-                if (data.allow_installment) {
-                    $("#viewProcedureInstallment").prop("checked", true);
-                } else {
-                    $("#viewProcedureInstallment").prop("checked", false);
                 }
 
 				// console.log(data);

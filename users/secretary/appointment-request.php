@@ -44,9 +44,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             fill: currentColor;
         }
 
-        body {
-            /* background-color: lightgrey; */
-        }
+        /* body {
+            background-color: lightgrey;
+        } */
 
         /* .container-fluid {
             padding: 0 !important;
@@ -163,7 +163,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <select class="form-select" name="reason" id="reason">
                                             <option disabled selected value="">Select...</option>
                                             <?php
-                                                $stmt = $conn->prepare("SELECT * FROM `rejected_reasons`;");
+                                                $stmt = $conn->prepare("SELECT * FROM `rejected_reasons` WHERE status != 0;");
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
                                                 $stmt->close();
@@ -280,106 +280,106 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="d-flex justify-content-start row">
+                                        <div class="justify-content-start row">
                                             <div class="col">
-                                                <div class="row">
-                                                    <h6 class="col-xl-6">Name of Physician: <span class="fw-normal" id="physician_name"></span></h6>
-                                                    <h6 class="col">Speciality: <span class="fw-normal" id="speciality"></span></h6>
-                                                </div>
-                                                <div class="row">
-                                                    <h6 class="col-xl-6">Office Address: <span class="fw-normal" id="office_address"></span></h6>
-                                                    <h6 class="col">Office Number: <span class="fw-normal" id="office_number"></span></h6>
-                                                </div>
-                                                <div class="row mt-3">
-                                                    <h6>Is in good health: <span class="fw-normal" id="is_good_health"></span></h6>
-                                                    <h6>Is under medical treatment now: <span class="fw-normal" id="is_under_treatment"></span></h6>
-                                                    <h6>Had serious illness or surgical operation: <span class="fw-normal" id="had_operation"></span></h6>
-                                                    <h6>Had been hospitalized: <span class="fw-normal" id="had_hospitalized"></span></h6>
-                                                    <h6>Is taking prescription/non-prescription medication: <span class="fw-normal" id="is_taking_prescription"></span></h6>
-                                                    <h6>Uses tobacco products: <span class="fw-normal" id="uses_tobacco"></span></h6>
-                                                    <h6>Uses alcohol, cocaine, or other dangerous drugs: <span class="fw-normal" id="uses_alcohol_drugs"></span></h6>
-                                                    <?php 
-                                                        $allergic = [
-                                                            "is_allergic_anesthetic" => "Local Anesthetic",
-                                                            "is_allergic_aspirin" => "Aspirin",
-                                                            "is_allergic_penicillin" => "Penicillin, Antibiotics",
-                                                            "is_allergic_latex" => "Latex",
-                                                            "is_allergic_sulfa" => "Sulfa Drugs",
-                                                            "is_allergic_others" => "Others: " . ($medicalData['is_allergic_others_other'] ?? "")
-                                                        ];
-                                                    ?>
-                                                    <h6>Is allergic with the following: <span class="fw-normal" id=""></span></h6>
-                                                                                                
-                                                    <div class="row col-xl-5 d-flex justify-content-start ms-3">
-                                                        <h6>• Local Anesthetic: <span class="fw-normal" id="is_allergic_anesthetic"></span></h6>
-                                                        <h6>• Aspirin: <span class="fw-normal" id="is_allergic_aspirin"></span></h6>
-                                                        <h6>• Penicillin, Antibiotics: <span class="fw-normal" id="is_allergic_penicillin"></span></h6>
-                                                        <h6>• Latex: <span class="fw-normal" id="is_allergic_latex"></span></h6>
-                                                        <h6>• Sulfa Drugs: <span class="fw-normal" id="is_allergic_sulfa"></span></h6>
-                                                        <h6>• Others: <span class="fw-normal" id="is_allergic_others"></span></h6>
-                                                    </div>
-
-                                                    <h6>Bleeding Time: <span class="fw-normal" id="bleeding_time"></span></h6>
-
-                                                    <h6>For women only: <span class="fw-normal" id="for_women_only"></span></h6>
-
-                                                    <div class="row d-flex justify-content-start ms-3">
-                                                        <h6>Is pregnant: <span class="fw-normal" id="is_pregnant"></span></h6>
-                                                        <h6>Is nursing: <span class="fw-normal" id="is_nursing"></span></h6>
-                                                        <h6>Is taking birth control pills: <span class="fw-normal" id="is_birth_control"></span></h6>
-                                                    </div>
-
-                                                    <h6>Blood Type <span class="fw-normal" id="blood_type"></span></h6>
-                                                    <h6>Blood Pressure <span class="fw-normal" id="blood_pressure"></span></h6>
-
-                                                    <div class="row d-flex justify-content-start">
-                                                        <?php
-                                                            $illness = [
-                                                                "high_blood_pressure" => "High Blood Pressure", "low_blood_pressure" => "Low Blood Pressure",
-                                                                "epilepsy_convulsions" => "Epilepsy / Convulsions", "aids_hiv_infection" => "AIDS / HIV Infection",
-                                                                "sexually_transmitted_disease" => "Sexually Transmitted Disease", "stomach_troubles_ulcers" => "Stomach Troubles / Ulcers",
-                                                                "fainting_seizure" => "Fainting / Seizure", "rapid_weight_loss" => "Rapid Weight Loss",
-                                                                "radiation_therapy" => "Radiation Therapy", "joint_replacement_implant" => "Joint Replacement / Implant",
-                                                                "heart_surgery" => "Heart Surgery", "heart_attack" => "Heart Attack", "thyroid_problem" => "Thyroid Problem",
-                                                                "heart_disease" => "Heart Disease", "heart_murmur" => "Heart Murmur", "hepatitis_liver_disease" => "Hepatitis / Liver Disease",
-                                                                "rheumatic_fever" => "Rheumatic Fever", "hay_fever_allergies" => "Hay Fever / Allergies",
-                                                                "respiratory_problems" => "Respiratory Problems", "hepatitis_jaundice" => "Hepatitis / Jaundice",
-                                                                "tuberculosis" => "Tuberculosis", "swollen_ankles" => "Swollen Ankles", "kidney_disease" => "Kidney Disease",
-                                                                "diabetes" => "Diabetes", "chest_pain" => "Chest Pain", "stroke" => "Stroke", "cancer_tumors" => "Cancer / Tumors",
-                                                                "anemia" => "Anemia", "angina" => "Angina", "asthma" => "Asthma", "emphysema" => "Emphysema",
-                                                                "bleeding_problems" => "Bleeding Problems", "blood_diseases" => "Blood Diseases", "head_injuries" => "Head Injuries",
-                                                                "arthritis_rheumatism" => "Arthritis / Rheumatism", "other" => "Others: " . ($medicalData['other_illness'] ?? "")
-                                                            ];
-
-                                                            $hasIllness = false;
-                                                            
-                                                            if (!empty($medicalData)) {
-                                                                foreach ($illness as $key => $value) {
-                                                                    if ($medicalData[$key] === 1) {
-                                                                        $hasIllness = true;
-                                                                        break;
-                                                                    }
-                                                                }
-                                                            }
-
-                                                            if (!empty($medicalData)) {
-                                                                $count = 0;
-                                                                echo "<h6>Had or have the following: <span class='fw-normal'>" . ($hasIllness ? "Yes" : "No") . "</span></h6>";
-                                                                echo "<div class='col-6 col-sm-6 col-lg-3'>";
-                                                                foreach ($illness as $key => $value) {
-                                                                    if ($medicalData[$key] === 1) {
-                                                                        if ($count % 12 == 0 && $count != 0) {
-                                                                            echo "</div><div class='col-6 col-sm-6 col-lg-3'>";
-                                                                        }
-                                                                        echo "<h6>• <span class='fw-normal'>$value</span></h6>";
-                                                                        $count ++;
-                                                                    }
-                                                                }
-                                                                echo "</div>";
-                                                            }
-                                                        ?>
-                                                    </div>
-                                                </div>
+                                                <table id="medicalTable" class="table-group-divider table-hover table">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="fw-semibold">Name of Physician:</td>
+                                                            <td id="physician_name"></td>
+                                                            <td class="fw-semibold">Speciality:</td>
+                                                            <td id="speciality"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="fw-semibold">Office Address:</td>
+                                                            <td id="office_address"></td>
+                                                            <td class="fw-semibold">Office Number:</td>
+                                                            <td id="office_number"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold">Is in good health:</td>
+                                                            <td colspan="2" id="is_good_health"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold">Is under medical treatment now:</td>
+                                                            <td colspan="2" id="is_under_treatment"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold">Had serious illness or surgical operation:</td>
+                                                            <td colspan="2" id="had_operation"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold">Had been hospitalized:</td>
+                                                            <td colspan="2" id="had_hospitalized"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold">Is taking prescription/non-prescription medication:</td>
+                                                            <td colspan="2" id="is_taking_prescription"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold">Uses tobacco products:</td>
+                                                            <td colspan="2" id="uses_tobacco"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold">Uses alcohol, cocaine, or other dangerous drugs:</td>
+                                                            <td colspan="2" id="uses_alcohol_drugs"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="fw-semibold">Is allergic with the following:</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold"><span class="ms-3">• Local Anesthetic:</span></td>
+                                                            <td colspan="2" id="is_allergic_anesthetic"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold"><span class="ms-3">• Aspirin:</span></td>
+                                                            <td colspan="2" id="is_allergic_aspirin"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold"><span class="ms-3">• Penicillin, Antibiotics:</span></td>
+                                                            <td colspan="2" id="is_allergic_penicillin"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold"><span class="ms-3">• Latex:</span></td>
+                                                            <td colspan="2" id="is_allergic_latex"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold"><span class="ms-3">• Sulfa Drugs:</span></td>
+                                                            <td colspan="2" id="is_allergic_sulfa"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold"><span class="ms-3">• Others:</span></td>
+                                                            <td colspan="2" id="is_allergic_others"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold">Bleeding Time:</td>
+                                                            <td colspan="2" id="bleeding_time"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="fw-semibold">For women only:</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold"><span class="ms-3">• Is pregnant:</span></td>
+                                                            <td colspan="2" id="is_pregnant"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold"><span class="ms-3">• Is nursing:</span></td>
+                                                            <td colspan="2" id="is_nursing"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold"><span class="ms-3">• Is taking birth control pills:</span></td>
+                                                            <td colspan="2" id="is_birth_control"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold">Blood Type:</td>
+                                                            <td colspan="2" id="blood_type"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="fw-semibold">Blood Pressure:</td>
+                                                            <td colspan="2" id="blood_pressure"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
@@ -719,9 +719,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $("#aptdtlsapprovedtime").text(data.Approved_Time);
                 $("#aptdtlsconcern").text(data.Concern);
 
-                //console.log(data.responseText);
+                // console.log(data.responseText);
             }).fail(function(data) {
-                //console.log(data.responseText);
+                // console.log(data.responseText);
             });
         }
 
@@ -836,9 +836,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $("#appointmentTable").DataTable().destroy().clear();
                 $('#appointmentTableTableBody').html(data);
                 loadTable();
-                //console.log(data);
+                // console.log(data);
             }).fail(function(data) {
-                //console.log(data);
+                // console.log(data);
             });
         }
 

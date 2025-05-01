@@ -77,9 +77,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 fill: currentColor;
             }
 
-            body {
+            /* body {
                 background-color: lightgrey;
-            }
+            } */
 
             /* .container-fluid {
                 padding: 0 !important;
@@ -351,11 +351,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     }
                     // console.log(formData);
                     // console.log("Done");
-                    //console.log(data);
+                    // console.log(data);
                 }).fail(function(data) {
                     // console.log(formData);
                     // console.log("Failed");
-                    //console.log(data);
+                    // console.log(data);
                 });
             });
 
@@ -421,9 +421,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         $('#appointListModal').modal('show');
                     }
 
-                    //console.log(data);
+                    // console.log(data);
                 }).fail(function(data) {
-                    //console.log(data);
+                    // console.log(data);
                 });
             }
         });

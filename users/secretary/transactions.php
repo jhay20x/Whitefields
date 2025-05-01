@@ -42,9 +42,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 fill: currentColor;
             }
 
-            body {
-                /* background-color: lightgrey; */
-            }
+            /* body {
+                background-color: lightgrey;
+            } */
 
             /* .container-fluid {
                 padding: 0 !important;
@@ -142,7 +142,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <div class="col-12 col-lg-6 align-items-center">
                                         <h6 class="h6">Patient Name: <span id="transDetailPatientName" class="fw-normal"></span><input id="transactionDetailsPid" type="hidden" name="patient_id" value=""></h6>
                                         <h6 class="h6">Appointment ID: <span id="transDetailAptID" class="fw-normal"></span></h6>
-                                        <h6 class="h6">Past Appointment ID: <span id="transDetailPastAptID" class="fw-normal"></span></h6>
+                                        <h6 class="h6">Follow-up Appointment ID: <span id="transDetailPastAptID" class="fw-normal"></span></h6>
                                         <h6 class="h6">Processed By: <span id="transDetailProcessed" class="fw-normal"></span></h6>
                                     </div>
     
@@ -588,7 +588,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         `;
                     });
 
-                    if (data.AppointStatus == 5) {                        
+                    let isCompleted = data.AppointStatus.every(proc => proc.AppointStatus == 5);
+
+                    if (isCompleted) {
                         $("#paymentRefDiv, #paymentTypeDiv, #transactionDetailsSaveBtn, #transactionDetailsCancelBtn").addClass("d-none");
                         $("#transactionDetailsBackBtn").removeClass("d-none");
                         $("#paymentRefDiv, #paymentTypeDiv, #transactionDetailsSaveBtn").find("input").prop("disabled", true);

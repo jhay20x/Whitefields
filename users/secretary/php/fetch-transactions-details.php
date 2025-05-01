@@ -42,7 +42,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         "SecretaryName" => null,
         "PatientName" => null,
         "Timestamp" => null,
-        "AppointStatus" => null,
+        "AppointStatus" => [],
         "Procedures" => []
     ];
 
@@ -59,8 +59,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $data["PatientID"]   = $row["PatientID"];
                 $data["PatientName"]   = $row["PatientName"];
                 $data["Timestamp"]     = empty($row["Timestamp"]) ? $curdate : $row["Timestamp"];
-                $data["AppointStatus"]   = $row["AppointStatus"];
             }
+
+            $data["AppointStatus"][] = [
+                "AppointStatus" => $row["AppointStatus"]
+            ];
 
             $data["Procedures"][] = [
                 "AppointmentID" => $row["AppointmentID"],

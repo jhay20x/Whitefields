@@ -754,9 +754,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     $('#myTable').DataTable().destroy().clear();
                     $('#tableBody').html(data);
                     loadTable();
-                    //console.log(data);
+                    // console.log(data);
                 }).fail(function(data) {
-                    //console.log(data);
+                    // console.log(data);
                 });
             }
 
@@ -809,9 +809,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 }).done(function (data) {
                     localStorage.setItem("cancelMessage", data.message);
                     location.reload();
-                    //console.log(data);
+                    // console.log(data);
                 }).fail(function(data) {
-                    //console.log(data);
+                    // console.log(data);
                 });
             });
         });

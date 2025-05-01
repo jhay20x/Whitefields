@@ -38,9 +38,9 @@ function checkIfProcedureExistInactive($conn, $procedureName) {
     }
 }
 
-function insertInfo($conn, $procedureName, $procedureDesc, $procedureInstallment, $procedurePriceMin, $procedurePriceMax) {
-    $stmt = $conn->prepare("INSERT INTO `procedures`(`name`, `description`, `allow_installment`, `price_min`, `price_max`) VALUES (?,?,?,?,?)");
-    $stmt->bind_param("ssiii", $procedureName, $procedureDesc, $procedureInstallment, $procedurePriceMin, $procedurePriceMax);
+function insertInfo($conn, $procedureName, $procedureDesc, $procedurePriceMin, $procedurePriceMax) {
+    $stmt = $conn->prepare("INSERT INTO `procedures`(`name`, `description`, `price_min`, `price_max`) VALUES (?,?,?,?)");
+    $stmt->bind_param("ssiii", $procedureName, $procedureDesc, $procedurePriceMin, $procedurePriceMax);
     $stmt->execute();
 	$stmt->close();
 }
@@ -48,7 +48,6 @@ function insertInfo($conn, $procedureName, $procedureDesc, $procedureInstallment
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {     
     $procedureName = $_POST["procedureName"] ?? "";
     $procedureDesc = $_POST["procedureDesc"] ?? "";
-    $procedureInstallment = $_POST["procedureInstallment"] ?? "";
     $procedurePriceMin = $_POST["procedurePriceMin"] ?? "";
     $procedurePriceMax = $_POST["procedurePriceMax"] ?? "";
 
@@ -80,7 +79,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         return;
     }
     
-    insertInfo($conn, $procedureName, $procedureDesc, $procedureInstallment, $procedurePriceMin, $procedurePriceMax);
+    insertInfo($conn, $procedureName, $procedureDesc, $procedurePriceMin, $procedurePriceMax);
     $message = "A new procedure has been successfully added.";
 }
 

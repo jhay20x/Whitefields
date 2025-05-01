@@ -41,9 +41,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             fill: currentColor;
         }
 
-        body {
-            /* background-color: lightgrey; */
-        }
+        /* body {
+            background-color: lightgrey;
+        } */
 
         /* .container-fluid {
             padding: 0 !important;
@@ -773,9 +773,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     $(detailsId[index]).text(details[index]);
                 }
 
-                //console.log(data.responseText);
+                // console.log(data.responseText);
             }).fail(function(data) {
-                //console.log(data.responseText);
+                // console.log(data.responseText);
             });
         }
 

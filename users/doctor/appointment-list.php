@@ -42,9 +42,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             fill: currentColor;
         }
 
-        body {
-            /* background-color: lightgrey; */
-        }
+        /* body {
+            background-color: lightgrey;
+        } */
 
         /* .container-fluid {
         padding: 0 !important;
@@ -180,7 +180,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 </div>
                                 <div class="col-12 col-lg">
                                     <h6></span> Appointment ID: <span id="" class="fw-normal aptId"></span></h6>
-                                    <h6></span> Past Appointment ID: <span id="" class="fw-normal pastAptId"></span></h6>
+                                    <h6></span> Follow-up Appointment ID: <span id="" class="fw-normal pastAptId"></span></h6>
                                     <h6></span> Date: <span id="" class="fw-normal"><?php echo date(format: 'Y-m-d', timestamp: time()); ?></span></h6>
                                 </div>
                             </div>
@@ -1180,9 +1180,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 if (data.length != 0) {
                     $('#appointListModal').modal('show');
                 }
-                //console.log(data);
+                // console.log(data);
             }).fail(function(data) {
-                //console.log(data);
+                // console.log(data);
             });
         }
 
@@ -1434,9 +1434,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     $("#aptTreatPatientSaveDiv").show();
                     $("#aptTreatPatientAddProcedureBtn").show();
                 }
-                console.log(data);
+                // console.log(data);
             }).fail(function(data) {
-                console.log(data);
+                // console.log(data);
             });
         }
     });

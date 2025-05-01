@@ -6,13 +6,21 @@ require_once '../../../database/config.php';
 
 $error;
 $data = [];
-$pid;
+$rid;
+$type;
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
-    $pid = $_POST["pid"] ?? "";
+    $rid = $_POST["rid"] ?? "";
+    $type = $_POST["type"] ?? "";
 
-    $stmt = $conn->prepare("SELECT * FROM procedures WHERE id = ?");
-    $stmt->bind_param('i',$pid);
+    if($type == "Denied") {
+        $stmt = $conn->prepare("SELECT * FROM rejected_reasons WHERE id = ?");
+        $stmt->bind_param('i',$rid);
+    } else {
+        $stmt = $conn->prepare("SELECT * FROM cancel_reasons WHERE id = ?");
+        $stmt->bind_param('i',$rid);
+    }
+
     $stmt->execute();
     $result = $stmt->get_result();
 	$stmt->close();
@@ -20,10 +28,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
         
-        $data['name'] = $row['name'];
-        $data['description'] = $row['description'];
-        $data['price_min'] = $row['price_min'];
-        $data['price_max'] = $row['price_max'];
+        $data['reason'] = $row['reason'];
         $data['status'] = $row['status'];
     }
 }

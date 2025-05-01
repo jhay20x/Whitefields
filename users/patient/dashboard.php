@@ -250,10 +250,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     $("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 }
 				// console.log(formData);
-				//console.log(data);
+				// console.log(data);
 			}).fail(function(data) {
 				// console.log(formData);
-				//console.log(data.responseText);
+				// console.log(data.responseText);
 			});
 		});
 

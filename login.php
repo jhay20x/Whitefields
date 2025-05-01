@@ -175,7 +175,7 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 				userEmail = data.userEmail;
 				username = data.username;
 				user_id = data.user_id;
-				//console.log(data);
+				// console.log(data);
 				hideLoader();
 				if (!data.success) {
 					$("#loginUserEmail").focus();
@@ -188,7 +188,7 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 					disableInputs();
 					setTimeout(showLoader, 2000);
 					if (data.emailVerification) {
-						//console.log(data.usertype);
+						// console.log(data.usertype);
 						setTimeout(redirectDashboard, 2000);
 					} else {
 						setTimeout(sendOTP, 1000);
@@ -218,7 +218,7 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 			data: formData,
 			dataType: "json"
 		}).done(function (data) {
-			//console.log(data);
+			// console.log(data);
 			hideLoader();
 			if (!data.success) {
 				$("#forgotEmail").focus();
@@ -227,7 +227,7 @@ if ((!isset($_SESSION['user_id']) && !isset($_SESSION['user_username']) && !isse
 				$("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show" role="alert">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 			}
 		}).fail(function(data) {
-			//console.log(data);
+			// console.log(data);
 		});
 	}
 </script>

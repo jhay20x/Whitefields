@@ -74,9 +74,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             fill: currentColor;
         }
 
-        body {
-            /* background-color: lightgrey; */
-        }
+        /* body {
+            background-color: lightgrey;
+        } */
 
         /* .container-fluid {
             padding: 0 !important;
@@ -628,10 +628,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         localStorage.setItem("uploadmessage", data.message);
                         location.reload();
                     }
-                    //console.log(data.responseText);
+                    // console.log(data.responseText);
                 },
                 error: function(data) {
-                    //console.log(data.responseText);
+                    // console.log(data.responseText);
                 }
             });
         }));
@@ -705,9 +705,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         $(`#${nofields[index].substring(3)}`).val(fields[index]);
                     }
                 }
-                //console.log(data);
+                // console.log(data);
             }).fail(function(data) {
-                //console.log(data);
+                // console.log(data);
             });
         }
 

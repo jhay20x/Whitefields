@@ -41,9 +41,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             fill: currentColor;
         }
 
-        body {
-            /* background-color: lightgrey; */
-        }
+        /* body {
+            background-color: lightgrey;
+        } */
 
         /* .container-fluid {
             padding: 0 !important;
@@ -184,19 +184,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <div class="justify-content-start row">
                                             <div class="col">
                                                 <table id="medicalTable" class="table-group-divider table-hover table">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="fw-semibold">Name of Physician:</td>
-                                                            <td id="physician_name"></td>
-                                                            <td class="fw-semibold">Speciality:</td>
-                                                            <td id="speciality"></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="fw-semibold">Office Address:</td>
-                                                            <td id="office_address"></td>
-                                                            <td class="fw-semibold">Office Number:</td>
-                                                            <td id="office_number"></td>
-                                                        </tr>
+                                                    <tbody id="medicalTableBody">
                                                         <tr>
                                                             <td colspan="2" class="fw-semibold">Is in good health:</td>
                                                             <td colspan="2" id="is_good_health"></td>
@@ -922,6 +910,20 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     "#had_hospitalized_why": data.had_hospitalized_why
                 };
 
+                let illness = {
+                    "high_blood_pressure": data.high_blood_pressure, "low_blood_pressure": data.low_blood_pressure, "epilepsy_convulsions": data.epilepsy_convulsions,
+                    "aids_hiv_infection": data.aids_hiv_infection, "sexually_transmitted_disease": data.sexually_transmitted_disease, "stomach_troubles_ulcers": data.stomach_troubles_ulcers,
+                    "fainting_seizure": data.fainting_seizure, "rapid_weight_loss": data.rapid_weight_loss, "radiation_therapy": data.radiation_therapy,
+                    "joint_replacement_implant": data.joint_replacement_implant, "heart_surgery": data.heart_surgery, "heart_attack": data.heart_attack,
+                    "thyroid_problem": data.thyroid_problem, "heart_disease": data.heart_disease, "heart_murmur": data.heart_murmur,
+                    "hepatitis_liver_disease": data.hepatitis_liver_disease, "rheumatic_fever": data.rheumatic_fever, "hay_fever_allergies": data.hay_fever_allergies,
+                    "respiratory_problems": data.respiratory_problems, "hepatitis_jaundice": data.hepatitis_jaundice, "tuberculosis": data.tuberculosis,
+                    "swollen_ankles": data.swollen_ankles, "kidney_disease": data.kidney_disease, "diabetes": data.diabetes, "chest_pain": data.chest_pain,
+                    "stroke": data.stroke, "cancer_tumors": data.cancer_tumors, "anemia": data.anemia, "angina": data.angina, "asthma": data.asthma,
+                    "emphysema": data.emphysema, "bleeding_problems": data.bleeding_problems, "blood_diseases": data.blood_diseases,
+                    "head_injuries": data.head_injuries, "arthritis_rheumatism": data.arthritis_rheumatism, "other_illness": data.other_illness
+                }
+
                 $.each(allergic, function(selector, value) {
                     let text = (value === "Yes") ? value : (value === "No Record" ? "No Record" : "No");
 
@@ -929,7 +931,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 });
 
                 $.each(detailsText, function(selector, value) {
-                    let extraValue = detailsText[selector + "_condition"] || detailsText[selector + "_illness"] || detailsText[selector + "_medication"] || detailsText[selector + "_other"] || "";
+                    let extraValue = detailsText[selector + "_condition"] || detailsText[selector + "_illness"]
+                    || detailsText[selector + "_medication"] || detailsText[selector + "_other"] || "";
 
                     let text = (value === "Yes" || value === "No") ? (extraValue ? value + ", " + extraValue : value) : (value === "No Record" ? "No Record" : "No");
 
@@ -954,9 +957,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     $('#had_hospitalized').text(hadHospitalized['#had_hospitalized']);
                 }
                 
-                // console.log(data);
+                console.log(data);
             }).fail(function(data) {
-                // console.log(data);
+                console.log(data);
             });
         }
 		

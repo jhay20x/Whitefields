@@ -32,18 +32,6 @@ if (is_int($id)) {
   $hasId = false;
 }
 
-if (is_int($mid)) {
-  $hasMid = true;
-} else {
-  $hasMid = false;
-}
-
-if (is_int($did)) {
-  $hasDid = true;
-} else {
-  $hasDid = false;
-}
-
 ?>
 
 <!-- Modal -->
@@ -171,6 +159,7 @@ if (is_int($did)) {
                 <li><a href="clinic-availability.php" class="d-inline-flex text-decoration-none rounded text-white">Clinic Availabilty</a></li>
                 <li><a href="procedures-list.php" class="d-inline-flex text-decoration-none rounded text-white">Procedures</a></li>
                 <li><a href="secretary-list.php" class="d-inline-flex text-decoration-none rounded text-white">Secretary Accounts</a></li>
+                <li><a href="appointment-response.php" class="d-inline-flex text-decoration-none rounded text-white">Appointment Responses</a></li>
               </ul>
             </div>
           </li>
@@ -180,7 +169,17 @@ if (is_int($did)) {
       }
       
       if ($account_type === 2) {
-      
+        if (is_int($mid)) {
+          $hasMid = true;
+        } else {
+          $hasMid = false;
+        }
+
+        if (is_int($did)) {
+          $hasDid = true;
+        } else {
+          $hasDid = false;
+        }
       ?>
         <ul class="list-unstyled ps-0 mb-auto">
           <li class="mb-1 ms-3">

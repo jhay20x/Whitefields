@@ -164,7 +164,7 @@ session_start();
 					emailChecked = data.emailVerification;
 					username = data.username;
 					userEmail = $("#forgotEmail").val();
-					//console.log(data);
+					// console.log(data);
 					hideLoader();
 					if (!data.success) {
 						$("#forgotEmail").focus();
@@ -176,7 +176,7 @@ session_start();
 						setTimeout(sendOTP, 2000);
 					}
 				}).fail(function(data) {
-					//console.log(data);
+					// console.log(data);
 				});
 			}
 
@@ -199,7 +199,7 @@ session_start();
 					data: formData,
 					dataType: "json"
 				}).done(function (data) {
-					//console.log(data);
+					// console.log(data);
 					hideLoader();
 					if (!data.success) {
 						$("#otpCode").focus;
@@ -212,7 +212,7 @@ session_start();
 						setTimeout(redirectDashboard, 2000);
 					}
 				}).fail(function(data) {
-					//console.log(data);
+					// console.log(data);
 				});
 			}
 		});
@@ -286,9 +286,9 @@ session_start();
 			dataType: "json"
 		}).done(function (data) {
 			otpCode = data.otpCode;
-			//console.log(data);
+			// console.log(data);
 		}).fail(function(data) {
-			//console.log(data);
+			// console.log(data);
 		});
 	}
 
@@ -306,7 +306,7 @@ session_start();
 			dataType: "json"
 		}).done(function (data) {
 			otpSent = data.otpSent;
-			//console.log(data);
+			// console.log(data);
 			hideLoader();
 			if (!data.success) {
 				$("#forgotEmail").focus();
@@ -316,7 +316,7 @@ session_start();
 				showOtpBox();
 			}
 		}).fail(function(data) {
-			//console.log(data);
+			// console.log(data);
 		});
 	}
 	

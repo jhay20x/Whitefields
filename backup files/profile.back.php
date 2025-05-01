@@ -483,10 +483,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         localStorage.setItem("errordiv", data.message);
                         location.reload();
                     }
-                    //console.log(data);
+                    // console.log(data);
                 },
                 error: function(data) {
-                    //console.log(data);
+                    // console.log(data);
                 }
             });
         }));
@@ -515,9 +515,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 // $('#gender').prop('selectedIndex', 0);
                 // $('#mname').prop('readonly', false);
                 // $("#nomname").prop('checked', false);
-				//console.log(data);
+				// console.log(data);
 			}).fail(function(data) {
-				//console.log(data);
+				// console.log(data);
 			});
 		});
         

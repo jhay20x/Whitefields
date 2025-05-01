@@ -165,9 +165,9 @@ if (isset($_SESSION['email_address'])) {
 				url: "auth/update-email-status.php",
 				dataType: "json"
 			}).done(function (data) {
-				//console.log(data);
+				// console.log(data);
 			}).fail(function(data) {
-				//console.log(data);
+				// console.log(data);
 			});
 		}
 
@@ -178,9 +178,9 @@ if (isset($_SESSION['email_address'])) {
 				dataType: "json"
 			}).done(function (data) {
 				otpCode = data.otpCode;
-				//console.log(data);
+				// console.log(data);
 			}).fail(function(data) {
-				//console.log(data);
+				// console.log(data);
 			});
 		}
 
@@ -195,7 +195,7 @@ if (isset($_SESSION['email_address'])) {
 				data: formData,
 				dataType: "json"
 			}).done(function (data) {
-				//console.log(data);
+				// console.log(data);
 				hideLoader();
 				if (!data.success) {
 					enableInputs();
