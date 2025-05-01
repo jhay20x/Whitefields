@@ -283,7 +283,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <div class="justify-content-start row">
                                             <div class="col">
                                                 <table id="medicalTable" class="table-group-divider table-hover table">
-                                                    <tbody>
+                                                    <tbody id="medicalTableBody">
                                                         <tr>
                                                             <td class="fw-semibold">Name of Physician:</td>
                                                             <td id="physician_name"></td>
@@ -377,6 +377,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                                         <tr>
                                                             <td colspan="2" class="fw-semibold">Blood Pressure:</td>
                                                             <td colspan="2" id="blood_pressure"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="fw-semibold">Had or have the following:</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -901,6 +904,33 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     "#had_hospitalized_when": data.had_hospitalized_when,
                     "#had_hospitalized_why": data.had_hospitalized_why
                 };
+
+                let illness = {
+                    "• High Blood Pressure:": data.high_blood_pressure, "• Low Blood Pressure:": data.low_blood_pressure, "• Epilepsy/Convulsions:": data.epilepsy_convulsions,
+                    "• AIDS/HIV Infection:": data.aids_hiv_infection, "• Sexually Transmitted Disease:": data.sexually_transmitted_disease, "• Stomach Troubles/Ulcers:": data.stomach_troubles_ulcers,
+                    "• Fainting/Seizure:": data.fainting_seizure, "• Rapid Weight Loss:": data.rapid_weight_loss, "• Radiation Therapy:": data.radiation_therapy,
+                    "• Joint Replacement/Implant:": data.joint_replacement_implant, "• Heart Surgery:": data.heart_surgery, "• Heart Attack:": data.heart_attack,
+                    "• Thyroid Problem:": data.thyroid_problem, "• Heart Disease:": data.heart_disease, "• Heart Murmur:": data.heart_murmur,
+                    "• Hepatitis/Liver Disease:": data.hepatitis_liver_disease, "• Rheumatic Fever:": data.rheumatic_fever, "• Hay Fever/Allergies:": data.hay_fever_allergies,
+                    "• Respiratory Problems:": data.respiratory_problems, "• Hepatitis/Jaundice:": data.hepatitis_jaundice, "• Tuberculosis:": data.tuberculosis,
+                    "• Swollen Ankles:": data.swollen_ankles, "• Kidney Disease:": data.kidney_disease, "• Diabetes:": data.diabetes, "• Chest Pain:": data.chest_pain,
+                    "• Stroke:": data.stroke, "• Cancer/Tumors:": data.cancer_tumors, "• Anemia:": data.anemia, "• Angina:": data.angina, "• Asthma:": data.asthma,
+                    "• Emphysema:": data.emphysema, "• Bleeding Problems:": data.bleeding_problems, "• Blood Diseases:": data.blood_diseases,
+                    "• Head Injuries:": data.head_injuries, "• Arthritis/Rheumatism:": data.arthritis_rheumatism, "• Other Illness:": data.other_illness
+                };
+
+                $("#medicalTableBody .dynamic-row").remove();
+
+                $.each(illness, function(selector, value) {
+                    if (value != null && value != "No Record") {
+                        $("#medicalTableBody").append(`
+                            <tr class="dynamic-row">
+                                <td colspan="2" class="fw-semibold"><span class="ms-3">${selector}</span></td>
+                                <td colspan="2">${value}</td>
+                            </tr>
+                        `);
+                    }
+                });
 
                 $.each(allergic, function(selector, value) {
                     let text = (value === "Yes") ? value : (value === "No Record" ? "No Record" : "No");

@@ -186,6 +186,18 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                                 <table id="medicalTable" class="table-group-divider table-hover table">
                                                     <tbody id="medicalTableBody">
                                                         <tr>
+                                                            <td class="fw-semibold">Name of Physician:</td>
+                                                            <td id="physician_name"></td>
+                                                            <td class="fw-semibold">Speciality:</td>
+                                                            <td id="speciality"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="fw-semibold">Office Address:</td>
+                                                            <td id="office_address"></td>
+                                                            <td class="fw-semibold">Office Number:</td>
+                                                            <td id="office_number"></td>
+                                                        </tr>
+                                                        <tr>
                                                             <td colspan="2" class="fw-semibold">Is in good health:</td>
                                                             <td colspan="2" id="is_good_health"></td>
                                                         </tr>
@@ -266,6 +278,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                                         <tr>
                                                             <td colspan="2" class="fw-semibold">Blood Pressure:</td>
                                                             <td colspan="2" id="blood_pressure"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="fw-semibold">Had or have the following:</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -911,19 +926,32 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 };
 
                 let illness = {
-                    "high_blood_pressure": data.high_blood_pressure, "low_blood_pressure": data.low_blood_pressure, "epilepsy_convulsions": data.epilepsy_convulsions,
-                    "aids_hiv_infection": data.aids_hiv_infection, "sexually_transmitted_disease": data.sexually_transmitted_disease, "stomach_troubles_ulcers": data.stomach_troubles_ulcers,
-                    "fainting_seizure": data.fainting_seizure, "rapid_weight_loss": data.rapid_weight_loss, "radiation_therapy": data.radiation_therapy,
-                    "joint_replacement_implant": data.joint_replacement_implant, "heart_surgery": data.heart_surgery, "heart_attack": data.heart_attack,
-                    "thyroid_problem": data.thyroid_problem, "heart_disease": data.heart_disease, "heart_murmur": data.heart_murmur,
-                    "hepatitis_liver_disease": data.hepatitis_liver_disease, "rheumatic_fever": data.rheumatic_fever, "hay_fever_allergies": data.hay_fever_allergies,
-                    "respiratory_problems": data.respiratory_problems, "hepatitis_jaundice": data.hepatitis_jaundice, "tuberculosis": data.tuberculosis,
-                    "swollen_ankles": data.swollen_ankles, "kidney_disease": data.kidney_disease, "diabetes": data.diabetes, "chest_pain": data.chest_pain,
-                    "stroke": data.stroke, "cancer_tumors": data.cancer_tumors, "anemia": data.anemia, "angina": data.angina, "asthma": data.asthma,
-                    "emphysema": data.emphysema, "bleeding_problems": data.bleeding_problems, "blood_diseases": data.blood_diseases,
-                    "head_injuries": data.head_injuries, "arthritis_rheumatism": data.arthritis_rheumatism, "other_illness": data.other_illness
-                }
+                    "• High Blood Pressure:": data.high_blood_pressure, "• Low Blood Pressure:": data.low_blood_pressure, "• Epilepsy/Convulsions:": data.epilepsy_convulsions,
+                    "• AIDS/HIV Infection:": data.aids_hiv_infection, "• Sexually Transmitted Disease:": data.sexually_transmitted_disease, "• Stomach Troubles/Ulcers:": data.stomach_troubles_ulcers,
+                    "• Fainting/Seizure:": data.fainting_seizure, "• Rapid Weight Loss:": data.rapid_weight_loss, "• Radiation Therapy:": data.radiation_therapy,
+                    "• Joint Replacement/Implant:": data.joint_replacement_implant, "• Heart Surgery:": data.heart_surgery, "• Heart Attack:": data.heart_attack,
+                    "• Thyroid Problem:": data.thyroid_problem, "• Heart Disease:": data.heart_disease, "• Heart Murmur:": data.heart_murmur,
+                    "• Hepatitis/Liver Disease:": data.hepatitis_liver_disease, "• Rheumatic Fever:": data.rheumatic_fever, "• Hay Fever/Allergies:": data.hay_fever_allergies,
+                    "• Respiratory Problems:": data.respiratory_problems, "• Hepatitis/Jaundice:": data.hepatitis_jaundice, "• Tuberculosis:": data.tuberculosis,
+                    "• Swollen Ankles:": data.swollen_ankles, "• Kidney Disease:": data.kidney_disease, "• Diabetes:": data.diabetes, "• Chest Pain:": data.chest_pain,
+                    "• Stroke:": data.stroke, "• Cancer/Tumors:": data.cancer_tumors, "• Anemia:": data.anemia, "• Angina:": data.angina, "• Asthma:": data.asthma,
+                    "• Emphysema:": data.emphysema, "• Bleeding Problems:": data.bleeding_problems, "• Blood Diseases:": data.blood_diseases,
+                    "• Head Injuries:": data.head_injuries, "• Arthritis/Rheumatism:": data.arthritis_rheumatism, "• Other Illness:": data.other_illness
+                };
 
+                $("#medicalTableBody .dynamic-row").remove();
+
+                $.each(illness, function(selector, value) {
+                    if (value != null && value != "No Record") {
+                        $("#medicalTableBody").append(`
+                            <tr class="dynamic-row">
+                                <td colspan="2" class="fw-semibold"><span class="ms-3">${selector}</span></td>
+                                <td colspan="2">${value}</td>
+                            </tr>
+                        `);
+                    }
+                });
+                
                 $.each(allergic, function(selector, value) {
                     let text = (value === "Yes") ? value : (value === "No Record" ? "No Record" : "No");
 
@@ -957,9 +985,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     $('#had_hospitalized').text(hadHospitalized['#had_hospitalized']);
                 }
                 
-                console.log(data);
+                // console.log(data);
             }).fail(function(data) {
-                console.log(data);
+                // console.log(data);
             });
         }
 		
