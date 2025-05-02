@@ -200,6 +200,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             loadTable();            
             
             function loadTable() {
+                DataTable.Buttons.defaults.dom.button.className = 'btn btn-sm btn-outline-primary';
                 let table = new DataTable('#reportsListTable', {
                     language: {
                         searchBuilder: {
