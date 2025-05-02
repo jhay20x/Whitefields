@@ -706,7 +706,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $(this).find("[data-bs-toggle='tooltip']").attr("title", "").tooltip('dispose');
                 $("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show mt-3">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 
-                $("#myForm").find("input, select, textarea").prop("disabled", true);
+                $("#myForm").find("input, .procedure-remove, select, textarea").prop("disabled", true);
                 $("#aptTreatPatientUpdateDiv").show();
                 $("#aptTreatPatientSaveDiv").hide();
 
