@@ -19,8 +19,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $sid = $_POST['sid'];
 
     $stmt = $conn->prepare("SELECT CONCAT(si.fname , CASE WHEN si.mname = 'None' THEN ' ' ELSE CONCAT(' ' , si.mname , ' ') END , si.lname, 
-    CASE WHEN si.suffix = 'None' THEN '' ELSE CONCAT(' ' , si.suffix) END ) AS Name,
-    si.accounts_id, si.bdate, si.contactno, si.gender, si.address, si.religion, si.nationality, ac.email_address, ac.username, ac.status, ac.id as AccountID
+    CASE WHEN si.suffix = 'None' THEN '' ELSE CONCAT(' ' , si.suffix) END ) AS Name, si.id as SecID,
+    si.bdate, si.contactno, si.gender, si.address, si.religion, si.nationality, ac.email_address, ac.username, ac.status, ac.is_main, ac.id as AccountID
     FROM secretary_info si
     LEFT OUTER JOIN accounts ac
     ON ac.id = si.accounts_id
@@ -34,6 +34,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $row = $result->fetch_assoc();
         
         $data['AccountID'] = $row['AccountID'];
+        $data['isCurrent'] = $row['AccountID'] == $_SESSION['user_id'];
         $data['Name'] = $row['Name'];
         $data['age'] = calculateAge($row['bdate']);
         $data['bdate'] = $row['bdate'];
@@ -45,6 +46,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $data['email_address'] = $row['email_address'];
         $data['username'] = $row['username'];
         $data['status'] = $row['status'];
+        $data['is_main'] = $row['is_main'];
     }
 }
 

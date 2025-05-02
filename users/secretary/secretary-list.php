@@ -13,7 +13,6 @@ require_once 'php/fetch-id.php';
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_SESSION['account_type'])) {
     if ($_SESSION['account_type'] == 1) {
         $id = fetchSecretaryID();
-
 ?>
 
 <!DOCTYPE html>
@@ -116,7 +115,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="secretaryViewClose" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
-                    <div class="container-fluid">                        
+                    <div class="container-fluid">  
+                        <div id="isMainMessage" class="col-12" role="alert"></div>                      
                         <div class="row">
                             <div class="row">
                                 <h5 class="col-auto my-auto">Account Status: <span id="secretaryStatusText"></span></h5>
@@ -145,6 +145,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <div data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title='"Set as Main Account" sets the account for automatic cancellation and emailing clients for missed appointments.'>
+                        <span class="text-primary" id="exclamationIcon"><i class="bi bi-exclamation-circle"></i></span>
+                    </div>
+                    <button type="button" id="changeStatusMainBtn" class="btn btn-sm btn-outline-primary">Set as Main Account</button>
                     <button type="button" id="changeStatusBtn" class="btn btn-sm btn-outline-primary">Change Status</button>
                     <button type="button" id="changeStatusBackBtn" class="btn btn-sm btn-outline-primary" data-bs-dismiss="modal" aria-label="Close">Back</button>
                     <button type="button" style="display: none;" id="changeStatusSaveBtn" class="btn btn-sm btn-outline-success">Save</button>
@@ -447,16 +451,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                         <tbody>
                             <?php
-                            $uid = $_SESSION['user_id'];
-
                             $stmt = $conn->prepare("SELECT CONCAT(si.fname , CASE WHEN si.mname = 'None' THEN ' ' ELSE CONCAT(' ' , si.mname , ' ') END , si.lname, 
                                 CASE WHEN si.suffix = 'None' THEN '' ELSE CONCAT(' ' , si.suffix) END ) AS Name, 
                                 si.id AS ID, si.contactno AS Contact, si.bdate AS Bdate, ac.status as Status
                                 FROM secretary_info si
                                 LEFT OUTER JOIN accounts ac
-                                ON si.accounts_id = ac.id
-                                WHERE si.accounts_id != ?;");
-                            $stmt->bind_param("i", $uid);
+                                ON si.accounts_id = ac.id;");
                             $stmt->execute();
                             $result = $stmt->get_result();
                             $stmt->close();
@@ -611,7 +611,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
 		$("#myForm").submit(function(e){
             showLoader();
-            $("#errorMessage, #addSecretaryMessage").empty();
+            $("#errorMessage, #addSecretaryMessage, #isMainMessage").empty();
 			e.preventDefault();
 
 			var url = $("#myForm").attr('action');
@@ -624,7 +624,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 			}).done(function (data) {
                 if (!data.success) {
                     hideLoader();
-                    $("#addSecretaryMessage").append('<div class="mt-3 alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                    $("#addSecretaryMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 } else {
                     localStorage.setItem("errorMessage", data.message);
                     location.reload();
@@ -637,7 +637,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
 		$("#changeStatusSaveBtn").click(function(e){
             showLoader();
-            $("#errorMessage, #addSecretaryMessage").empty();
+            $("#errorMessage, #addSecretaryMessage, #isMainMessage").empty();
 			e.preventDefault();
 
             var formData = {
@@ -653,7 +653,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 			}).done(function (data) {
                 if (!data.success) {
                     hideLoader();
-                    $("#addSecretaryMessage").append('<div class="mt-3 alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                    $("#addSecretaryMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                 } else {
                     localStorage.setItem("errorMessage", data.message);
                     location.reload();
@@ -664,9 +664,36 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 			});
 		});
 
+		$("#changeStatusMainBtn").click(function(){
+            showLoader();
+            $("#errorMessage, #addSecretaryMessage, #isMainMessage").empty();
+
+            var formData = {
+                newMain: $(this).attr("value")
+            };
+
+			$.ajax({
+				type: "POST",
+				url: "php/set-main-account.php",
+				data: formData,
+                dataType: "json"
+			}).done(function (data) {
+                if (!data.success) {
+                    hideLoader();
+                    $("#isMainMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                } else {
+                    localStorage.setItem("errorMessage", data.message);
+                    location.reload();
+                }
+				console.log(data);
+			}).fail(function(data) {
+				console.log(data);
+			});
+		});
+
         $("#changeStatusBtn").on("click", function() {
             $(this).hide();
-            $("#changeStatusBackBtn, #secretaryStatusText").hide();
+            $("#changeStatusBackBtn, #secretaryStatusText, #changeStatusMainBtn").hide().prop("disabled", true);
             $("#changeStatusSaveBtn, #changeStatusCancelBtn, #secretaryStatusDiv").show()
             $("#secretaryStatusDiv select").prop("disabled", false);
         });
@@ -679,7 +706,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $("#changeStatusConfirmYesBtn").on("click", function() {
             let id = $(this).val();
 
-            $("#changeStatusBtn, #changeStatusBackBtn, #secretaryStatusText").show();
+            $("#changeStatusBtn, #changeStatusBackBtn, #secretaryStatusText, #changeStatusMainBtn").show().prop("disabled", false);
             $("#changeStatusSaveBtn, #changeStatusCancelBtn, #secretaryStatusDiv").hide();
             $("#secretaryStatusDiv select").prop("disabled", true);
             $("#secretaryStatus").val(id);
@@ -724,6 +751,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         }
 
         function fetchSecretaryDetails(sid) {
+            $("#errorMessage, #addSecretaryMessage, #isMainMessage").empty();
+
             var formData = {
                 sid: sid
             };
@@ -739,7 +768,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 
                 styleStatus(data.status);
 
-                $("#changeStatusSaveBtn").val(data.AccountID);
+                $("#changeStatusSaveBtn, #changeStatusMainBtn").val(data.AccountID);
                 $("#secretaryStatus").val(data.status);
                 $("#changeStatusConfirmYesBtn").val(data.status);
 
@@ -757,6 +786,18 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                 for (let index = 0; index < details.length; index++) {
                     $(detailsId[index]).text(details[index]);
+                }
+
+                if (data.isCurrent) {
+                    $("#changeStatusBtn").prop('disabled', true);
+                } else {
+                    $("#changeStatusBtn").prop('disabled', false);
+                }
+
+                if (data.is_main) {
+                    $("#changeStatusMainBtn").prop('disabled', true);
+                } else {
+                    $("#changeStatusMainBtn").prop('disabled', false);
                 }
                 // console.log(data);
             }).fail(function(data) {

@@ -694,7 +694,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             $("#aptdtlsreasonOther").text(data.CancelReasonOther);
                             $("#aptdtlsverdictdate").text(data.Cancel_Date);
                             $("#aptdtlsverdicttime").text(data.Cancel_Time);
-                            $("#aptdtlsverdictby").text("Me");
+                            $("#aptdtlsverdictby").text(data.Cancelled_By);
                             $("#aptdtlsverdictbytext").show();
                             break;
 
@@ -740,9 +740,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         $('#appointListModal').modal('show');
                     }
 
-                    // console.log(data);
+                    console.log(data);
                 }).fail(function(data) {
-                    // console.log(data);
+                    console.log(data);
                 });
             }
 

@@ -145,7 +145,7 @@ function insertRequest($conn, $patient_id, $dentist, $requestdatetime, $datetime
     $approveddatetime = date('Y/m/d H:i:s A', time());
     $user_id = $_SESSION['user_id'];
 
-    $stmt = $conn->prepare("INSERT INTO `appointment_requests`(`past_appoint_id`, `patient_id`, `dentist_info_id`, `request_datetime`, `start_datetime`, `approved_datetime`, `approved_by`, `start_datetime_str`, `appoint_status_id`, `oral_concern`) VALUES (?,?,?,?,?,?,?,?,?,?);");
+    $stmt = $conn->prepare("INSERT INTO `appointment_requests`(`past_appoint_id`, `patient_id`, `dentist_info_id`, `request_datetime`, `start_datetime`, `approved_datetime`, `verdict_by`, `start_datetime_str`, `appoint_status_id`, `oral_concern`) VALUES (?,?,?,?,?,?,?,?,?,?);");
     $stmt->bind_param("iiisssisis", $followUpAppointId, $patient_id, $dentist, $requestdatetime, $datetime, $approveddatetime, $user_id, $datetimestr, $appoint_status, $concern);
     $stmt->execute();
 	$stmt->close();

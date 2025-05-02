@@ -19,10 +19,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         DATE(ar.completed_datetime) AS Completed_Date, TIME(ar.completed_datetime) AS Completed_Time,
         DATE(tr.timestamp) AS Partial_Date, TIME(tr.timestamp) AS Partial_Time,
         DATE(ar.approved_datetime) AS Approved_Date, TIME(ar.approved_datetime) AS Approved_Time, st.status_name AS Status,
+        CASE WHEN pi.accounts_id = ar.verdict_by THEN 'Me' ELSE CONCAT(si.fname , CASE WHEN si.mname = 'None' THEN ' ' ELSE CONCAT(' ' , si.mname , ' ') END , si.lname, 
+        CASE WHEN si.suffix = 'None' THEN '' ELSE CONCAT(' ' , si.suffix) END ) END AS Cancelled_By,
         CONCAT(si.fname , CASE WHEN si.mname = 'None' THEN ' ' ELSE CONCAT(' ' , si.mname , ' ') END , si.lname, 
-        CASE WHEN si.suffix = 'None' THEN '' ELSE CONCAT(' ' , si.suffix) END ) AS Approved_By, ar.approved_by AS Approved_ID,
+        CASE WHEN si.suffix = 'None' THEN '' ELSE CONCAT(' ' , si.suffix) END ) AS Approved_By, ar.verdict_by AS Approved_ID,
         CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
-        CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name, ar.id AS ID,
+        CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name,
         CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
         CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS Dentist, ar.oral_concern AS Concern,
         rr.reason AS Reason, ar.reason_other AS ReasonOther,
@@ -31,7 +33,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         LEFT OUTER JOIN patient_info pi ON pi.id = ar.patient_id
         LEFT OUTER JOIN appointment_status st ON st.id = ar.appoint_status_id
         LEFT OUTER JOIN dentist_info di ON di.id = ar.dentist_info_id
-        LEFT OUTER JOIN secretary_info si ON si.accounts_id = ar.approved_by
+        LEFT OUTER JOIN secretary_info si ON si.accounts_id = ar.verdict_by
         LEFT OUTER JOIN rejected_reasons rr ON rr.id = ar.reason_id
         LEFT OUTER JOIN cancel_reasons cr ON cr.id = ar.cancel_reason_id
         LEFT OUTER JOIN transactions tr ON tr.appointment_requests_id  = ar.id
@@ -63,6 +65,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $data['Cancel_Time'] = date('h:i A', strtotime($row['Cancel_Time']));
         $data['Cancel_Date'] = $row['Cancel_Date'];
         $data['Approved_By'] = $row['Approved_By'];
+        $data['Cancelled_By'] = $row['Cancelled_By'];
         $data['Reason'] = $row['Reason'];
         $data['ReasonOther'] = $row['ReasonOther'];
         $data['CancelReason'] = $row['CancelReason'];

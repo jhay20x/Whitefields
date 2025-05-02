@@ -22,33 +22,23 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $dentist_id = $_POST['dentist_id'] ?? "";
 
     $user_id = $_SESSION['user_id'];
-    $setStatus = $_POST['setStatus'];
+    $setStatus = $_POST['setStatus'] ?? "";
     $setStatusText = $_POST['setStatusText'];
     $datetime = $_POST['datetime'];
     $reasonText = $_POST['reasonText'];
+    $pastAptId = isset($_POST['pastAptId']) && $_POST['pastAptId'] !== "" ? $_POST['pastAptId'] : NULL;
 
-    if ($setStatus == 2) {
-        if (is_null($_POST['reason'])) {
-            $reason = NULL;
-        } else {
-            $reason = $_POST['reason'];
-        }
-
-        if ($_POST['reason'] == 6) {
-            $reasonOther = $_POST['reasonOther'];
-        } else {
-            $reasonOther = NULL;
-        }
-    } else {
+    if ($setStatus == 1) {
         $reason = NULL;
         $reasonOther = NULL;
-    }    
-    
-    if ($setStatus == 1) {
-        $query = "UPDATE `appointment_requests` SET `dentist_info_id` = ? WHERE `id` = ?;";
-        $params = [$dentist_id, $id];
-        $type = "ii";
+
+        $query = "UPDATE `appointment_requests` SET `dentist_info_id` = ?, `past_appoint_id` = ? WHERE `id` = ?;";
+        $params = [$dentist_id, $pastAptId, $id];
+        $type = "iii";
     } else {
+        $reason = isset($_POST['reason']) && $_POST['reason'] !== "" ? $_POST['reason'] : NULL;
+        $reasonOther = $reason == 6 && isset($_POST['reasonOther']) && $_POST['reasonOther'] !== '' ? $_POST['reasonOther'] : NULL;
+
         $query = "UPDATE `appointment_requests` SET `appoint_status_id`= ?, `reason_id` = ?, `reason_other` = ?, `dentist_info_id` = ? WHERE `id` = ?;";
         $params = [$setStatus, $reason, $reasonOther, $dentist_id, $id];
         $type = "iisii";
@@ -59,23 +49,28 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
     if ($stmt->execute()) {
         $user = fetchEmail($conn, $pid);
+        $username = $user["username"];
+        $userEmail = $user["emailAddress"];
 
-        if ($setStatus == 1) {
-            $message = "Appointment request has been successfully approved.";
-            $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been approved. Failing to attend on your appointed date and time will result to the cancellation of your appointment. Have a nice day.";
-        } else if ($setStatus == 2) {
-            $message = "Appointment request has been successfully rejected.";
+        if ($setStatus == 2) {
+            $message = "Appointment request details has been updated. Appointment been successfully rejected.";
 
             if ($reason != 6){
-                $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been unfortunately rejected due to the following reason: $reasonText.";                
+                $content = "Good Day $username!<br><br>
+                    Your appointment request for the date $datetime has been unfortunately rejected due to the following reason:<br><br>
+                    $reasonText.";
             } else {
-                $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been unfortunately rejected due to the following reason: $reasonText - $reasonOther.";                
+                $content = "Good Day $username!<br><br>
+                    Your appointment request for the date $datetime has been unfortunately rejected due to the following reason:<br><br>
+                    $reasonText - $reasonOther.";                
             }
-        }
-        
-        if ($user["emailAddress"] != "None") {
-            sendEmail($user["emailAddress"], $content);
-        }
+            
+            if ($userEmail != "None") {
+                sendEmail($userEmail, $username, $content);
+            }
+        } else {
+            $message = "Appointment request details has been updated.";
+        };
     }
 }
 
@@ -103,12 +98,9 @@ function fetchEmail($conn, $pid)
     }
 }
 
-function sendEmail($userEmail, $content)
-{
+function sendEmail($userEmail, $username, $content){
     global $error;
-
-    $username = $_SESSION['user_username'];
-
+    
     $subject = 'Whitefields Appointment Request Update';
     $emailmessage = $content;
     $mail = new PHPMailer(true);

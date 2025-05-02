@@ -45,27 +45,34 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
     $approveddatetime = date('Y/m/d H:i:s A', time());
 
-    $stmt = $conn->prepare("UPDATE `appointment_requests` SET `appoint_status_id`= ?, `approved_datetime`= ?, `approved_by`= ?, `reason_id` = ?, `reason_other` = ? WHERE `id` = ?;");
+    $stmt = $conn->prepare("UPDATE `appointment_requests` SET `appoint_status_id`= ?, `approved_datetime`= ?, `verdict_by`= ?, `reason_id` = ?, `reason_other` = ? WHERE `id` = ?;");
     $stmt->bind_param("isiisi", $setStatus, $approveddatetime, $user_id, $reason, $reasonOther, $id);
 
     if ($stmt->execute()) {
         $user = fetchEmail($conn, $pid);
+        $username = $user["username"];
+        $userEmail = $user["emailAddress"];
 
         if ($setStatus == 1) {
             $message = 'Appointment request has been successfully approved.';
-            $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been approved. Failing to attend on your appointed date and time will result to the cancellation of your appointment. Have a nice day.";
+            $content = "Good Day $username!<br><br>
+                Your appointment request for the date $datetime has been approved. Failing to attend on your appointed date and time will result to the cancellation of your appointment. Have a nice day.";
         } else if ($setStatus == 2) {
             $message = 'Appointment request has been successfully rejected.';
 
             if ($reason != 6){
-                $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been rejected due to the following reason: $reasonText.";                
+                $content = "Good Day $username!<br><br>
+                    Your appointment request for the date $datetime has been rejected due to the following reason:<br><br>
+                    $reasonText.";                
             } else {
-                $content = "Good Day " . $user["username"] . "! Your appointment request for the date $datetime has been rejected due to the following reason: $reasonText - $reasonOther.";                
+                $content = "Good Day $username!<br><br>
+                    Your appointment request for the date $datetime has been rejected due to the following reason:<br><br>
+                    $reasonText - $reasonOther.";                
             }
         }
         
-        if ($user["emailAddress"] != "None") {
-            sendEmail($user["emailAddress"], $content);
+        if ($userEmail != "None") {
+            sendEmail($userEmail, $username, $content);
         }
     }
 }
@@ -94,11 +101,8 @@ function fetchEmail($conn, $pid)
     }
 }
 
-function sendEmail($userEmail, $content)
-{
+function sendEmail($userEmail, $username, $content){
     global $error;
-
-    $username = $_SESSION['user_username'];
 
     $subject = 'Whitefields Appointment Request';
     $emailmessage = $content;

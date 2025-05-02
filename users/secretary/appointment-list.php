@@ -116,6 +116,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
+                            <div id="appointmentUpdateMessage" class="" role="alert"></div>
+
                             <div class="d-flex align-items-start row">
                                 <div class="col">
                                     <h6>Patient Name: <span id="" class="aptdtlsname fw-normal"></span></h6>
@@ -232,7 +234,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <button type="button" class="btn-close" data-bs-dismiss="modal" id="appointListClose" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="container-fluid">
+                        <div class="container-fluid">                            
+                            <div id="appointmentMessage" class="" role="alert"></div>
+                            
                             <div class="d-flex align-items-start row">
                                 <div class="col-12 col-lg">
                                     <h6>Request Date: <span id="aptdtlsRequestDate" class="fw-normal"></span></h6>
@@ -1017,7 +1021,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 let select = "#followUpAppointId";
                 
                 if (state) {
-                    fetchAppointments(pid, select, false);
+                    fetchAppointments(pid, select, false, "");
                 } else {
                     $("#followUpAppointId").prop('disabled', true).empty();
                     $("#followUpAppointId").selectpicker('destroy');
@@ -1031,12 +1035,15 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 let select = "#followUpAppointId";
 
                 if (state) {
-                    fetchAppointments(pid, select, false);
+                    fetchAppointments(pid, select, false, "");
                 }
             });
 
-            function fetchAppointments(pid, select, pastAptId) {                
+            function fetchAppointments(pid, select, hasPastId, pastAptId) {                
                 showLoader();
+
+                let $select = $(select);
+                $select.prop('disabled', false).empty();
 
                 var formData = {
                     pid: pid
@@ -1050,31 +1057,40 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 }).done(function (data) {
                     hideLoader();
 
-                    let $select = $(select);
-                    $select.prop('disabled', false).empty();
-                    $select.selectpicker('destroy');
-                    $select.selectpicker('refresh');
-                    
                     $.each(data, function(index, value) {
                         $select.append($('<option>', {
                             value: value.id,
-                            text: "Appointment #" + value.id + " - " + value.procedures
+                            text: `Appointment #${value.id} - ${value.procedures}`
                         }));
                     });
 
-                    $select.selectpicker('refresh');
+                    if (hasPastId) {
+                        $select.prepend($('<option>', {
+                            value: "",
+                            text: `Nothing selected`
+                        }));
+                    
+                        $select.selectpicker('destroy');
+                        $select.selectpicker();
 
-                    if (pastAptId) {
-                        $select.selectpicker('val', pastAptId);
-                    }
+                        if (pastAptId !== "") {
+                            $select.selectpicker('val', pastAptId);
+                        } else {
+                            $select.selectpicker('val', "");
+                            $select.val('');
+                            $select.find('option').prop('selected', false);
+                        }
+                    }                    
+                    
+                    $select.selectpicker('destroy');
+                    $select.selectpicker();
                     // console.log(data);
                 }).fail(function(data) {
                     // console.log(data);
                 });
             }
 
-            $('#updateStatusSaveBtn').on('click', function () {
-                showLoader();
+            $('#updateStatusSaveBtn').on('click', function () {                
                 let id = $(this).attr('value');
                 let pid = $(this).attr('data-p-id');
                 let dentist_id = $("#patientChangeDentist").val();
@@ -1084,7 +1100,34 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 let reason = $("#reason").val();
                 let reasonText = $( "#reason option:selected" ).text();
                 let reasonOther = $("#reasonOther").val();
+                let pastAptId = $("#updateFollowUpAppointId").selectpicker('val');
 
+                if (setStatus == 1) {
+                    updateRequestStatus(id, pid, dentist_id, setStatus, setStatusText, datetime, null, null, null, pastAptId);
+                } else if (setStatus == 2) {
+
+                    if (reason == "" || reason == null) {
+                        $("#appointmentUpdateMessage").empty();
+                        $("#appointmentUpdateMessage").append('<div class="alert alert-danger alert-dismissible fade show">Please select a reason first.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                        return;
+                    }
+
+                    if (reason == 6 && reasonOther == "") {
+                        $("#appointmentUpdateMessage").empty();
+                        $("#appointmentUpdateMessage").append('<div class="alert alert-danger alert-dismissible fade show">Please provide a valid reason for rejecting the appointment.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                        return;
+                    }
+
+                    if (reason != 6) {
+                        updateRequestStatus(id, pid, dentist_id, setStatus, setStatusText, datetime, reason, reasonText, null, pastAptId);
+                    } else {
+                        updateRequestStatus(id, pid, dentist_id, setStatus, setStatusText, datetime, reason, reasonText, reasonOther, pastAptId);
+                    }
+                }
+            });
+            
+            function updateRequestStatus(id, pid, dentist_id, setStatus, setStatusText, datetime, reason, reasonText, reasonOther, pastAptId) {
+                showLoader();
                 var formData = {
                     id: id,
                     pid: pid,
@@ -1094,7 +1137,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     datetime: datetime,
                     reason: reason,
                     reasonText: reasonText,
-                    reasonOther: reasonOther
+                    reasonOther: reasonOther,
+                    pastAptId: pastAptId
                 };
 
                 $.ajax({
@@ -1115,11 +1159,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         return this.defaultSelected;
                     });
                     $("#reasonOther").val("");
+                    $("#appointmentMessage").append(`<div class="alert alert-success alert-dismissible fade show">${data.message}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`);
                     hideLoader();
-                    // console.log(data);
+                    console.log(data);
                 }).fail(function(data) {
-                    // console.log(data);
+                    console.log(data);
                 });
+            }
+
+            $('#appointListModal').on('hidden.bs.modal', function () {
+                $("#appointmentMessage").empty();
             });
 
             $("#aptCancelYesBtn").on("click", function() {
@@ -1222,7 +1271,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             $("#aptdtlsReasonOther").text(data.CancelReasonOther);
                             $("#aptdtlsVerdictDate").text(data.Cancel_Date);
                             $("#aptdtlsVerdictTime").text(data.Cancel_Time);
-                            $("#aptdtlsVerdictBy").text("The Client");
+                            $("#aptdtlsVerdictBy").text(data.Cancelled_By);
                             $("#aptdtlsVerdictText").show();
                             break;    
 
@@ -1282,6 +1331,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 let pid = $("#updateStatusSaveBtn").attr("data-p-id");
                 let select = "#updateFollowUpAppointId";
                 let pastAptId = $("#pastAptId").text();
+                pastAptId = pastAptId !== "N/A" ? pastAptId : "";
 
                 $("#patientChangeDentist").val(dentistID);
                 $('#patientUpdateStatus').val(1);
@@ -1289,7 +1339,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $("#reasonOtherDiv").hide();
 
                 if (status == "Approved") {
-                    fetchAppointments(pid, select, pastAptId);
+                    fetchAppointments(pid, select, true, pastAptId);
                 }
                 
             });
