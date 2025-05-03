@@ -27,7 +27,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         LEFT OUTER JOIN secretary_info si ON si.id = tr.secretary_id
         LEFT OUTER JOIN patient_info pi ON pi.id = th.patient_id
         WHERE th.appointment_requests_id IN (?,?)
-        GROUP BY ar.id, pr.name
+        GROUP BY th.id
         ORDER BY ar.id DESC;");
 
     $stmt->bind_param("ii", $aptId, $pastAptId);

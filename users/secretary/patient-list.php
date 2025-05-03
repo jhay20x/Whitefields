@@ -24,6 +24,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 	<link rel="shortcut icon" type="image/x-icon" href="../../resources/images/logo-icon-67459a47526b9.webp"/>
     <title>Patients - Whitefields Dental Clinic</title>
     <link rel="stylesheet" href="../../resources/css/bootstrap.css">
+    <link rel="stylesheet" href="../../resources/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="../../resources/css/sidebar.css">
     <link rel="stylesheet" href="../../resources/css/loader.css">
     <link rel="stylesheet" href="../../resources/css/jquery-ui.css">
@@ -583,6 +584,276 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addPatientRecordModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addPatientRecordLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center">
+                    <h6 class="modal-title" id="appointListLabel">
+                        <i class="bi bi-person"></i> Add New Patient Record
+                    </h6>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="addPatientRecordClose" aria-label="Close"></button> -->
+                </div>
+                <form autocomplete="off" action="php/add-patient-record.php" method="POST" class="col" id="addPatientRecordForm">
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div id="addPatientRecordMessage" class="col-12" role="alert"></div>
+
+                            <div id="pastAppointDetails" class="mb-3">
+                                <div class="col-lg-12">
+                                    <h5>Past Appointment Details</h5>
+                                    <hr>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input required type="date" name="date" placeholder="Date"  id="date" id="date" class="form-control">
+                                        <label for="date">Date</label>
+                                    </div>
+                                </div>
+
+                                <div class="row my-3">
+                                    <div class="col-12 col-lg-6">
+                                        <label class="form-label" for="selectPatientId">Patient Name</label>
+                                        <select required class="selectpicker form-control show-tick" data-size="5" data-live-search="true" name="selectPatientId" id="selectPatientId">
+                                            <option disabled selected value="">Select a patient...</option>
+                                            <?php
+                                                $stmt = $conn->prepare("SELECT pi.id,
+                                                    CONCAT(pi.fname , CASE WHEN pi.mname = 'None' THEN ' ' ELSE CONCAT(' ' , pi.mname , ' ') END , pi.lname, 
+                                                    CASE WHEN pi.suffix = 'None' THEN '' ELSE CONCAT(' ' , pi.suffix) END ) AS Name
+                                                    FROM patient_info pi;");
+                                                $stmt->execute();
+                                                $result = $stmt->get_result();
+
+                                                if ($result->num_rows > 0) {
+                                                    while ($row = mysqli_fetch_assoc($result)) {
+                                                        echo '
+                                                            <option value="' . $row['id'] . '">' . $row['Name'] . '</option>
+                                                        ';
+                                                    }
+                                                }
+                                            ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+                                        <label class="form-label" for="selectDentistId">Dentist Name</label>
+                                        <select required class="selectpicker form-control show-tick" data-size="5" data-live-search="true" name="selectDentistId" id="selectDentistId">
+                                            <option disabled selected value="">Select a dentist...</option>
+                                            <?php
+                                                $stmt = $conn->prepare("SELECT di.id,
+                                                    CONCAT(di.fname , CASE WHEN di.mname = 'None' THEN ' ' ELSE CONCAT(' ' , di.mname , ' ') END , di.lname, 
+                                                    CASE WHEN di.suffix = 'None' THEN '' ELSE CONCAT(' ' , di.suffix) END ) AS Name
+                                                    FROM dentist_info di
+                                                    LEFT OUTER JOIN accounts ac ON ac.id = di.accounts_id
+                                                    WHERE ac.status != 0;");
+                                                $stmt->execute();
+                                                $result = $stmt->get_result();
+
+                                                if ($result->num_rows > 0) {
+                                                    while ($row = mysqli_fetch_assoc($result)) {
+                                                        echo '
+                                                            <option value="' . $row['id'] . '">' . $row['Name'] . '</option>
+                                                        ';
+                                                    }
+                                                }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="my-3 row align-items-center">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select required class="form-select" name="timeHour" id="timeHour">
+                                                <option disabled selected value="">--</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                            </select>
+                                            <label for="timeHour">Hour</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <h3 class="col-auto">:</h3>
+
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select required class="form-select" name="timeMinute" id="timeMinute">
+                                                <option disabled selected value="">--</option>
+                                                <option value="00">00</option>
+                                                <option value="30">30</option>
+                                            </select>
+                                            <label for="timeMinute">Minute</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col col-lg-2">
+                                        <div class="form-floating">
+                                            <select required class="form-select" name="timeAMPM" id="timeAMPM">
+                                                <option disabled selected value="">--</option>
+                                                <option value="AM">AM</option>
+                                                <option value="PM">PM</option>
+                                            </select>
+                                            <label for="timeAMPM">AM/PM</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- <div class="input-group my-3">
+                                    <label class="input-group-text" for="dentist">Dentist</label>
+                                    <input maxlength="100" required disabled type="text" name="dentist" placeholder="Dentist"  id="dentist" class="form-control">
+                                </div> -->
+                                
+                                <div class="form-floating my-3">
+                                    <input required type="hidden" name="dentist" id="dentist">
+                                    <input maxlength="100" required type="text" name="concern" placeholder="Oral Concern (100 characters only)"  id="concern" class="form-control onlyLettersNumbers">
+                                    <label for="concern">Oral Concern (100 characters only)</label>
+                                </div>
+                            </div>
+
+                            <div id="pastAppointmentProcedures" class="mb-3">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <h5 class="col">Past Appointment Procedures</h5>
+                                        <button type="button" class="btn btn-sm btn-outline-primary col-auto" id="addPatientRecordProcedureBtn">Add Procedure</button>
+                                    </div>
+                                    <hr>
+                                </div>
+
+                                <div class="row justify-content-center overflow-auto" style="max-height: 300px;" id="proceduresList">
+                                    <div class="row flex-row jus align-items-center mb-3" id="procedureRow_0">
+                                        <div class="col col-lg-1 mb-3 mb-lg-0 order-0 order-lg-0">
+                                            <h6><span class="d-inline d-lg-none">Procedure </span>1</h6>
+                                        </div>
+                                        <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-2 order-lg-1">
+                                            <div class="form-floating">
+                                                <input type="text" name="patientToothNo[]" placeholder="Tooth No./s" id="patientToothNo_0" class="form-control onlyNumbers">
+                                                <label for="patientToothNo_0">Tooth No./s</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4 mb-3 mb-lg-0 order-3 order-lg-2">
+                                            <div class="form-floating">
+                                                <select required class="form-control" name="patientProcedure[]" id="patientProcedure_0">
+                                                    <?php
+                                                        $stmt = $conn->prepare("SELECT * FROM `procedures`");
+                                                        $stmt->execute();
+                                                        $result = $stmt->get_result();
+                                                        $stmt->close();
+            
+                                                        if ($result->num_rows > 0) {
+                                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                                !$row['status'] ? $disabled = "disabled" : $disabled = "";
+
+                                                                echo '
+                                                                    <option ' . $disabled . ' value="' . $row['id'] . '">' . $row['name'] . '</option>
+                                                                ';
+                                                            }
+                                                        }
+                                                    ?>
+                                                </select>
+                                                <label class="form-label" for="patientProcedure_0">Procedure</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-4 order-lg-3">
+                                            <div class="form-floating">
+                                                <input type="text" required name="patientTransactionPrice[]" placeholder="Procedure Price" id="patientTransactionPrice_0" class="form-control patientTransactionPrice">
+                                                <label for="patientTransactionPrice_0">Procedure Price</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto col-lg-1 mb-3 mb-lg-0 order-1 order-lg-4">
+                                            <button type="button" class="btn btn-outline-danger procedure-remove"><i class="bi bi-x-lg"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row justify-content-center">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-floating">
+                                                <textarea maxlength="255" style="height: 125px;" name="dentistNote" placeholder="Code" id="dentistNote" id="dentistNote" class="form-control"></textarea>
+                                                <label for="dentistNote">Notes</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="pastAppointmentProcedures" class="mb-3">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <h5 class="col">Past Appointment Transactions</h5>
+                                        <button type="button" class="btn btn-sm btn-outline-primary col-auto" id="addPatientRecordTransactionBtn">Add Transaction</button>
+                                    </div>
+                                    <hr>
+                                </div>
+
+                                <div class="row justify-content-center overflow-auto" style="max-height: 300px;" id="proceduresList">
+                                    <div class="row flex-row jus align-items-center mb-3" id="procedureRow_0">
+                                        <div class="col col-lg-1 mb-3 mb-lg-0 order-0 order-lg-0">
+                                            <h6><span class="d-inline d-lg-none">Procedure </span>1</h6>
+                                        </div>
+                                        <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-2 order-lg-1">
+                                            <div class="form-floating">
+                                                <input type="text" name="patientToothNo[]" placeholder="Tooth No./s" id="patientToothNo_0" class="form-control onlyNumbers">
+                                                <label for="patientToothNo_0">Tooth No./s</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4 mb-3 mb-lg-0 order-3 order-lg-2">
+                                            <div class="form-floating">
+                                                <select required class="form-control" name="patientProcedure[]" id="patientProcedure_0">
+                                                    <?php
+                                                        $stmt = $conn->prepare("SELECT * FROM `procedures`");
+                                                        $stmt->execute();
+                                                        $result = $stmt->get_result();
+                                                        $stmt->close();
+            
+                                                        if ($result->num_rows > 0) {
+                                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                                !$row['status'] ? $disabled = "disabled" : $disabled = "";
+
+                                                                echo '
+                                                                    <option ' . $disabled . ' value="' . $row['id'] . '">' . $row['name'] . '</option>
+                                                                ';
+                                                            }
+                                                        }
+                                                    ?>
+                                                </select>
+                                                <label class="form-label" for="patientProcedure_0">Procedure</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-4 order-lg-3">
+                                            <div class="form-floating">
+                                                <input type="text" required name="patientTransactionPrice[]" placeholder="Procedure Price" id="patientTransactionPrice_0" class="form-control patientTransactionPrice">
+                                                <label for="patientTransactionPrice_0">Procedure Price</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto col-lg-1 mb-3 mb-lg-0 order-1 order-lg-4">
+                                            <button type="button" class="btn btn-outline-danger procedure-remove"><i class="bi bi-x-lg"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-outline-success" name="profileSubmitBtn">Submit</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"data-bs-target="#cancelAddPatientConfirmModal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     
     <!-- Modal -->
     <div class="modal fade" id="cancelAddPatientConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cancelAddPatientConfirmLabel" aria-hidden="true">
@@ -705,6 +976,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 <script src="../../resources/js/jquery-ui.js"></script>
 <script src="../../resources/js/functions.js"></script>
 <script src="../../resources/js/bootstrap.bundle.min.js"></script>
+<script src="../../resources/js/bootstrap-select.min.js"></script>
 <script src='../../resources/js/index.global.js'></script>
 <script src='../../resources/js/sidebar.js'></script>
 <script src="../../resources/js/dataTables.js"></script>
@@ -749,6 +1021,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 },
                 topEnd: {
                     buttons: [
+                        {
+                            text: 'Add Patient Record',
+                            action: function (e, dt, node, config) {
+                                $("#errorMessage").empty();
+                                $('#addPatientRecordModal').modal('show');
+                            }
+                        },
                         {
                             text: 'Add Patient',
                             action: function (e, dt, node, config) {
