@@ -188,7 +188,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <hr>
 
                             <div class="row justify-content-center overflow-auto" style="max-height: 300px;" id="proceduresList">
-                                <div class="row flex-row jus align-items-center mb-3" id="procedureRow_0">
+                                <div class="row flex-row justify-content-center align-items-center mb-3" id="procedureRow_0">
                                     <div class="col col-lg-1 mb-3 mb-lg-0 order-0 order-lg-0">
                                         <h6><span class="d-inline d-lg-none">Procedure </span>1</h6>
                                     </div>
@@ -223,7 +223,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     </div>
                                     <div class="col-12 col-lg-3 mb-3 mb-lg-0 order-4 order-lg-3">
                                         <div class="form-floating">
-                                            <input type="text" required name="patientPrice[]" placeholder="Procedure Price" id="patientPrice_0" class="form-control patientPrice">
+                                            <input type="text" required name="patientPrice[]" placeholder="Procedure Price" id="patientPrice_0" class="form-control patientPrice onlyNumbersDots">
                                             <label for="patientPrice_0">Procedure Price</label>
                                         </div>
                                     </div>
