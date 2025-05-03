@@ -167,6 +167,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <select required disabled class="selectpicker form-control show-tick" data-size="5" data-live-search="true" name="updateFollowUpAppointId" id="updateFollowUpAppointId"></select>
                                         </div>
                                     </div>
+
+                                    <div id="aptdtlsUpdateUploadMedia" class="col">                                        
+                                        <div class="col-12 col-lg">
+                                            <h6>Upload Media</span></h6>
+                                        </div>
+
+                                        <form action="php/upload-media.php" enctype="multipart/form-data" name="uploadForm" method="POST" id="uploadForm">
+                                            <div class="input-group">
+                                                <input type="file" class="form-control" name="fileToUpload[]" id="fileToUpload" multiple>
+                                                <input class="btn btn-outline-secondary" type="submit" name="uploadsubmitbtn" value="Upload" >
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div> 
 
                                 <div id="aptdtlsUpdateStatus" class="col-lg-6">
@@ -526,6 +539,17 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
                                 </div>
+                                <div id="uploadedMedia" class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#uploadedMediaList" aria-expanded="false" aria-controls="uploadedMediaList">
+                                            <span class="fw-semibold">Uploaded Media</span>
+                                        </button>
+                                    </h2>
+                                    <div id="uploadedMediaList" class="accordion-collapse collapse" data-bs-parent="#patientView">
+                                        <div class="accordion-body text-center">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -710,6 +734,17 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        <img id="previewImage" src="" class="img-fluid rounded" style="max-height: 100vh;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="container-fluid">
             <div class="row d-flex justify-content-center position-relative">
                 <div class="title position-sticky top-0 start-0 z-3 bg-white d-flex flex-row shadow align-items-center p-3">
@@ -839,6 +874,53 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             loadTable();
             loadModal();
             inputFilters();
+
+            $("#uploadForm").on('submit',(function(e) {
+                e.preventDefault();
+                showLoader();
+                $("#errorMessage, #appointmentUpdateMessage").empty();
+
+                let id = $("#updateStatusSaveBtn").attr('value');
+                let pid = $("#updateStatusSaveBtn").attr('data-p-id');
+
+                var url = $("#uploadForm").attr('action');
+
+                var formData = new FormData(this);
+
+                formData.append('id', id);
+                formData.append('pid', pid);
+                
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: formData,
+                    contentType: false,            
+                    cache: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        refreshList();
+                        fetchPatientDetails(patient_id, id);
+                        refreshDentalList(patient_id);
+                        refreshMedicalList(patient_id);
+                        refreshTreatment(patient_id);
+                        refreshMedia(patient_id, id);
+                        loadDetails(id);
+                        $('#patientUpdateStatusModal').modal('hide');
+                        $('#appointListModal').modal('show');
+                        $("#patientUpdateStatus option, #reasonDiv option").prop('selected', function() {
+                            return this.defaultSelected;
+                        });
+                        $("#reasonOther").val("");
+                        $("#appointmentMessage").append(`<div class="alert alert-success alert-dismissible fade show">${data.message}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`);
+                        hideLoader();
+                        // console.log(data.responseText);
+                    },
+                    error: function(data) {
+                        // console.log(data.responseText);
+                    }
+                });
+            }));
 
             $("#myForm").submit(function(e) {
                 $("#errorMessage").empty();
@@ -1010,6 +1092,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 fetchPatientDetails(patient_id, id);
                 refreshDentalList(patient_id);
                 refreshMedicalList(patient_id);
+                refreshMedia(patient_id, id);
                 refreshTreatment(patient_id);
                 loadDetails(id);
             });
@@ -1089,7 +1172,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 });
             }
 
-            $('#updateStatusSaveBtn').on('click', function () {                
+            $('#updateStatusSaveBtn').on('click', function () {
                 let id = $(this).attr('value');
                 let pid = $(this).attr('data-p-id');
                 let dentist_id = $("#patientChangeDentist").val();
@@ -1151,6 +1234,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     refreshDentalList(patient_id);
                     refreshMedicalList(patient_id);
                     refreshTreatment(patient_id);
+                    refreshMedia(patient_id, id);
                     loadDetails(id);
                     $('#patientUpdateStatusModal').modal('hide');
                     $('#appointListModal').modal('show');
@@ -1193,6 +1277,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     refreshDentalList(pid);
                     refreshMedicalList(pid);
                     refreshTreatment(pid);
+                    refreshMedia(pid, id);
                     loadDetails(id);
                     $('#appointListModal').modal('show');
                 }
@@ -1501,6 +1586,47 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     // console.log(data);
                 });
             }
+            
+            function refreshMedia(pid, id) {
+                var formData = {
+                    pid: pid,
+                    id: id
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: 'php/fetch-media.php',
+                    data: formData,
+                    dataType: 'json'
+                }).done(function (data) {
+                    let html = '';
+
+                    if (data.length === 0) {
+                        html = '<h6>No media uploaded.</h6>';
+                    } else {
+                        data.forEach(img => {
+                            html += `<img src="${img}" class="img-thumbnail me-2 mb-2 image-preview" style="width:200px; cursor:pointer;">`;
+                        });
+                    };
+
+                    $("#uploadedMediaList .accordion-body").html(html);
+                    // console.log(data);
+                }).fail(function(data) {
+                    // console.log(data);
+                });
+            }
+
+            $('body').on("click", '.image-preview', function() {
+                let src = $(this).attr("src");
+
+                $('#previewImage').attr('src', src);
+                $('#patientViewModal').modal('hide');
+                $('#imagePreviewModal').modal('show');
+            });
+
+            $('#imagePreviewModal').on('hide.bs.modal', function () {
+                $('#patientViewModal').modal('show');
+            });
             
             function refreshDentalList(pid) {
                 var formData = {

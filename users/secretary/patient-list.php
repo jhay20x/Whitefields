@@ -319,6 +319,17 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     </div>
                                 </div>
                             </div>
+                            <div id="uploadedMedia" class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#uploadedMediaList" aria-expanded="false" aria-controls="uploadedMediaList">
+                                        <span class="fw-semibold">Uploaded Media</span>
+                                    </button>
+                                </h2>
+                                <div id="uploadedMediaList" class="accordion-collapse collapse" data-bs-parent="#patientView">
+                                    <div class="accordion-body text-center">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -903,6 +914,17 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <img id="previewImage" src="" class="img-fluid rounded" style="max-height: 100vh;">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container-fluid">
         <div class="row d-flex justify-content-center position-relative">
             <div class="title position-sticky top-0 start-0 z-3 bg-white d-flex flex-row shadow align-items-center p-3">
@@ -1288,6 +1310,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             refreshDentalList(patient_id);
             refreshMedicalList(patient_id);
             refreshTreatment(patient_id);
+            refreshMedia(patient_id, id);
         });
 
         $('#treatmentItem').on('click', function () {
@@ -1458,7 +1481,48 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             }).fail(function(data) {
                 // console.log(data);
             });
+        }        
+            
+        function refreshMedia(pid, id) {
+            var formData = {
+                pid: pid,
+                id: id
+            };
+
+            $.ajax({
+                type: "POST",
+                url: 'php/fetch-media.php',
+                data: formData,
+                dataType: 'json'
+            }).done(function (data) {
+                let html = '';
+
+                if (data.length === 0) {
+                    html = '<h6>No media uploaded.</h6>';
+                } else {
+                    data.forEach(img => {
+                        html += `<img src="${img}" class="img-thumbnail me-2 mb-2 image-preview" style="width:200px; cursor:pointer;">`;
+                    });
+                };
+
+                $("#uploadedMediaList .accordion-body").html(html);
+                // console.log(data);
+            }).fail(function(data) {
+                // console.log(data);
+            });
         }
+
+        $('body').on("click", '.image-preview', function() {
+            let src = $(this).attr("src");
+
+            $('#previewImage').attr('src', src);
+            $('#patientViewModal').modal('hide');
+            $('#imagePreviewModal').modal('show');
+        });
+
+        $('#imagePreviewModal').on('hide.bs.modal', function () {
+            $('#patientViewModal').modal('show');
+        });
 
         function refreshTreatment(patient_id) {
             var formData = {
