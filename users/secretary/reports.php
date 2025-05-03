@@ -197,7 +197,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
             today = yyyy + '-' + mm + '-' + dd;
 
-            loadTable();            
+            loadTable();
             
             function loadTable() {
                 DataTable.Buttons.defaults.dom.button.className = 'btn btn-sm btn-outline-primary';
@@ -232,7 +232,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 }
                             },
                         },
-                        topStart: {
+                        topEnd: {
                             buttons: [
                                 {
                                     extend: 'print',
@@ -255,6 +255,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     }
                                 }
                             ]
+                        },
+                        topStart: {
+                            search: true
                         },
                         bottomStart: {
                             pageLength: true
