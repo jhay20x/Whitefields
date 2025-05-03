@@ -687,7 +687,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                             <label for="timeAMPM">AM/PM</label>
                                         </div>
                                     </div>
-
                                 </div>
                                 
                                 <!-- <div class="input-group my-3">

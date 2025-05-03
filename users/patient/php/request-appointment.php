@@ -23,19 +23,19 @@ function checkUser($conn, $user_id) {
     $time_str = $_POST['timeHour'] . ":" . $_POST['timeMinute'] . ' ' . $_POST['ampmText'];
     $time = date("H:i:s", strtotime($time_str));
     $dentist = $_POST['dentist'] ?? "";
+    
+    if (!checkDateSched($date)) {
+        return;
+    };    
+    
+    if (!checkDateTime($conn, $date, $time)) {
+        return;
+    };
 
     if ($dentist == 0) {
         $error = "No dentist available on this date. Please choose another date.";
         return;
     }
-    
-    if (!checkDateTime($date, $time)) {
-        return;
-    };
-    
-    if (!checkDateSched($date)) {
-        return;
-    };    
     
     if (!checkStoreAvailability($conn, $date)) {
         return;
@@ -87,21 +87,52 @@ function checkTimeSched($conn, $time, $date){
     }
 }
 
-function checkDateTime($date, $time) {
+function checkDateTime($conn, $date, $time) {
     global $error;
 
-    $curdate = date("Y-m-d");
-    $curtime = date("H:i:s", time());
-    $maxtime = date("H:i:s", strtotime("18:30:00"));
+    $storeTime = fetchStoreOpenAndClose($conn, $date);
 
-    if ($date == $curdate && $curtime > $time && $curtime < $maxtime){
+    if (!$storeTime) {
+        $error = "The clinic is closed for this day. Please select a different day for your appointment.";
+        return false;
+    }
+
+    $curdate = date("Y-m-d");
+    $curtime = date("H:i:s");
+    
+    $timeFrom = $storeTime['time_from'];
+    $timeTo   = $storeTime['time_to'];
+
+    if ($time < $timeFrom) {
+        $error = "Selected time is too early. Please choose a time after " . date("h:i A", strtotime($timeFrom)) . ".";
+        return false;
+    } elseif ($time > $timeTo) {
+        $error = "Selected time is too late. Please choose a time before " . date("h:i A", strtotime($timeTo)) . ".";
+        return false;
+    }
+
+    if ($date == $curdate && $curtime > $time && $curtime < $timeTo){
         $error = "Unfortunately you can't set appointment for this selected time. Please choose a later time or date.";
         return false;
-    } else if ($date == $curdate && $curtime > $maxtime){
+    } else if ($date == $curdate && $curtime > $timeTo){
         $error = "Unfortunately you can't set any appointments for today. Please choose a different date.";
         return false;
     } else {
         return true;
+    }
+}
+
+function fetchStoreOpenAndClose($conn, $date) {
+    $stmt = $conn->prepare('SELECT sa.time_from, sa.time_to FROM store_availability sa WHERE sa.day = DAYNAME(?) AND sa.availability IS NOT NULL;');
+    $stmt->bind_param('s', $date);
+    $stmt->execute();
+    $result = $stmt->get_result();
+	$stmt->close();
+
+    if ($result->num_rows > 0) {
+        return $result->fetch_assoc();
+    } else {
+        return null;
     }
 }
 
@@ -119,7 +150,7 @@ function checkDateSched($date) {
 function checkStoreAvailability($conn, $date) {
     global $error;
 
-    $stmt = $conn->prepare('SELECT sa.availability, sa.time_from, sa.time_to FROM store_availability sa WHERE sa.day = DAYNAME(?) AND sa.availability IS NOT NULL;');
+    $stmt = $conn->prepare('SELECT sa.availability FROM store_availability sa WHERE sa.day = DAYNAME(?) AND sa.availability IS NOT NULL;');
     $stmt->bind_param('s', $date);
     $stmt->execute();
     $result = $stmt->get_result();

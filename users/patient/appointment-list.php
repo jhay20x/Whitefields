@@ -193,19 +193,21 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 
                                 <div class="my-3 row align-items-center">
                                     <div class="col">
-                                        <div class="form-floating col">
+                                        <div class="form-floating">
                                             <select required class="form-select" name="timeHour" id="timeHour">
                                                 <option disabled selected value="">--</option>
-                                                <option value="9">9</option>
-                                                <option value="10">10</option>
-                                                <option value="11">11</option>
-                                                <option value="12">12</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
                                                 <option value="4">4</option>
                                                 <option value="5">5</option>
                                                 <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
                                             </select>
                                             <label for="timeHour">Hour</label>
                                         </div>
@@ -224,7 +226,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         </div>
                                     </div>
 
-                                    <h6 id="ampmText" class="col-auto">--</h6>
+                                    <div class="col col-lg-2">
+                                        <div class="form-floating">
+                                            <select required class="form-select" name="timeAMPM" id="timeAMPM">
+                                                <option disabled selected value="">--</option>
+                                                <option value="AM">AM</option>
+                                                <option value="PM">PM</option>
+                                            </select>
+                                            <label for="timeAMPM">AM/PM</label>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <!-- <div class="input-group my-3">
@@ -471,13 +482,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 var formData = {
                     timeHour: $('#timeHour').val(),
                     timeMinute: $('#timeMinute').val(),
-                    ampmText: $('#ampmText').text(),
+                    ampmText: $('#timeAMPM').val(),
                     date: $('#date').val(),
                     dentist: dentist_id,
                     concern: $('#concern').val()
                 };
 
-                console.log($("#myForm").serialize());
+                // console.log($("#myForm").serialize());
 
                 $.ajax({
                     type: "POST",
@@ -489,9 +500,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         $("#errorMessage").append('<div class="alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     } else {
                         refreshList();
-                        $("#date, #concern").val("");
-                        $("#ampmText").text("--");
-                        $('#dentist, #timeHour, #timeMinute').prop('selectedIndex', 0);
+                        $("#myForm")[0].reset();
                         $("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     }
                     // console.log(formData);
@@ -503,9 +512,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             });
             
             $(window).on('hide.bs.modal', function (e) {
-                $("#date, #concern, #dentist").val("");
-                $("#ampmText").text("--");
-                $('#timeHour, #timeMinute').prop('selectedIndex', 0);
+                $("#myForm")[0].reset();
             })
 
             $("#date").on('change', function() {
