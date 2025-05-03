@@ -477,7 +477,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     concern: $('#concern').val()
                 };
 
-                // console.log($("#myForm").serialize());
+                console.log($("#myForm").serialize());
 
                 $.ajax({
                     type: "POST",
@@ -740,9 +740,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         $('#appointListModal').modal('show');
                     }
 
-                    console.log(data);
+                    // console.log(data);
+                    
                 }).fail(function(data) {
-                    console.log(data);
+                    // console.log(data);
+                    
                 });
             }
 

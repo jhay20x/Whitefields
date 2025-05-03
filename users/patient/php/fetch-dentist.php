@@ -54,8 +54,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $data["dentist"] = $row['Name'];
             $data["dentist_id"] = $row['ID'];
         } else {
-            $data["success"] = false;
-            $data["error"] = "Not Set";
+            $data["success"] = true;
+            $data["dentist"] = 0;
+            $data["dentist_id"] = 0;
         }
 
         return $data;
