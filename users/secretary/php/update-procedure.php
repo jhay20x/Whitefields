@@ -19,7 +19,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $viewProcedurePriceMax = $_POST["viewProcedurePriceMax"] ?? "";
 
     $stmt = $conn->prepare("UPDATE procedures SET name = ?, description = ?, price_min = ?, price_max = ?, status = ? WHERE id = ?;");
-    $stmt->bind_param("ssiiiii",$viewProcedureName, $viewProcedureDesc, $viewProcedurePriceMin, $viewProcedurePriceMax, $viewProcedureStatus, $pid);
+    $stmt->bind_param("ssiiii",$viewProcedureName, $viewProcedureDesc, $viewProcedurePriceMin, $viewProcedurePriceMax, $viewProcedureStatus, $pid);
     
     if ($stmt->execute()){    
         $message = "Procedure details has been updated.";

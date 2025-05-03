@@ -148,8 +148,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 </h2>
                                 <div id="medicalInfo" class="accordion-collapse collapse" data-bs-parent="#patientView">
                                     <div class="accordion-body">
-                                        <div class="d-flex justify-content-end float-end">
-                                            <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View Records">
+                                        <div class="row justify-content-end">
+                                            <div class="col-auto" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View Records">
                                                 <button id="" class="btn btn-outline-secondary mb-3 position-relative" data-bs-toggle="modal" data-bs-target="#medicalHistoryLogsModal">
                                                     <i class="bi bi-file-earmark-text"></i>
                                                 </button>

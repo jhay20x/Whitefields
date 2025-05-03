@@ -184,7 +184,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 </div>
 
                                 <div class="col-lg-6">
-                                    <div class="form-floating">
+                                    <div class="form-floating mb-3">
                                         <select required class="form-control" name="viewProcedureStatus" id="viewProcedureStatus">
                                             <option value="1" class="text-success fw-bold">Active</option>
                                             <option value="0" class="text-danger fw-bold">Inactive</option>
