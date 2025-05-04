@@ -120,7 +120,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <div class="row">
                             <div class="row">
                                 <h5 class="col-auto my-auto">Account Status: <span id="dentistStatusText"></span></h5>
-                                <div class="col-3" id="dentistStatusDiv" style="display: none;">                                    
+                                <div class="col-auto" id="dentistStatusDiv" style="display: none;">                                    
                                     <select disabled required class="form-select" id="dentistStatus" name="dentistStatus">
                                         <option class="text-success h6" value="1">Active</option>
                                         <option class="text-danger h6" value="0">Inactive</option>

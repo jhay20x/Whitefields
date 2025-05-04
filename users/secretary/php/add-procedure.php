@@ -40,7 +40,7 @@ function checkIfProcedureExistInactive($conn, $procedureName) {
 
 function insertInfo($conn, $procedureName, $procedureDesc, $procedurePriceMin, $procedurePriceMax) {
     $stmt = $conn->prepare("INSERT INTO `procedures`(`name`, `description`, `price_min`, `price_max`) VALUES (?,?,?,?)");
-    $stmt->bind_param("ssiii", $procedureName, $procedureDesc, $procedurePriceMin, $procedurePriceMax);
+    $stmt->bind_param("ssii", $procedureName, $procedureDesc, $procedurePriceMin, $procedurePriceMax);
     $stmt->execute();
 	$stmt->close();
 }

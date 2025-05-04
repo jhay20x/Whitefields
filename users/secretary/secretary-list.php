@@ -120,7 +120,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         <div class="row">
                             <div class="row">
                                 <h5 class="col-auto my-auto">Account Status: <span id="secretaryStatusText"></span></h5>
-                                <div class="col-3" id="secretaryStatusDiv" style="display: none;">                                    
+                                <div class="col-auto" id="secretaryStatusDiv" style="display: none;">                                    
                                     <select disabled required class="form-select" id="secretaryStatus" name="secretaryStatus">
                                         <option class="text-success h6" value="1">Active</option>
                                         <option class="text-danger h6" value="0">Inactive</option>
@@ -145,7 +145,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title='"Set as Main Account" sets the account for automatic cancellation and emailing clients for missed appointments.'>
+                    <div id="mainAccountTooltip" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title='"Set as Main Account" sets the account for automatic cancellation of missed appointments.'>
                         <span class="text-primary" id="exclamationIcon"><i class="bi bi-exclamation-circle"></i></span>
                     </div>
                     <button type="button" id="changeStatusMainBtn" class="btn btn-sm btn-outline-primary">Set as Main Account</button>
@@ -693,7 +693,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
         $("#changeStatusBtn").on("click", function() {
             $(this).hide();
-            $("#changeStatusBackBtn, #secretaryStatusText, #changeStatusMainBtn").hide().prop("disabled", true);
+            $("#changeStatusBackBtn, #secretaryStatusText, #changeStatusMainBtn, #mainAccountTooltip").hide().prop("disabled", true);
             $("#changeStatusSaveBtn, #changeStatusCancelBtn, #secretaryStatusDiv").show()
             $("#secretaryStatusDiv select").prop("disabled", false);
         });
@@ -706,7 +706,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $("#changeStatusConfirmYesBtn").on("click", function() {
             let id = $(this).val();
 
-            $("#changeStatusBtn, #changeStatusBackBtn, #secretaryStatusText, #changeStatusMainBtn").show().prop("disabled", false);
+            $("#changeStatusBtn, #changeStatusBackBtn, #secretaryStatusText, #changeStatusMainBtn, #mainAccountTooltip").show().prop("disabled", false);
             $("#changeStatusSaveBtn, #changeStatusCancelBtn, #secretaryStatusDiv").hide();
             $("#secretaryStatusDiv select").prop("disabled", true);
             $("#secretaryStatus").val(id);
