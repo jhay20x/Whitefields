@@ -562,6 +562,29 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 </div>
             </div>
         </div>
+    
+        <!-- Modal -->
+        <div class="modal fade" id="cancelDeleteMediaConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cancelDeleteMediaConfirmLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center">
+                        <h6 class="modal-title" id="cancelDeleteMediaConfirmLabel">
+                            <i class="bi bi-person"></i> Delete Media
+                        </h6>
+                        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="cancelRequestConfirmClose" aria-label="Close"></button> -->
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="text-center">
+                                <h6>Are you sure to delete this image?</h6>
+                                <button type="button" value="" id="aptDeleteMediaYesBtn" class="btn btn-sm btn-outline-danger m-2 me-0" data-bs-dismiss="modal" aria-label="Close">Yes</button>
+                                <button type="button" value="" id="aptDeleteMediaNoBtn" class="btn btn-sm btn-outline-success m-2 me-0" data-bs-toggle="modal" data-bs-target="#patientViewModal">No</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Modal -->
         <div class="modal fade" id="dentalHistoryLogsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="dentalHistoryLogsLabel" aria-hidden="true">
