@@ -565,12 +565,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     data.Procedures.forEach(proc => {
                         let prop;
 
-                        if (proc.RemainingBalance == 0 && proc.TotalAmount == 0 && proc.AppointStatus == 5) {
-                            prop = "";
-                        } else if (proc.RemainingBalance == 0) {
+                        if (proc.AppointStatus == 5) {
                             prop = "disabled";
-                        } else {
+                        } else if (proc.RemainingBalance == 0 && proc.AmountPaid == 0 && proc.AppointStatus != 5) {
                             prop = "";
+                        } else if (proc.RemainingBalance > 0 && proc.AmountPaid >= 0 && proc.AppointStatus != 5) {
+                            prop = "";
+                        } else if (proc.RemainingBalance == 0 && proc.AmountPaid == proc.TotalAmount && proc.AppointStatus != 5) {
+                            prop = "disabled ";
+                        } else {
+                            prop = "disabled";
                         };
 
                         tbodyHtml += `
