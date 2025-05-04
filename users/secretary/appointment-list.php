@@ -1425,7 +1425,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 $("#reasonDiv").hide();
                 $("#reasonOtherDiv").hide();
 
-                if (status == "Approved") {
+                if (status == "Approved" || status == "Evaluated") {
                     fetchAppointments(pid, select, true, pastAptId);
                 }
                 
