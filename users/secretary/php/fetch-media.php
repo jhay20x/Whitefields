@@ -9,7 +9,7 @@ $error;
 $data = [];
 $id;
 
-function getFolderName($conn, $pid ) {
+function getFolderName($conn, $pid) {
     $stmt = $conn->prepare("SELECT ac.profile_path FROM accounts ac LEFT OUTER JOIN patient_info pi ON pi.accounts_id = ac.id WHERE pi.id = ?");
     $stmt->bind_param("i", $pid);
     $stmt->execute();
@@ -25,7 +25,7 @@ function getFolderName($conn, $pid ) {
     }
 }
 
-function getMediaFolderName($conn, $id ) {
+function getMediaFolderName($conn, $id) {
     $stmt = $conn->prepare("SELECT ar.media_path FROM appointment_requests ar WHERE ar.id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
@@ -36,6 +36,22 @@ function getMediaFolderName($conn, $id ) {
         $row = $result->fetch_assoc();
 
         return $row['media_path'];
+    } else {
+        return null;
+    }
+}
+
+function getAppointmentId($conn, $mediaFolderName) {
+    $stmt = $conn->prepare("SELECT ar.id FROM appointment_requests ar WHERE ar.media_path = ?");
+    $stmt->bind_param("s", $mediaFolderName);
+    $stmt->execute();
+    $result = $stmt->get_result();   
+	$stmt->close(); 
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+
+        return $row['id'];
     } else {
         return null;
     }
@@ -83,10 +99,22 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $subfolders = array_filter(glob("$path/*"), 'is_dir');
 
         foreach ($subfolders as $subfolder) {
+            $mediaFolderName = basename($subfolder);
+            $appointmentId = getAppointmentId($conn, $mediaFolderName);
+
             foreach (scandir($subfolder) as $file) {
-                if (in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png'])) {
-                    $relativePath = str_replace('../../../', '../../', "$subfolder/$file");
-                    $data[] = $relativePath;
+                $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+                if (in_array($ext, ['jpg', 'jpeg', 'png'])) {
+                    $fullPath = "$subfolder/$file";
+                    $relativePath = str_replace('../../../', '../../', $fullPath);
+
+                    $data[] = [
+                        "url" => $relativePath,
+                        "filename" => $file,
+                        "appointment_id" => $appointmentId,
+                        "date" => date("Y-m-d h:i:s A", filemtime($fullPath))
+                    ];
                 }
             }
         }

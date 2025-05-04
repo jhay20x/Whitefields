@@ -706,8 +706,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
         today = yyyy + '-' + mm + '-' + dd;
 
-        // console.log(today); 
-
 		$("#myForm").submit(function(e){
             showLoader();
             $("#errorMessage").empty();
@@ -958,16 +956,15 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         //     initCollapsed: true,
                         // },
                         searchBuilder: {
-                            // preDefined: {
-                            //     criteria: [
-                            //         {
-                            //             data: 'Appointment Date',
-                            //             condition: '=',
-                            //             // value: ["2025-02-08"]
-                            //             value: [today]
-                            //         }
-                            //     ]
-                            // }
+                            preDefined: {
+                                criteria: [
+                                    {
+                                        data: 'Appointment Date',
+                                        condition: '=',
+                                        value: [today]
+                                    }
+                                ]
+                            }
                         },
                     },
                     bottomStart: {
@@ -1072,8 +1069,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
         $('body').on('click', '#aptTreatmentRecord', function(){
             let id = $(this).attr('data-aptId');
             let pastAptId = $(this).attr("data-past-apt-id");
+            let status = $("#aptdtlsstatus").text();
 
-            loadTreatmentRecord(id, pastAptId);
+            loadTreatmentRecord(id, pastAptId, status);
         });
 
         $('body').on('click', '#aptTreatPatientUpdateBtn', function(){
@@ -1105,18 +1103,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             let id = search_params.get('id');
             let pid = search_params.get('pid');
             let paid = search_params.get('paid');
+            let status = search_params.get('status');
             $('#aptTreatmentRecord').attr('data-aptId', id);
             window.history.replaceState({}, document.title, window.location.pathname);
 
             if (id) {
+                loadDetails(id);
                 resetAccordion();
                 fetchPatientDetails(pid, id);
                 refreshDentalList(pid);
                 refreshMedicalList(pid);
                 refreshTreatment(pid);
-                loadTreatmentRecord(id, paid);
                 refreshMedia(pid, id);
-                loadDetails(id);
+                loadTreatmentRecord(id, paid, status);
             }
         };
         
@@ -1435,10 +1434,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
         let procedureOptions = $('#patientProcedure_0').html();
 
-        function loadTreatmentRecord(aptId, pastAptId) {
+        function loadTreatmentRecord(aptId, pastAptId, status) {
             $("#errorMessage").empty();
             $("#aptId").text(aptId);
-            let status = $("#aptdtlsstatus").text();
             $("#pastAptId").text(pastAptId == 0 ? "N/A" : pastAptId);
 
             var formData = {
@@ -1455,13 +1453,15 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 if (data.length != 0) {
                     $('#proceduresList').empty();
                     let state = "";
-
+                    
                     if (pastAptId != 0 && status == "Approved") {
                         $("#myForm").find("input, select, textarea").prop("disabled", false);
                         $("#aptTreatPatientUpdateDiv").hide();
                         $("#aptTreatPatientSaveDiv").show();
                         $("#aptTreatPatientAddProcedureBtn").show();
+                        console.log("If");
                     } else {
+                        console.log("Else");
                         $("#myForm").find("input, select, textarea").prop("disabled", true);
                         $("#aptTreatPatientSaveDiv").hide();
                         $("#aptTreatPatientUpdateDiv").show();
