@@ -241,7 +241,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <div class="row">
                                 <div class="col-0 col-lg-3">
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="fname" placeholder="First Name"  id="fname" value="<?php echo $fname ?? ''; ?>" class="form-control onlyLetters">
+                                        <input type="text" name="fname" placeholder="First Name"  id="fname" class="form-control onlyLetters">
                                         <label for="fname">First Name</label>
                                     </div>
                                 </div>
@@ -249,11 +249,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="col-0 col-lg-3">
                                     <div class="input-group mb-3">
                                         <div class="form-floating">
-                                            <input type="text" name="mname" placeholder="Middle Name" id="mname" value="<?php echo $mname ?? ''; ?>"  class="form-control onlyLetters">
+                                            <input type="text" name="mname" placeholder="Middle Name" id="mname"  class="form-control onlyLetters">
                                             <label for="mname">Middle Name</label>
                                         </div>
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0" id="nomname" name="nomname" type="checkbox"<?php echo $mname == "None" ? ' checked="checked"' : ''; ?>>
+                                            <input class="form-check-input mt-0" id="nomname" name="nomname" type="checkbox">
                                             <label class="ms-1" for="nomname">N/A</label>
                                         </div>
                                     </div>
@@ -261,7 +261,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                                 <div class="col-0 col-lg-3">
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="lname" placeholder="Last Name"  id="lname" value="<?php echo $lname ?? ''; ?>" class="form-control onlyLetters">
+                                        <input type="text" name="lname" placeholder="Last Name"  id="lname" class="form-control onlyLetters">
                                         <label for="lname">Last Name</label>
                                     </div>
                                 </div>
@@ -283,21 +283,21 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <div class="row">                                    
                                 <div class="col-0 col-lg-3">
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="specialist" placeholder="Age"  id="specialist" value="<?php echo $specialist ?? ''; ?>" class="form-control onlyLetters">
+                                        <input type="text" name="specialist" placeholder="Specialist"  id="specialist" class="form-control onlyLetters">
                                         <label for="specialist">Specialist</label>
                                     </div>
                                 </div>
 
                                 <div class="col-0 col-lg-3">
                                     <div class="form-floating mb-3">
-                                        <input type="date" name="bdate" placeholder="Code"  id="bdate" value="<?php echo $bdate ?? ''; ?>" class="form-control">
+                                        <input type="date" name="bdate" placeholder="Birth Date"  id="bdate" class="form-control">
                                         <label for="bdate">Birth Date</label>
                                     </div>
                                 </div>
 
                                 <div class="col-0 col-lg">
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="address" placeholder="Address"  id="address" value="<?php echo $address ?? ''; ?>" class="form-control onlyAddress">
+                                        <input type="text" name="address" placeholder="Address"  id="address" class="form-control onlyAddress">
                                         <label for="address">Address</label>
                                     </div>                                             
                                 </div>
@@ -308,11 +308,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     <div class="form-floating mb-3">
                                         <select class="form-select" name="gender" id="gender">
                                             <option disabled selected value="">Select...</option>
-                                            <option value="Female"<?php echo ($gender == "Female") ? ' selected="selected"' : ''; ?>>Female</option>
-                                            <option value="Male"<?php echo ($gender == "Male") ? ' selected="selected"' : ''; ?>>Male</option>
-                                            <option value="Nonbinary"<?php echo ($gender == "Nonbinary") ? ' selected="selected"' : ''; ?>>Nonbinary</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Male">Male</option>
+                                            <!-- <option value="Nonbinary">Nonbinary</option> -->
                                             <!-- <option value="Other">Other</option> -->
-                                            <option value="Decline to state"<?php echo ($gender == "Decline to state") ? ' selected="selected"' : ''; ?>>Decline to state</option>
+                                            <option value="Decline to state">Decline to state</option>
                                         </select>
                                         <label for="gender">Gender</label>
                                     </div>
@@ -320,19 +320,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                                 <div class="col-0 col-lg-3">
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="religion" placeholder="Religion"  id="religion" value="<?php echo $religion ?? ''; ?>" class="form-control onlyLetters">
+                                        <input type="text" name="religion" placeholder="Religion"  id="religion" class="form-control onlyLetters">
                                         <label for="religion">Religion</label>
                                     </div>
                                 </div>
                                 <div class="col-0 col-lg-3">
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="nationality" placeholder="Nationality"  id="nationality" value="<?php echo $nationality ?? ''; ?>" class="form-control onlyLetters">
+                                        <input type="text" name="nationality" placeholder="Nationality"  id="nationality" class="form-control onlyLetters">
                                         <label for="nationality">Nationality</label>
                                     </div>
                                 </div>
                                 <div class="col-0 col-lg-3">
                                     <div class="form-floating mb-3">
-                                        <input type="text" maxlength="11" name="contnumber" placeholder="Contact Number"  id="contnumber" value="<?php echo $contnum ?? ''; ?>" class="form-control onlyNumbers">
+                                        <input type="text" maxlength="11" name="contnumber" placeholder="Contact Number"  id="contnumber" class="form-control onlyNumbers">
                                         <label for="contnumber">Contact No.</label>
                                     </div>
                                 </div>
@@ -341,7 +341,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <div class="row">
                                 <div class="col-0 col-lg">
                                     <div class="form-floating mb-3">
-                                        <input type="text" maxlength="100" name="aboutme" placeholder="About Me" id="aboutme" value="<?php echo $aboutme ?? ''; ?>" class="form-control onlyLettersNumbers">
+                                        <input type="text" maxlength="100" name="aboutme" placeholder="About Me" id="aboutme" class="form-control onlyLettersNumbers">
                                         <label for="aboutme">About Me</label>
                                     </div>                                            
                                 </div>

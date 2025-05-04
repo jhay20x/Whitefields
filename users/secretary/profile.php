@@ -241,7 +241,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <div class="row">
                                 <div class="col-lg">
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="fname" placeholder="First Name"  id="fname" class="form-control">
+                                        <input type="text" name="fname" placeholder="First Name"  id="fname" class="form-control onlyLetters">
                                         <label for="fname">First Name</label>
                                     </div>
                                 </div>
@@ -249,7 +249,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="col-lg">
                                     <div class="input-group mb-3">
                                         <div class="form-floating">
-                                            <input type="text" name="mname" placeholder="Middle Name" id="mname" class="form-control">
+                                            <input type="text" name="mname" placeholder="Middle Name" id="mname" class="form-control onlyLetters">
                                             <label for="mname">Middle Name</label>
                                         </div>
                                         <div class="input-group-text">
@@ -261,7 +261,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                                 <div class="col-lg">
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="lname" placeholder="Last Name"  id="lname" class="form-control">
+                                        <input type="text" name="lname" placeholder="Last Name"  id="lname" class="form-control onlyLetters">
                                         <label for="lname">Last Name</label>
                                     </div>
                                 </div>
@@ -269,7 +269,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 <div class="col-lg">
                                     <div class="input-group mb-3">
                                         <div class="form-floating">
-                                            <input type="text" name="suffix" placeholder="Middle Name" id="suffix" class="form-control">
+                                            <input type="text" name="suffix" placeholder="Middle Name" id="suffix" class="form-control onlyLetters">
                                             <label for="suffix">Suffix</label>
                                         </div>
                                         <div class="input-group-text">
@@ -304,7 +304,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 
                                 <div class="col-lg">
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="address" placeholder="Address"  id="address" class="form-control">
+                                        <input type="text" name="address" placeholder="Address"  id="address" class="form-control onlyAddress">
                                         <label for="address">Address</label>
                                     </div>                                             
                                 </div>
@@ -313,21 +313,21 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             <div class="row">
                                 <div class="col-lg">
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="religion" placeholder="Religion"  id="religion" class="form-control">
+                                        <input type="text" name="religion" placeholder="Religion"  id="religion" class="form-control onlyLetters">
                                         <label for="religion">Religion</label>
                                     </div>
                                 </div>
 
                                 <div class="col-lg">
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="nationality" placeholder="Nationality"  id="nationality" class="form-control">
+                                        <input type="text" name="nationality" placeholder="Nationality"  id="nationality" class="form-control onlyLetters">
                                         <label for="nationality">Nationality</label>
                                     </div>
                                 </div>
                                 
                                 <div class="col-lg">
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="contnumber" placeholder="Contact Number"  id="contnumber" class="form-control">
+                                        <input type="text" name="contnumber" placeholder="Contact Number"  id="contnumber" class="form-control onlyNumbers">
                                         <label for="contnumber">Contact No.</label>
                                     </div>
                                 </div>
