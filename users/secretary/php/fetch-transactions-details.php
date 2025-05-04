@@ -66,6 +66,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             ];
 
             $data["Procedures"][] = [
+                "AppointStatus" => $row["AppointStatus"],
                 "AppointmentID" => $row["AppointmentID"],
                 "ProcedureID" => $row["ProcedureID"],
                 "ProcedureName" => $row["ProcedureName"],
