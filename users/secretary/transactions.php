@@ -175,7 +175,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                         <div id="paymentRefDiv" class="col-12 col-xl-8 d-none">
                                             <div class="input-group">
                                                 <label class="input-group-text" for="paymentRefNo">Payment Ref. No.</label>
-                                                <input autocomplete="off" disabled required type="text" name="paymentRefNo" placeholder="(If applicable)"  id="paymentRefNo" class="form-control onlyNumbers">
+                                                <input autocomplete="off" disabled required type="text" name="paymentRefNo" placeholder="(If applicable)"  id="paymentRefNo" class="form-control onlyLettersNumbersNoSpace">
                                             </div>
                                         </div>
                                     </div>

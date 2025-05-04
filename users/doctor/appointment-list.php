@@ -719,25 +719,29 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
 				data: $("#myForm").serialize(),
                 dataType: "json"
 			}).done(function (data) {
-                let status = $("#aptdtlsstatus").text();
                 hideLoader();
-                refreshList();
-                $(".patientPrice").removeClass("is-valid is-invalid");
-                $(this).find("[data-bs-toggle='tooltip']").attr("title", "").tooltip('dispose');
-                $("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show mt-3">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
 
-                $("#myForm").find("input, .procedure-remove, select, textarea").prop("disabled", true);
-                $("#aptTreatPatientUpdateDiv").show();
-                $("#aptTreatPatientSaveDiv").hide();
-
-                if (status == "Approved") {
-                    $("#aptdtlsstatus")
-                        .removeClass("text-success text-warning text-danger")
-                        .addClass("text-secondary")
-                        .text("Evaluated");
+                if (!data.success) {
+                    $("#errorMessage").append('<div class="alert alert-danger  alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                } else {
+                    let status = $("#aptdtlsstatus").text();
+                    refreshList();
+                    $(".patientPrice").removeClass("is-valid is-invalid");
+                    $(this).find("[data-bs-toggle='tooltip']").attr("title", "").tooltip('dispose');
+                    $("#errorMessage").append('<div class="alert alert-success  alert-dismissible fade show">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+    
+                    $("#myForm").find("input, .procedure-remove, select, textarea").prop("disabled", true);
+                    $("#aptTreatPatientUpdateDiv").show();
+                    $("#aptTreatPatientSaveDiv").hide();
+    
+                    if (status == "Approved") {
+                        $("#aptdtlsstatus")
+                            .removeClass("text-success text-warning text-danger")
+                            .addClass("text-secondary")
+                            .text("Evaluated");
+                    }
+                    refreshTreatment(patient_id);
                 }
-
-                refreshTreatment(patient_id);
 				// console.log(data.responseText);
 			}).fail(function(data) {
 				// console.log(data.responseText);
@@ -1459,9 +1463,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         $("#aptTreatPatientUpdateDiv").hide();
                         $("#aptTreatPatientSaveDiv").show();
                         $("#aptTreatPatientAddProcedureBtn").show();
-                        console.log("If");
                     } else {
-                        console.log("Else");
                         $("#myForm").find("input, select, textarea").prop("disabled", true);
                         $("#aptTreatPatientSaveDiv").hide();
                         $("#aptTreatPatientUpdateDiv").show();

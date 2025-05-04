@@ -143,6 +143,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $proceduresList = $_POST["patientProcedure"] ?? [];
     $proceduresPrice = $_POST["patientPrice"] ?? [];
 
+    if (empty($proceduresList) || empty($proceduresPrice)) {                
+        $data['success'] = false;
+        $data['error'] = "The patient's procedures has not been saved. It is because either there are no procedure or price set.";
+        echo json_encode($data);
+        exit;
+    }
+
     $timestamp = date('Y-m-d H:i:s', time());
     $prevTimestamp = fetchTimestamp($conn, $aptId);
 
