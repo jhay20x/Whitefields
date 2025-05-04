@@ -11,7 +11,7 @@ $data = [];
 
 if (isset($_POST['otpCode'])) {
     if (!empty($_POST['otpCode'])) {
-        $stmt = $conn->prepare("SELECT id, account_type_id, username, otp FROM `accounts` WHERE `email_address` = ?");
+        $stmt = $conn->prepare("SELECT id, account_type_id, username FROM `accounts` WHERE `email_address` = ?");
         $stmt->bind_param("s", $_SESSION['email_address']);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -21,7 +21,7 @@ if (isset($_POST['otpCode'])) {
             $user = $result->fetch_assoc();
     
             $userOTP = $_POST['otpCode'];
-            $savedOTP = $user['otp'];
+            $savedOTP = $_SESSION['passwordResetOTP'];
             $user_id = $user['id'];
             $user_username = $user['username'];
             $user_type = $user['account_type_id'];

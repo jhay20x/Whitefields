@@ -943,6 +943,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         },
                     }
                 },
+                stateSave: true,
                 select: false,
                 lengthMenu: [
                     [15, 25, 50, -1],
