@@ -540,13 +540,16 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                     </div>
                                 </div>
                                 <div id="uploadedMedia" class="accordion-item">
-                                    <h2 class="accordion-header">
+                                    <h2 class="accordion-header text-center">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#uploadedMediaList" aria-expanded="false" aria-controls="uploadedMediaList">
                                             <span class="fw-semibold">Uploaded Media</span>
                                         </button>
                                     </h2>
                                     <div id="uploadedMediaList" class="accordion-collapse collapse" data-bs-parent="#patientView">
-                                        <div class="accordion-body text-center">
+                                        <div class="row justify-content-center">
+                                            <div id="deleteMediaMessage" class="col-10" role="alert"></div>
+                                        </div>
+                                        <div class="accordion-body row justify-content-around text-center">
                                         </div>
                                     </div>
                                 </div>
@@ -914,10 +917,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                         $("#reasonOther").val("");
                         $("#appointmentMessage").append(`<div class="alert alert-success alert-dismissible fade show">${data.message}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`);
                         hideLoader();
-                        // console.log(data.responseText);
+                        // console.log(data);
                     },
                     error: function(data) {
-                        // console.log(data.responseText);
+                        // console.log(data);
                     }
                 });
             }));
@@ -1585,14 +1588,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 }).fail(function(data) {
                     // console.log(data);
                 });
-            }
+            } 
             
-            function refreshMedia(pid, id) {
+            function refreshMedia(pid) {
                 var formData = {
-                    pid: pid,
-                    id: id
+                    pid: pid
                 };
-
+    
                 $.ajax({
                     type: "POST",
                     url: 'php/fetch-media.php',
@@ -1600,30 +1602,92 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     dataType: 'json'
                 }).done(function (data) {
                     let html = '';
-
+    
                     if (data.length === 0) {
                         html = '<h6>No media uploaded.</h6>';
                     } else {
                         data.forEach(img => {
-                            html += `<img src="${img}" class="img-thumbnail me-2 mb-2 image-preview" style="width:200px; cursor:pointer;">`;
+                            html += `
+                                <div class="card mb-3" style="max-width: 500px;">
+                                    <div class="row g-0 align-items-center">
+                                        <div class="col-md-4">
+                                            <img src="${img.url}" 
+                                                class="img-thumbnail image-preview" 
+                                                style="max-height: 120px; cursor: pointer;" 
+                                                alt="${img.filename}">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <p class="card-text mb-2"><strong>Appointment ID:</strong> ${img.appointment_id ?? 'N/A'}</p>
+                                                <p class="card-text mb-1"><strong>Date:</strong> ${img.date}</p>
+                                                <p class="card-text mb-1"><strong>File:</strong> ${img.filename}</p>
+                                                <a href="${img.url}" download="${img.filename}" class="btn btn-sm btn-outline-primary">
+                                                    Download
+                                                </a>
+                                                <button class="btn btn-sm btn-outline-danger delete-media-btn" 
+                                                        data-url="${img.url}" 
+                                                        data-filename="${img.filename}" data-p-id="${pid}" data-bs-toggle="modal" data-bs-target="#cancelDeleteMediaConfirmModal">
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
                         });
                     };
-
+    
                     $("#uploadedMediaList .accordion-body").html(html);
                     // console.log(data);
                 }).fail(function(data) {
                     // console.log(data);
                 });
             }
-
+    
+            $('body').on("click", '.delete-media-btn', function() {
+                $("#errorMessage, #addPatientMessage, #addPatientRecordMessage, #deleteMediaMessage").empty();
+                let url = $(this).data('url');
+                let pid = $(this).attr('data-p-id');
+    
+                $("#aptDeleteMediaYesBtn").attr("data-url", url).attr("data-p-id", pid);
+            });
+    
+            $('body').on("click", '#aptDeleteMediaYesBtn', function(e) {
+                showLoader();
+                e.preventDefault();
+                $("#errorMessage, #addPatientMessage, #addPatientRecordMessage, #deleteMediaMessage").empty();
+    
+                let pid = $(this).attr('data-p-id');
+                let url = $(this).attr('data-url');
+    
+                var formData = {
+                    url: url
+                }
+    
+                $.ajax({
+                    type: "POST",
+                    url: 'php/delete-media.php',
+                    data: formData,
+                    dataType: "json"
+                }).done(function (data) {
+                    hideLoader();
+                    refreshMedia(pid);
+                    $("#deleteMediaMessage").append('<div class="mt-3 alert alert-success alert-dismissible fade show">' + data.message +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                    $('#patientViewModal').modal('show');
+                    // console.log(data);
+                }).fail(function(data) {
+                    // console.log(data);
+                });
+            });
+    
             $('body').on("click", '.image-preview', function() {
                 let src = $(this).attr("src");
-
+    
                 $('#previewImage').attr('src', src);
                 $('#patientViewModal').modal('hide');
                 $('#imagePreviewModal').modal('show');
             });
-
+    
             $('#imagePreviewModal').on('hide.bs.modal', function () {
                 $('#patientViewModal').modal('show');
             });
