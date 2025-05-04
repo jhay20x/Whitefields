@@ -618,22 +618,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                                 </div>
 
                                 <div class="row my-3">
-                                    <div class="col-12 col-lg-6">
+                                    <div class="col-12">
                                         <div class="form-floating">
                                             <input required type="date" name="date" placeholder="Date"  id="date" id="date" class="form-control">
                                             <label for="date">Date</label>
-                                        </div>
-                                    </div>
-    
-                                    <div class="col-12 col-lg-6 mt-3 mt-lg-0">
-                                        <div class="form-floating">
-                                            <select required class="form-select fw-bold" name="status" id="status">
-                                                <option disabled selected value="">--</option>
-                                                <option value="5" class="text-success fw-bold">Completed</option>
-                                                <option value="6" class="text-warning fw-bold">Evaluated</option>
-                                                <option value="7" class="text-danger fw-bold">Partially Paid</option>
-                                            </select>
-                                            <label for="status">Appointment Status</label>
                                         </div>
                                     </div>
                                 </div>

@@ -68,7 +68,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $time = date("H:i:s", strtotime($time_str));
     $datetime = date('Y-m-d H:i:s', strtotime("$date $time"));
     $datetimestr = $date . 'T' . date('H:i:s', strtotime($time));
-    $appointstatus = $_POST['status'] ?? "";
     $concern = $_POST['concern'] ?? "";
     
     // Insert Transaction    
@@ -77,6 +76,10 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $lastPaidDate = $_POST['lastPaidDate'] ?? "";
     $patientTransactionAmountPaid = $_POST['patientTransactionAmountPaid'] ?? [];
     $patientTransactionRemainingBalance = $_POST['patientTransactionRemainingBalance'] ?? [];
+
+    $allPaid = !empty($patientTransactionRemainingBalance) && array_sum($patientTransactionRemainingBalance) == 0;
+
+    $appointstatus = $allPaid ? 5 : 7;
 
     // Insert Treatment History    
     $patientToothNo = $_POST['patientToothNo'] ?? [];

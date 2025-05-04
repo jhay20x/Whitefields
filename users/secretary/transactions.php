@@ -433,7 +433,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $('body').on('change', '#paymentType', function(){
                 let paymentRefDiv = $("#paymentRefDiv");
 
-                if ($(this).val() == 2) {
+                if ($(this).val() != 1) {
                     paymentRefDiv.removeClass("d-none");
                     paymentRefDiv.find("input").prop("disabled", false);
                 } else {
@@ -484,7 +484,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
             $("#myForm").submit(function(e){
                 showLoader();
                 e.preventDefault();
-                $("#errorMessage, #addProcedureMessage, #viewProcedureMessage").empty();
+                $("#errorMessage, #addProcedureMessage, #viewProcedureMessage, #transactionMessage").empty();
 
                 var url = $("#myForm").attr('action');
 
@@ -497,7 +497,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                     if (!data.success) {
                         hideLoader();
                         $("#transactionMessage").append('<div class="mt-3 alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
-                        $("#").append('<div class="mt-3 alert alert-danger alert-dismissible fade show">' + data.error +  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     } else {
                         localStorage.setItem("errorMessage", data.message);
                         location.reload();

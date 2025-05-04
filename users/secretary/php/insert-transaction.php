@@ -64,6 +64,25 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
     $amount_paid = $_POST['amount_paid'] ?? [];
     $remaining_balance = $_POST['remaining_balance'] ?? [];
     $procedures_id = $_POST['procedures_id'] ?? [];
+    
+    foreach ($amount_paid as $index => $amount) {
+        $balance = $remaining_balance[$index] ?? 0;
+        $procedureId = $procedures_id[$index] ?? 'Unknown';
+    
+        if ($amount < 0) {            
+            $data['success'] = false;
+            $data['error'] = "An invalid amount has been set. Please try again.";
+            echo json_encode($data);
+            exit;
+        }
+    
+        if ($amount > $balance) {
+            $data['success'] = false;
+            $data['error'] = "The amount entered exceeds the remaining balance. Please try again.";
+            echo json_encode($data);
+            exit;
+        }
+    }
 
     if (count($procedures_id) === count($amount_paid) && 
         count($procedures_id) === count($remaining_balance) &&
