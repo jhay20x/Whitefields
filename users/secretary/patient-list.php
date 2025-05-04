@@ -1198,8 +1198,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             action: function (e, dt, node, config) {
                                 $("#errorMessage").empty();
                                 $('#addPatientRecordModal').modal('show');
-                                console.log($("#selectDentistId").val());
-                                console.log($("#selectPatientId").val());
                             }
                         },
                         {
@@ -1271,7 +1269,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 autoWidth: false,
                 paging: true,
                 scrollX: true,
-                order: [[0, "asc"]],
+                order: [[0, "desc"]],
                 columns: [null, { width: '15%' }, null, { width: '25%' }, null]
             });
         }

@@ -688,7 +688,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                 autoWidth: false,
                 paging: true,
                 scrollX: true,
-                order: [[0, "asc"]],
+                order: [[0, "desc"]],
                 columns: [null, { width: '15%' }, null, { width: '25%' }, null]
             });
         }
