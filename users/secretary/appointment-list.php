@@ -1332,7 +1332,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_username']) && isset($_
                             $(".aptdtlsVerdictDiv").show();
                             $(".aptdtlsReasonDiv").hide();
                             $("#aptdtlsUpdateStatus").hide();
-                            $("#aptdtlsUpdatePastApt").hide();
+                            $("#aptdtlsUpdatePastApt").show();
                             $(".aptdtlsstatus").removeClass("text-danger text-warning text-success").addClass("text-secondary");
                             break;
                     
